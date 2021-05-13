@@ -1,0 +1,13 @@
+.navbar-container{
+    height: 4.4rem;
+    width: 100%;
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 6px -4px 20px 2px;
+}
+
+.navbar-logo{
+    color: var(--primary);
+    margin: 0;
+}

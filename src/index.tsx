@@ -4,6 +4,9 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import {createMuiTheme,ThemeProvider} from '@material-ui/core'
+import {BrowserRouter} from 'react-router-dom'
+import 'react-toastify/dist/ReactToastify.css'
+import {ToastContainer} from 'react-toastify'
 
 const theme = createMuiTheme({
   palette: {
@@ -17,7 +20,10 @@ const theme = createMuiTheme({
 ReactDOM.render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
-      <App />
+      <BrowserRouter>
+        <App />
+        <ToastContainer/>
+      </BrowserRouter>
     </ThemeProvider>
   </React.StrictMode>,
   document.getElementById('root')

@@ -42,3 +42,20 @@
     margin: 0;
     margin-top: 0.5rem;
 }
+
+.upload-profile-picture{
+    color:var(--primary);
+    cursor:pointer;
+}
+
+
+.file-upload-info{
+    color: var(--primary);
+}
+
+.profile-picture{
+    width: 5rem;
+    height: 5rem;
+    border-radius: 50%;
+    align-self: center;
+}

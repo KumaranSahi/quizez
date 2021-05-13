@@ -187,7 +187,8 @@ export const AuthContextProvider : FC=({children}:Props)=>{
             currentPage:currentPage,
             changePassword:changePassword,
             setCurrentPage:setCurrentPage,
-            authLoading:loading
+            authLoading:loading,
+            setAuthLoading:setLoading
         }}>
             {children}
         </AuthContext.Provider>

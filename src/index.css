@@ -27,4 +27,7 @@ a{
   --failure-mild:salmon;
   --neutral:gray;
   --neutral-mild:lightgrey;
+  --z-index-high:200;
+  --z-index-mid:100;
+  --z-index-low:1;
 }

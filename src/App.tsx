@@ -1,22 +1,30 @@
 import './App.css';
-import {Navbar} from './Components'
-import {Route,Switch} from 'react-router-dom'
-import {Singup} from './Pages'
-import {AuthContextProvider} from './Store/AuthContext/AuthContext'
+import {Navbar,Spinner} from './Components'
+import {Route,Switch,Redirect} from 'react-router-dom'
+import {Signup,Home} from './Pages'
+import {useAuth} from './Store/AuthContext/AuthContext'
+
+const PrivateLink=({...props})=>{
+  const {token}=useAuth()
+  return(
+      token?<Route {...props}/>:<Redirect to="/"/>
+  )
+}
+
 
 function App() {
+  const {token,authLoading}=useAuth()
   return (
     <div className="App">
-      <AuthContextProvider>
         <header>
           <Navbar/>
         </header>
         <main className="main-container">
           <Switch>
-            <Route path="/" component={Singup}/>
+          {token?<Route path="/" component={Home}/>:<Route path="/" component={Signup}/>}
           </Switch>
         </main>
-      </AuthContextProvider>
+        {authLoading &&<Spinner/>}
     </div>
   );
 }

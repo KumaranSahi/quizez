@@ -9,14 +9,15 @@ export type AuthContextType={
     token:string;
     userName:string;
     image:string;
-    dispatch:Action,
-    signUpUser:(userData:UserData)=>void,
-    signInUser:(emailAndPassword:SigninUser)=>void,
-    signOutUser:()=>void,
-    currentPage:SigninPages,
-    changePassword:(userData:ChangePassword)=>void,
-    setCurrentPage:(arg0:SigninPages)=>void,
-    authLoading:Boolean
+    dispatch:Action;
+    signUpUser:(userData:UserData)=>void;
+    signInUser:(emailAndPassword:SigninUser)=>void;
+    signOutUser:()=>void;
+    currentPage:SigninPages;
+    changePassword:(userData:ChangePassword)=>void;
+    setCurrentPage:(arg0:SigninPages)=>void;
+    authLoading:Boolean;
+    setAuthLoading:(arg0:Boolean)=>void;
 }
 
 export type State={

@@ -2,12 +2,14 @@ import classes from './Singup.module.css'
 import {useState,SyntheticEvent} from 'react'
 import {useAuth} from '../../Store/AuthContext/AuthContext'
 import {SigninPages} from '../../Store/AuthContext/AuthContext.types'
-import {warningToast} from '../../Components/'
-import {TextField,Button} from '@material-ui/core'
+import {successToast, warningToast} from '../../Components/'
+import {TextField,Button,IconButton,Checkbox} from '@material-ui/core'
+import {PhotoCamera} from '@material-ui/icons'
+import axios from 'axios'
 
-export const Singup=()=>{
+export const Signup=()=>{
 
-    const {signUpUser,signInUser,currentPage,setCurrentPage,changePassword}=useAuth()
+    const {signUpUser,signInUser,currentPage,setCurrentPage,changePassword,setAuthLoading,authLoading}=useAuth()
 
     const [userName,setUserName]=useState("")
     const [userNameValid,setUserNameValid]=useState(true)
@@ -17,6 +19,11 @@ export const Singup=()=>{
 
     const [password,setPassword]=useState("")
     const [confirmPassword,setConfirmPassword]=useState("")
+
+    const [image,setImage]=useState("")
+    const [fileUploadInfo,setFileUploadInfo]=useState("")
+
+    const [isAdmin,setIsAdmin]=useState(false)
 
     const validateUserName=()=>{
         if(userName.length===0)
@@ -32,6 +39,28 @@ export const Singup=()=>{
             setEmailValid(false)
     }
 
+    const fileUpload=async (file:FileList|null)=>{
+        const allowedExtensions=new RegExp("^.*(.jpg|.jpeg|.png)")
+        if(file && allowedExtensions.test(file[0].name.toLowerCase())&&file[0].size<=4000000){
+            try{
+                setAuthLoading(true)
+                const data=new FormData()
+                data.append("file",file[0]);
+                data.append("upload_preset","conclave");
+                data.append("cloud_name","conclave");
+                const {data:imageData}=await axios.post("https://api.cloudinary.com/v1_1/conclave/image/upload",data);
+                setImage(imageData.url)
+                setAuthLoading(false)
+                successToast("Image uploaded successfully")
+            }catch(error){
+                console.log(error)
+                warningToast("Unable to upload image")
+            }
+        }else{
+            setFileUploadInfo("Please upload a .jpg or .png file under 4mb")
+        }
+    }
+
     const signUpSubmit=async (event:SyntheticEvent)=>{
         event.preventDefault();
         validateUserName();
@@ -40,7 +69,9 @@ export const Singup=()=>{
             signUpUser({
                 name:userName,
                 email:email,
-                password:password
+                password:password,
+                image:image,
+                isAdmin:isAdmin
             })
         }
     }
@@ -81,6 +112,22 @@ export const Singup=()=>{
                             className={classes["signup-container"]}
                             onSubmit={signUpSubmit}
                         >
+                            {image?
+                            <img
+                                src={image}
+                                alt="Profile"
+                                className={classes["profile-picture"]}
+                            /> 
+                            :<div>
+                                <input accept="image/*" style={{display:"none"}} id="icon-button-file" type="file" onChange={event=>fileUpload(event.target.files)}/>
+                                <label htmlFor="icon-button-file">
+                                    <IconButton color="primary" aria-label="upload picture" component="span">
+                                        <PhotoCamera />
+                                    </IconButton>
+                                    <span className={classes["upload-profile-picture"]}>Upload Profile picture</span>
+                                </label>
+                                {fileUploadInfo&&<p className={classes["file-upload-info"]}>{fileUploadInfo}</p>}
+                            </div>}
                             <div>
                                 <TextField
                                     label="Username"
@@ -113,7 +160,16 @@ export const Singup=()=>{
                                 value={password}
                                 onChange={event=>setPassword(event.target.value)}
                             />
-                            <Button variant="contained" color="primary"  type="submit">
+                            <label>
+                                <Checkbox
+                                    onClick={()=>setIsAdmin(state=>!state)}
+                                    checked={isAdmin}
+                                    color="primary"
+                                    inputProps={{ 'aria-label': 'secondary checkbox' }}
+                                />
+                                Quiz Creator Account
+                            </label>
+                            <Button variant="contained" color="primary"  type="submit" disabled={authLoading?true:false}>
                                 Sign up!
                             </Button>
                         </form>
@@ -150,7 +206,7 @@ export const Singup=()=>{
                                 value={password}
                                 onChange={event=>setPassword(event.target.value)}
                             />
-                            <Button variant="contained" color="primary"  type="submit">
+                            <Button variant="contained" color="primary"  type="submit" disabled={authLoading?true:false}>
                                 Sign In
                             </Button>
                         </form>
@@ -192,7 +248,7 @@ export const Singup=()=>{
                                 value={confirmPassword}
                                 onChange={event=>setConfirmPassword(event.target.value)}
                             />
-                            <Button variant="contained" color="primary"  type="submit">
+                            <Button variant="contained" color="primary"  type="submit" disabled={authLoading?true:false}>
                                 Change Password
                             </Button>
                         </form>

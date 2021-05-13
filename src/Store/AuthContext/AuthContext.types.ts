@@ -4,6 +4,21 @@ export type Props={
     children?:ReactNode;
 }
 
+export type AuthContextType={
+    userId:string;
+    token:string;
+    userName:string;
+    image:string;
+    dispatch:Action,
+    signUpUser:(userData:UserData)=>void,
+    signInUser:(emailAndPassword:SigninUser)=>void,
+    signOutUser:(expirationTime:number)=>void,
+    currentPage:SigninPages,
+    changePassword:(userData:ChangePassword)=>void,
+    setCurrentPage:(arg0:SigninPages)=>void,
+    authLoading:Boolean
+}
+
 export type State={
     userId:string|null;
     token:string|null;

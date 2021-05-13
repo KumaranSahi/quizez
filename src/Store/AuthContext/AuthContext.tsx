@@ -1,5 +1,5 @@
 import {useContext,createContext,useReducer,FC,useState,useEffect} from 'react'
-import {Props,State,Action,SigninPages,UserData,SigninUser,SignedInUserInfo,ChangePassword} from './AuthContext.types'
+import {Props,State,Action,SigninPages,UserData,SigninUser,SignedInUserInfo,ChangePassword,AuthContextType} from './AuthContext.types'
 import {successToast,warningToast,infoToast} from '../../Components/'
 import axios from 'axios'
 import {useHistory} from 'react-router-dom'
@@ -8,7 +8,7 @@ import {ResponseTemplate} from '../../Generics.types'
 
 export const AuthContext=createContext({});
 
-export const useAuth=()=>useContext(AuthContext);
+export const useAuth=()=>useContext(AuthContext) as AuthContextType;
 
 const initialState:State={
     userId:null,
@@ -179,7 +179,7 @@ export const AuthContextProvider : FC=({children}:Props)=>{
             userId:state.userId,
             token:state.token,
             userName:state.userName,
-            expiresIn:state.expiresIn,
+            image:state.image,
             dispatch:dispatch,
             signUpUser:signUpUser,
             signInUser:signInUser,

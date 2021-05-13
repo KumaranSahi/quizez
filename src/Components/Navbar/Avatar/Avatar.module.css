@@ -4,20 +4,14 @@
     align-items: center;
 }
 
-.name-avatar-container p{
+.name-container{
     margin-right: 1rem;
     font-size: 1.2rem;
     margin-bottom: 1.7rem;
     font-weight: 600;
     color: black;
     cursor: pointer;
-}
-
-.name-avatar-container a{
-    margin-right: 1rem;
-    font-size: 1.2rem;
-    margin-bottom: 1.7rem;
-    color: var(--primary);
+    display: none;
 }
 
 .avatar{
@@ -48,7 +42,9 @@
     background-color: var(--success-bright);
 }
 
-.bubble-inactive{
-    background-color: var(--failure);
-}
 
+@media (min-width:700px){
+    .name-container{
+        display: block;
+    }
+}

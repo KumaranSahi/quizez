@@ -12,7 +12,7 @@ export type AuthContextType={
     dispatch:Action,
     signUpUser:(userData:UserData)=>void,
     signInUser:(emailAndPassword:SigninUser)=>void,
-    signOutUser:(expirationTime:number)=>void,
+    signOutUser:()=>void,
     currentPage:SigninPages,
     changePassword:(userData:ChangePassword)=>void,
     setCurrentPage:(arg0:SigninPages)=>void,

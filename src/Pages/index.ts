@@ -1,0 +1,1 @@
+export {Singup} from './Signup/Signup'

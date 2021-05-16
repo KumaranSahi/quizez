@@ -9,7 +9,9 @@ import axios from 'axios'
 
 export const Signup=()=>{
 
-    const {signUpUser,signInUser,currentPage,setCurrentPage,changePassword,setAuthLoading,authLoading}=useAuth()
+    const {signUpUser,signInUser,currentPage,
+        setCurrentPage,changePassword,
+        setAuthLoading,authLoading,dispatch}=useAuth()
 
     const [userName,setUserName]=useState("")
     const [userNameValid,setUserNameValid]=useState(true)
@@ -72,7 +74,7 @@ export const Signup=()=>{
                 password:password,
                 image:image,
                 isAdmin:isAdmin
-            })
+            },setAuthLoading)
         }
     }
 
@@ -83,7 +85,7 @@ export const Signup=()=>{
             signInUser({
                 email:email,
                 password:password
-            })
+            },dispatch,setAuthLoading)
     }
 
     const changePasswordSubmit=async (event:SyntheticEvent)=>{
@@ -94,7 +96,7 @@ export const Signup=()=>{
                 email:email,
                 password:password,
                 confirmPassword:confirmPassword
-            })
+            },setAuthLoading)
         }else{
             warningToast("Passwords do not match")
         }
@@ -240,7 +242,7 @@ export const Signup=()=>{
                                 onChange={event=>setPassword(event.target.value)}
                             />
                             <TextField
-                                label="Password"
+                                label="Confirm Password"
                                 variant="outlined"
                                 type="password"
                                 required
@@ -264,7 +266,7 @@ export const Signup=()=>{
             <div className={classes["signin-signup-container"]}>
                 {pageToRender(currentPage)}
                 {currentPage==="SIGNIN_PAGE"&&<p className={classes["switch-page"]} onClick={()=>setCurrentPage("CHANGE_PASSWORD")}>Forgot Password</p>}
-                {currentPage==="SIGNIN_PAGE"?<p className={classes["switch-page"]} onClick={()=>setCurrentPage("SIGNUP_PAGE")}>New to Pix? Sign up!</p>:
+                {currentPage==="SIGNIN_PAGE"?<p className={classes["switch-page"]} onClick={()=>setCurrentPage("SIGNUP_PAGE")}>New to Quizez? Sign up!</p>:
                 <p className={classes["switch-page"]} onClick={()=>setCurrentPage("SIGNIN_PAGE")}>Already have an Account? Sign In!</p>}
             </div>
         </div>

@@ -5,7 +5,7 @@ import {useAuth} from '../../../Store/AuthContext/AuthContext'
 import {Menu,MenuItem} from '@material-ui/core'
 
 export const Avatar=()=>{
-    const {userName,image,signOutUser}=useAuth()
+    const {userName,image,signOutUser,dispatch}=useAuth()
     const [anchorEl, setAnchorEl] = useState<Element|null>(null);
 
     const handleClick = (event:SyntheticEvent) => {
@@ -17,7 +17,7 @@ export const Avatar=()=>{
     };
     
     const handleLogout=()=>{
-        signOutUser()
+        signOutUser(dispatch)
         handleClose()
     }
 

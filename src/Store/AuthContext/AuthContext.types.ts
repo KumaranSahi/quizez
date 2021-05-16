@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode,Dispatch,SetStateAction } from "react";
 
 export type Props={
     children?:ReactNode;
@@ -9,14 +9,15 @@ export type AuthContextType={
     token:string;
     userName:string;
     image:string;
-    signUpUser:(userData:UserData)=>void;
-    signInUser:(emailAndPassword:SigninUser)=>void;
-    signOutUser:()=>void;
+    signUpUser:(userData:UserData,setLoading:Dispatch<SetStateAction<boolean>>)=>void;
+    signInUser:(emailAndPassword:SigninUser,dispatch:Dispatch<Action>,setLoading:Dispatch<SetStateAction<boolean>>)=>void;
+    signOutUser:(dispatch:Dispatch<Action>)=>void;
     currentPage:SigninPages;
-    changePassword:(userData:ChangePassword)=>void;
-    setCurrentPage:(arg0:SigninPages)=>void;
+    changePassword:(userData:ChangePassword,setLoading:Dispatch<SetStateAction<boolean>>)=>void;
+    setCurrentPage:Dispatch<React.SetStateAction<SigninPages>>;
     authLoading:boolean;
-    setAuthLoading:(arg0:boolean)=>void;
+    setAuthLoading:Dispatch<SetStateAction<boolean>>;
+    dispatch:Dispatch<Action>;
 }
 
 export type State={

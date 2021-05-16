@@ -1,4 +1,4 @@
-import {useContext,createContext,useReducer,FC,useState,useEffect} from 'react'
+import {useContext,createContext,useReducer,FC,useState,useEffect,Dispatch,SetStateAction} from 'react'
 import {Props,State,Action,SigninPages,UserData,SigninUser,SignedInUserInfo,ChangePassword,AuthContextType} from './AuthContext.types'
 import {successToast,warningToast,infoToast} from '../../Components/'
 import axios from 'axios'
@@ -49,7 +49,7 @@ export const AuthContextProvider : FC=({children}:Props)=>{
 
     const [state,dispatch]=useReducer(authReducer,initialState)
 
-    const signUpUser=async (userData:UserData)=>{
+    const signUpUser=async (userData:UserData,setLoading:Dispatch<SetStateAction<boolean>>)=>{
         setLoading(true)
         try{
             const {data,status}=await axios.post<ResponseTemplate>('/api/users/signup',userData);
@@ -74,15 +74,15 @@ export const AuthContextProvider : FC=({children}:Props)=>{
         }
     }
 
-    const checkAuthTimeout=(expirationTime:number)=>{
+    const checkAuthTimeout=(expirationTime:number,dispatch:Dispatch<Action>)=>{
         setTimeout(()=>{
-            signOutUser()
+            signOutUser(dispatch)
         },
         expirationTime*1000
         )
     }
 
-    const signOutUser=()=>{
+    const signOutUser=(dispatch:Dispatch<Action>)=>{
         localStorage.removeItem("token");
         localStorage.removeItem("userId");
         localStorage.removeItem("userName");
@@ -95,7 +95,7 @@ export const AuthContextProvider : FC=({children}:Props)=>{
         push("/")
     }
 
-    const changePassword=async (userData:ChangePassword)=>{
+    const changePassword=async (userData:ChangePassword,setLoading:Dispatch<SetStateAction<boolean>>)=>{
         setLoading(true)
         try{
             const {data}=await axios.post<ResponseTemplate>('/api/users/password',userData);
@@ -110,7 +110,7 @@ export const AuthContextProvider : FC=({children}:Props)=>{
             setLoading(false)
         }
     }
-    const onReload=()=>{
+    const onReload=(dispatch:Dispatch<Action>)=>{
         const token=localStorage.getItem('token');
         let date=localStorage.getItem('expiresIn')
         let expiresIn:Date=new Date();
@@ -118,13 +118,13 @@ export const AuthContextProvider : FC=({children}:Props)=>{
             expiresIn=new Date(date);
         
         if(expiresIn<=new Date()){
-            signOutUser()
+            signOutUser(dispatch)
         }
         else{
             const userId=localStorage.getItem('userId');
             const userName=localStorage.getItem('userName')
             const image=localStorage.getItem('image')
-            checkAuthTimeout((expiresIn.getTime()-new Date().getTime())/1000)
+            checkAuthTimeout((expiresIn.getTime()-new Date().getTime())/1000,dispatch)
             dispatch({
                 type:"SIGNIN_USER",
                 payload:{
@@ -139,7 +139,7 @@ export const AuthContextProvider : FC=({children}:Props)=>{
         
     }
 
-    const signInUser=async (emailAndPassword:SigninUser)=>{
+    const signInUser=async (emailAndPassword:SigninUser,dispatch:Dispatch<Action>,setLoading:Dispatch<SetStateAction<boolean>>)=>{
         setLoading(true)
         try{
             const {data:{data,ok}}=await axios.post<ResponseTemplate<SignedInUserInfo>>('/api/users/signin',emailAndPassword);
@@ -150,7 +150,7 @@ export const AuthContextProvider : FC=({children}:Props)=>{
                 data?.image && localStorage.setItem("image",data.image)
                 const expiresIn=new Date(new Date().getTime()+3600000);
                 localStorage.setItem('expiresIn',""+expiresIn);
-                checkAuthTimeout(3600)
+                checkAuthTimeout(3600,dispatch)
                 dispatch({
                     type:"SIGNIN_USER",
                     payload:{
@@ -172,7 +172,7 @@ export const AuthContextProvider : FC=({children}:Props)=>{
     }
 
     useEffect(()=>{
-        onReload()
+        onReload(dispatch)
     },[])
 
     return(
@@ -188,7 +188,8 @@ export const AuthContextProvider : FC=({children}:Props)=>{
             changePassword:changePassword,
             setCurrentPage:setCurrentPage,
             authLoading:loading,
-            setAuthLoading:setLoading
+            setAuthLoading:setLoading,
+            dispatch:dispatch
         }}>
             {children}
         </AuthContext.Provider>

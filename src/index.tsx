@@ -8,6 +8,7 @@ import {BrowserRouter} from 'react-router-dom'
 import 'react-toastify/dist/ReactToastify.css'
 import {ToastContainer} from 'react-toastify'
 import {AuthContextProvider} from './Store/AuthContext/AuthContext'
+import {QuizContextProvider} from './Store/QuizContext/QuizContext'
 
 const theme = createMuiTheme({
   palette: {
@@ -23,8 +24,10 @@ ReactDOM.render(
     <ThemeProvider theme={theme}>
       <BrowserRouter>
         <AuthContextProvider>
-          <App />
-          <ToastContainer/>
+          <QuizContextProvider>
+            <App />
+            <ToastContainer/>
+          </QuizContextProvider>
         </AuthContextProvider>
       </BrowserRouter>
     </ThemeProvider>

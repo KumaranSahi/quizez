@@ -7,10 +7,12 @@ export type Props={
 export type State={
     quizes:Quiz[]|[];
     currentQuiz:Quiz|null;
+    creatingQuiz:CreateQuizResponse|null;
 }
 
 export type QuizAction=
     |{type:"LOAD_QUIZ_LIST";payload:Quiz[]}
+    |{type:"CREATE_QUIZ";payload:CreateQuizResponse}
 
 export type Option={
     content:string;
@@ -39,4 +41,19 @@ export type QuizContextTypes={
     quizLoading:boolean;
     quizes:Quiz[];
     currentQuiz:Quiz;
+    createQuiz:(quizData:QuizData, setLoading:Dispatch<SetStateAction<boolean>>, token:string,userId:string,dispatch:Dispatch<QuizAction>)=>void;
+    dispatch:Dispatch<QuizAction>;
+}
+
+export type QuizData={
+    name:string;
+    image?:string;
+    description:string;
+}
+
+export type CreateQuizResponse={
+    name: string;
+    description: string;
+    id:string;
+    image?:string;
 }

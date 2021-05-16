@@ -1,14 +1,20 @@
 import './App.css';
 import {Navbar,Spinner} from './Components'
-import {Route,Switch,Redirect} from 'react-router-dom'
-import {Signup,Home} from './Pages'
+import {Route,Switch,Redirect, useHistory} from 'react-router-dom'
+import {Signup,Home,CreateQuiz} from './Pages'
 import {useAuth} from './Store/AuthContext/AuthContext'
-import {QuizContextProvider} from './Store/QuizContext/QuizContext'
+import { useQuiz } from './Store/QuizContext/QuizContext';
+import { useEffect } from 'react';
 
 const PrivateLink=({...props})=>{
   const {token}=useAuth()
+  const {push}=useHistory()
+  useEffect(()=>{
+    if(!token) 
+      push("/sign-up")
+  },[])
   return(
-      token?<Route {...props}/>:<Redirect to="/sign-up"/>
+    <Route {...props}/>
   )
 }
 
@@ -21,20 +27,20 @@ const LockSignup=({...props})=>{
 
 function App() {
   const {token,authLoading}=useAuth()
+  const {quizLoading}=useQuiz()
   return (
     <div className="App">
         <header>
           <Navbar/>
         </header>
         <main className="main-container">
-          <QuizContextProvider>
-            <Switch>
-              <LockSignup path="/sign-up" component={Signup}/>
-              {token?<PrivateLink path="/" component={Home}/>:<Route path="/" component={Signup}/>}
-            </Switch>
-          </QuizContextProvider>
+          <Switch>
+            <LockSignup path="/sign-up" component={Signup}/>
+            <PrivateLink path="/create-quiz" component={CreateQuiz}/>
+            {token?<PrivateLink path="/" component={Home}/>:<Route path="/" component={Signup}/>}
+          </Switch>
         </main>
-        {authLoading &&<Spinner/>}
+        {(authLoading||quizLoading)&&<Spinner/>}
     </div>
   );
 }

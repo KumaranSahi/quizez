@@ -10,8 +10,6 @@
     padding-top:1rem;
     display: flex;
     flex-wrap: wrap;
-    overflow-y: scroll;
-    border:1px solid black;
     padding-inline-start: 0;
 }
 
@@ -19,6 +17,7 @@
     flex:2;
     border:1px solid black;
     display: none;
+    padding: 1rem;
 }
 
 @media (min-width:700px) {

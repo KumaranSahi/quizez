@@ -1,4 +1,4 @@
-import {ReactNode} from 'react'
+import {Dispatch, ReactNode, SetStateAction} from 'react'
 
 export type Props={
     children?:ReactNode;
@@ -29,6 +29,14 @@ export type Question={
 export type Quiz={
     name:string;
     id:string;
+    description?:string;
     questions?:Question[];
     image?:string;
+}
+
+export type QuizContextTypes={
+    setQuizLoading:Dispatch<SetStateAction<boolean>>;
+    quizLoading:boolean;
+    quizes:Quiz[];
+    currentQuiz:Quiz;
 }

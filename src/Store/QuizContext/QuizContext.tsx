@@ -1,5 +1,5 @@
 import {createContext, useContext, useState, useReducer, useEffect} from 'react'
-import {Props, State} from './QuizContext.types'
+import {Props, State, QuizContextTypes} from './QuizContext.types'
 import axios from 'axios'
 import {useAuth} from '../AuthContext/AuthContext'
 import {ResponseTemplate} from '../../Generics.types'
@@ -7,7 +7,7 @@ import {quizReducer} from "./QuizReducer"
 
 export const QuizContext=createContext({});
 
-export const useQuiz=()=>useContext(QuizContext);
+export const useQuiz=()=>useContext(QuizContext) as QuizContextTypes;
 
 const initialState:State={
     quizes:[],

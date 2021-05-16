@@ -30,7 +30,7 @@ function App() {
           <QuizContextProvider>
             <Switch>
               <LockSignup path="/sign-up" component={Signup}/>
-              {token?<Route path="/" component={Home}/>:<Route path="/" component={Signup}/>}
+              {token?<PrivateLink path="/" component={Home}/>:<Route path="/" component={Signup}/>}
             </Switch>
           </QuizContextProvider>
         </main>

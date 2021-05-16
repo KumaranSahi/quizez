@@ -20,6 +20,7 @@ export const authReducer=(state:State,action:Action)=>{
                 ...state,
                 userId:null,
                 token:null,
+                image:null,
                 userName:null,
                 expiresIn:null
             }
@@ -62,7 +63,6 @@ export const checkAuthTimeout=(expirationTime:number,dispatch:Dispatch<Action>,s
 }
 
 export const signOutUser=(dispatch:Dispatch<Action>,setLoading:Dispatch<SetStateAction<boolean>>)=>{
-    // const {push}=useHistory();
     localStorage.removeItem("token");
     localStorage.removeItem("userId");
     localStorage.removeItem("userName");
@@ -72,7 +72,6 @@ export const signOutUser=(dispatch:Dispatch<Action>,setLoading:Dispatch<SetState
         type:"SIGNOUT_USER"
     })
     setLoading(false)
-    // push("/")
 }
 
 export const changePassword=async (userData:ChangePassword,setLoading:Dispatch<SetStateAction<boolean>>,setCurrentPage:Dispatch<SetStateAction<SigninPages>>)=>{
@@ -122,7 +121,6 @@ export const onReload=(dispatch:Dispatch<Action>,setLoading:Dispatch<SetStateAct
 
 export const signInUser=async (emailAndPassword:SigninUser,dispatch:Dispatch<Action>,setLoading:Dispatch<SetStateAction<boolean>>)=>{
     setLoading(true)
-    // const {push}=useHistory();
     try{
         const {data:{data,ok}}=await axios.post<ResponseTemplate<SignedInUserInfo>>('/api/users/signin',emailAndPassword);
         if(ok){
@@ -144,7 +142,6 @@ export const signInUser=async (emailAndPassword:SigninUser,dispatch:Dispatch<Act
             })
             successToast("User Logged in Successfully")
             setLoading(false)
-            // push("/")
         }
     }catch(error){
         warningToast("Invalid username or password")

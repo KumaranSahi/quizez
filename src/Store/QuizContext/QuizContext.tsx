@@ -1,8 +1,9 @@
 import {createContext, useContext, useState, useReducer, useEffect} from 'react'
-import {Props, State, QuizAction} from './QuizContext.types'
+import {Props, State} from './QuizContext.types'
 import axios from 'axios'
 import {useAuth} from '../AuthContext/AuthContext'
 import {ResponseTemplate} from '../../Generics.types'
+import {quizReducer} from "./QuizReducer"
 
 export const QuizContext=createContext({});
 
@@ -19,18 +20,6 @@ export const QuizContextProvider=({children}:Props)=>{
     const config = {
         headers: {
             Authorization: "Bearer " + token
-        }
-    }
-
-    const quizReducer=(state:State,action:QuizAction)=>{
-        switch (action.type) {
-            case "LOAD_QUIZ_LIST":
-                return {
-                    ...state,
-                    quizes:action.payload
-                }
-            default:
-                return state;
         }
     }
 

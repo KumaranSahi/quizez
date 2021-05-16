@@ -6,7 +6,7 @@ export const AuthContext=createContext({});
 
 export const useAuth=()=>useContext(AuthContext) as AuthContextType;
 
-const initialState:State={
+export const initialState:State={
     userId:null,
     token:null,
     userName:null,

@@ -74,7 +74,7 @@ export const Signup=()=>{
                 password:password,
                 image:image,
                 isAdmin:isAdmin
-            },setAuthLoading)
+            },setAuthLoading,setCurrentPage)
         }
     }
 

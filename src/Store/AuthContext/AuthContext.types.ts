@@ -9,12 +9,12 @@ export type AuthContextType={
     token:string;
     userName:string;
     image:string;
-    signUpUser:(userData:UserData,setLoading:Dispatch<SetStateAction<boolean>>)=>void;
+    signUpUser:(userData:UserData,setLoading:Dispatch<SetStateAction<boolean>>,setCurrentPage:Dispatch<SetStateAction<SigninPages>>)=>void;
     signInUser:(emailAndPassword:SigninUser,dispatch:Dispatch<Action>,setLoading:Dispatch<SetStateAction<boolean>>)=>void;
-    signOutUser:(dispatch:Dispatch<Action>)=>void;
+    signOutUser:(dispatch:Dispatch<Action>,setLoading:Dispatch<SetStateAction<boolean>>)=>void;
     currentPage:SigninPages;
     changePassword:(userData:ChangePassword,setLoading:Dispatch<SetStateAction<boolean>>)=>void;
-    setCurrentPage:Dispatch<React.SetStateAction<SigninPages>>;
+    setCurrentPage:Dispatch<SetStateAction<SigninPages>>;
     authLoading:boolean;
     setAuthLoading:Dispatch<SetStateAction<boolean>>;
     dispatch:Dispatch<Action>;

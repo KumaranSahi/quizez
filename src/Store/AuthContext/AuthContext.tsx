@@ -1,10 +1,6 @@
-import {useContext,createContext,useReducer,FC,useState,useEffect,Dispatch,SetStateAction} from 'react'
-import {Props,State,Action,SigninPages,UserData,SigninUser,SignedInUserInfo,ChangePassword,AuthContextType} from './AuthContext.types'
-import {successToast,warningToast,infoToast} from '../../Components/'
-import axios from 'axios'
-import {useHistory} from 'react-router-dom'
-
-import {ResponseTemplate} from '../../Generics.types'
+import {useContext,createContext,useReducer,FC,useState,useEffect} from 'react'
+import {Props,State,SigninPages,AuthContextType} from './AuthContext.types'
+import {authReducer,signUpUser,signOutUser,changePassword,onReload,signInUser} from './AuthReducer'
 
 export const AuthContext=createContext({});
 
@@ -21,158 +17,11 @@ const initialState:State={
 export const AuthContextProvider : FC=({children}:Props)=>{
     const [loading,setLoading]=useState(false)
     const [currentPage,setCurrentPage]=useState<SigninPages>("SIGNIN_PAGE")
-    const {push}=useHistory();
-
-    const authReducer=(state:State,action:Action)=>{
-        switch (action.type) {
-            case "SIGNIN_USER":
-                return{
-                    ...state,
-                    userId:action.payload.userId,
-                    token:action.payload.token,
-                    userName:action.payload.userName,
-                    expiresIn:action.payload.expiresIn,
-                    image:action.payload.image
-                }
-            case "SIGNOUT_USER":
-                return{
-                    ...state,
-                    userId:null,
-                    token:null,
-                    userName:null,
-                    expiresIn:null
-                }
-            default:
-                return state;
-        }
-    }
 
     const [state,dispatch]=useReducer(authReducer,initialState)
 
-    const signUpUser=async (userData:UserData,setLoading:Dispatch<SetStateAction<boolean>>)=>{
-        setLoading(true)
-        try{
-            const {data,status}=await axios.post<ResponseTemplate>('/api/users/signup',userData);
-            if(data.ok){
-                successToast("User Added Successfully")
-                setCurrentPage("SIGNIN_PAGE")
-                setLoading(false)
-            }
-            else{
-                if(+status===208){
-                    infoToast("User already exists")
-                    infoToast("Please Try loging in")
-                }
-                else
-                    warningToast("Failed to add user")
-                setLoading(false)
-            }
-        }catch(error){
-            warningToast("Failed to add user")
-            console.log(error)
-            setLoading(false)
-        }
-    }
-
-    const checkAuthTimeout=(expirationTime:number,dispatch:Dispatch<Action>)=>{
-        setTimeout(()=>{
-            signOutUser(dispatch)
-        },
-        expirationTime*1000
-        )
-    }
-
-    const signOutUser=(dispatch:Dispatch<Action>)=>{
-        localStorage.removeItem("token");
-        localStorage.removeItem("userId");
-        localStorage.removeItem("userName");
-        localStorage.removeItem('expiresIn');
-        localStorage.removeItem('image')
-        dispatch({
-            type:"SIGNOUT_USER"
-        })
-        setLoading(false)
-        push("/")
-    }
-
-    const changePassword=async (userData:ChangePassword,setLoading:Dispatch<SetStateAction<boolean>>)=>{
-        setLoading(true)
-        try{
-            const {data}=await axios.post<ResponseTemplate>('/api/users/password',userData);
-            if(data.ok){
-                successToast("Password changed successfully");
-                setCurrentPage("SIGNIN_PAGE");
-            }
-            setLoading(false)
-        }catch(error){
-            warningToast("Unable to change password please try again later")
-            console.log(error)
-            setLoading(false)
-        }
-    }
-    const onReload=(dispatch:Dispatch<Action>)=>{
-        const token=localStorage.getItem('token');
-        let date=localStorage.getItem('expiresIn')
-        let expiresIn:Date=new Date();
-        if(date)
-            expiresIn=new Date(date);
-        
-        if(expiresIn<=new Date()){
-            signOutUser(dispatch)
-        }
-        else{
-            const userId=localStorage.getItem('userId');
-            const userName=localStorage.getItem('userName')
-            const image=localStorage.getItem('image')
-            checkAuthTimeout((expiresIn.getTime()-new Date().getTime())/1000,dispatch)
-            dispatch({
-                type:"SIGNIN_USER",
-                payload:{
-                    userId:userId,
-                    token:token,
-                    userName:userName,
-                    expiresIn:expiresIn,
-                    image:image
-                }
-            })
-        }
-        
-    }
-
-    const signInUser=async (emailAndPassword:SigninUser,dispatch:Dispatch<Action>,setLoading:Dispatch<SetStateAction<boolean>>)=>{
-        setLoading(true)
-        try{
-            const {data:{data,ok}}=await axios.post<ResponseTemplate<SignedInUserInfo>>('/api/users/signin',emailAndPassword);
-            if(ok){
-                localStorage.setItem("token",data!.token);
-                localStorage.setItem("userId",data!.userId);
-                localStorage.setItem("userName",data!.userName);
-                data?.image && localStorage.setItem("image",data.image)
-                const expiresIn=new Date(new Date().getTime()+3600000);
-                localStorage.setItem('expiresIn',""+expiresIn);
-                checkAuthTimeout(3600,dispatch)
-                dispatch({
-                    type:"SIGNIN_USER",
-                    payload:{
-                        userId:data!.userId,
-                        token:data!.token,
-                        userName:data!.userName,
-                        expiresIn:new Date(expiresIn)
-                    }
-                })
-                successToast("User Logged in Successfully")
-                setLoading(false)
-                push("/")
-            }
-        }catch(error){
-            warningToast("Invalid username or password")
-            console.log(error)
-            setLoading(false)
-        }
-    }
-
     useEffect(()=>{
-        onReload(dispatch)
+        onReload(dispatch,setLoading)
     },[])
 
     return(

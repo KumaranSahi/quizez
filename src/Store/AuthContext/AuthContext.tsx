@@ -52,7 +52,7 @@ export const AuthContextProvider : FC=({children}:Props)=>{
     const signUpUser=async (userData:UserData)=>{
         setLoading(true)
         try{
-            const {data,status}=await axios.post('/api/users/signup',userData);
+            const {data,status}=await axios.post<ResponseTemplate>('/api/users/signup',userData);
             if(data.ok){
                 successToast("User Added Successfully")
                 setCurrentPage("SIGNIN_PAGE")
@@ -87,6 +87,7 @@ export const AuthContextProvider : FC=({children}:Props)=>{
         localStorage.removeItem("userId");
         localStorage.removeItem("userName");
         localStorage.removeItem('expiresIn');
+        localStorage.removeItem('image')
         dispatch({
             type:"SIGNOUT_USER"
         })
@@ -97,7 +98,7 @@ export const AuthContextProvider : FC=({children}:Props)=>{
     const changePassword=async (userData:ChangePassword)=>{
         setLoading(true)
         try{
-            const {data}=await axios.post('/api/users/password',userData);
+            const {data}=await axios.post<ResponseTemplate>('/api/users/password',userData);
             if(data.ok){
                 successToast("Password changed successfully");
                 setCurrentPage("SIGNIN_PAGE");
@@ -180,7 +181,6 @@ export const AuthContextProvider : FC=({children}:Props)=>{
             token:state.token,
             userName:state.userName,
             image:state.image,
-            dispatch:dispatch,
             signUpUser:signUpUser,
             signInUser:signInUser,
             signOutUser:signOutUser,

@@ -169,7 +169,7 @@ export const Signup=()=>{
                                 />
                                 Quiz Creator Account
                             </label>
-                            <Button variant="contained" color="primary"  type="submit" disabled={authLoading?true:false}>
+                            <Button variant="contained" color="primary"  type="submit" disabled={authLoading}>
                                 Sign up!
                             </Button>
                         </form>
@@ -206,7 +206,7 @@ export const Signup=()=>{
                                 value={password}
                                 onChange={event=>setPassword(event.target.value)}
                             />
-                            <Button variant="contained" color="primary"  type="submit" disabled={authLoading?true:false}>
+                            <Button variant="contained" color="primary"  type="submit" disabled={authLoading}>
                                 Sign In
                             </Button>
                         </form>
@@ -248,7 +248,7 @@ export const Signup=()=>{
                                 value={confirmPassword}
                                 onChange={event=>setConfirmPassword(event.target.value)}
                             />
-                            <Button variant="contained" color="primary"  type="submit" disabled={authLoading?true:false}>
+                            <Button variant="contained" color="primary"  type="submit" disabled={authLoading}>
                                 Change Password
                             </Button>
                         </form>

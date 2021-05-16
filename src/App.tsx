@@ -3,14 +3,21 @@ import {Navbar,Spinner} from './Components'
 import {Route,Switch,Redirect} from 'react-router-dom'
 import {Signup,Home} from './Pages'
 import {useAuth} from './Store/AuthContext/AuthContext'
+import {QuizContextProvider} from './Store/QuizContext/QuizContext'
 
 const PrivateLink=({...props})=>{
   const {token}=useAuth()
   return(
-      token?<Route {...props}/>:<Redirect to="/"/>
+      token?<Route {...props}/>:<Redirect to="/sign-up"/>
   )
 }
 
+const LockSignup=({...props})=>{
+  const {token}=useAuth()
+  return(
+      token?<Redirect to="/"/>:<Route {...props}/>
+  )
+}
 
 function App() {
   const {token,authLoading}=useAuth()
@@ -20,9 +27,12 @@ function App() {
           <Navbar/>
         </header>
         <main className="main-container">
-          <Switch>
-          {token?<Route path="/" component={Home}/>:<Route path="/" component={Signup}/>}
-          </Switch>
+          <QuizContextProvider>
+            <Switch>
+              <LockSignup path="/sign-up" component={Signup}/>
+              {token?<Route path="/" component={Home}/>:<Route path="/" component={Signup}/>}
+            </Switch>
+          </QuizContextProvider>
         </main>
         {authLoading &&<Spinner/>}
     </div>

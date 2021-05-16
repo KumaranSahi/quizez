@@ -1,0 +1,15 @@
+.homepage-container{
+    width: 100%;
+    display: flex;
+}
+
+.active-quizes{
+    flex:4;
+    overflow-y: scroll;
+    border:1px solid black;
+}
+
+.create-quiz-personal-scores{
+    flex:2;
+    border:1px solid black;
+}

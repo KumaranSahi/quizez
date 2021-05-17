@@ -5,7 +5,7 @@ import {PhotoCamera} from '@material-ui/icons'
 import {useQuiz} from '../../Store/QuizContext/QuizContext'
 import {useAuth} from '../../Store/AuthContext/AuthContext'
 import axios from 'axios'
-import {successToast,warningToast} from '../../Components/'
+import {successToast,warningToast} from '../../Components'
 
 export const CreateQuiz=()=>{
 

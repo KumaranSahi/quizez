@@ -1,0 +1,228 @@
+import classes from './QuizModal.module.css'
+import {Question,Option} from '../../../Store/QuizContext/QuizContext.types'
+import {SetStateAction, useState,Dispatch, SyntheticEvent} from 'react'
+import {Modal,Backdrop,Fade,TextField,FormControlLabel
+    ,Checkbox,RadioGroup,Radio,FormGroup, IconButton,FormHelperText,Button} from '@material-ui/core';
+import {Add} from '@material-ui/icons'
+import {useQuiz} from '../../../Store/QuizContext/QuizContext'
+import {useAuth} from '../../../Store/AuthContext/AuthContext'
+
+type PropTypes=
+    |{type:"NEW_QUESTION";open:boolean;setOpen:Dispatch<SetStateAction<boolean>>;quiz:string}
+    |{type:"EDIT_QUESTION";payload:Question;open:boolean;setOpen:Dispatch<SetStateAction<boolean>>;quiz:string}
+
+export const QuizModal=(props:PropTypes)=>{
+    const [question,setQuestion]=useState("")
+    const [options,setOptions]=useState<Option[]|null>(null)
+    const [points,setPoints]=useState(0)
+    const [negativePoints,setNegativePoints]=useState(0)
+    const [multipleCorrect,setMultipleCorrect]=useState(false)
+    const [hint,setHint]=useState("")
+
+    const [addOption,setAddOption]=useState("")
+    const [addOptionError,setAddOptionError]=useState(false)
+
+    const {createQuestion,editQuestion,dispatch,setQuizLoading,quizLoading,creatingQuiz}=useQuiz()
+    const {token,userId}=useAuth()
+
+    if(props.type==="EDIT_QUESTION"){
+        setQuestion(props.payload.question)
+        setOptions(props.payload.options)
+        setPoints(props.payload.points)
+        props.payload.negativePoints && setNegativePoints(props.payload.negativePoints)
+        setMultipleCorrect(props.payload.multipleCorrect)
+        props.payload.hint && setHint(props.payload.hint)
+    }
+
+    const handleClose = () => {
+        props.setOpen(false);
+    };
+
+    const addOptionButtonClicked=()=>{
+        if(addOption && !(options && options.some(({content})=>(content.toLowerCase()===addOption.toLowerCase())))){
+            setOptions(state=>state?[...state,{content:addOption,isCorrect:false}]:[{content:addOption,isCorrect:false}])
+            setAddOptionError(false)
+            setAddOption("")
+        }else{
+            setAddOptionError(true)
+            setAddOption("")
+        }
+    }
+
+    const optionClicked=(id="",content:string,radio=false)=>{
+        if(id){
+            setOptions(state=>state && state.map(option=>option.id===id?{...option,isCorrect:!option.isCorrect}:{...option,isCorrect:radio?false:option.isCorrect}))
+        }else{
+            setOptions(state=>state && state.map(option=>option.content===content?{...option,isCorrect:!option.isCorrect}:{...option,isCorrect:radio?false:option.isCorrect}))
+        }
+    }
+
+    const questionSubmitted=(event:SyntheticEvent)=>{
+        event.preventDefault();
+        if(question && options && options.length>1 && points>0){
+            if(props.type==="NEW_QUESTION"){
+                createQuestion({
+                    hint:hint,
+                    multipleCorrect:multipleCorrect,
+                    negativePoints:negativePoints,
+                    options:options,
+                    points:points,
+                    question:question,
+                    quiz:props.quiz,
+                },token,userId,setQuizLoading,dispatch,creatingQuiz)
+            }else{
+                editQuestion({
+                    hint:hint,
+                    multipleCorrect:multipleCorrect,
+                    negativePoints:negativePoints,
+                    options:options,
+                    points:points,
+                    question:question,
+                    quiz:props.quiz,
+                },token,props.payload.id,setQuizLoading,dispatch,creatingQuiz)
+            }
+        }
+    }
+
+    return(
+        <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        className={classes["quiz-modal"]}
+        open={props.open}
+        onClose={handleClose}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={props.open}>
+          <div className={classes["quiz-modal-paper"]}>
+            <h2
+                className={classes["quiz-modal-headings"]}
+            >Add a question</h2>
+            <form 
+                className={classes["question-form"]}
+                onSubmit={questionSubmitted}
+            >
+                <TextField 
+                    label="Question"
+                    fullWidth
+                    multiline
+                    required
+                    value={question}
+                    onChange={event=>setQuestion(event.target.value)} 
+                    variant="outlined" 
+                />
+                <FormControlLabel
+                    control={
+                    <Checkbox
+                        checked={multipleCorrect}
+                        onChange={()=>{
+                            setMultipleCorrect(state=>!state)
+                            setOptions(state=>state && state.map(option=>({...option,isCorrect:false})))
+                        }}
+                        color="primary"
+                    />
+                    }
+                    label="Has multiple correct answers"
+                />
+                <div className={classes["adjacent-textfield"]}>
+                    <TextField 
+                        label="Points"
+                        type="number"
+                        required
+                        value={points}
+                        onChange={event=>setPoints(+event.target.value)} 
+                        variant="outlined" 
+                    />
+                    <TextField 
+                        label="Negative Points"
+                        type="number"
+                        value={negativePoints}
+                        onChange={event=>setNegativePoints(+event.target.value)} 
+                        variant="outlined" 
+                    />
+                </div>
+                <h3
+                    className={classes["quiz-modal-headings"]}
+                >
+                    Options(atleast 2 options)
+                </h3>
+                {
+                    multipleCorrect?(
+                        <>
+                            <FormGroup>
+                                {options && options.map(({content,isCorrect,id})=>
+                                (<FormControlLabel
+                                    key={id?id:content}
+                                    control={<Checkbox 
+                                        name={content} 
+                                        checked={isCorrect} 
+                                        onClick={()=>optionClicked(id,content)}
+                                    />}
+                                    label={content}
+                                />))}
+                            </FormGroup>
+                        </>
+                    ):(
+                        <>
+                            <RadioGroup aria-label="option" name="option">
+                                {
+                                    options?.map(({id,content,isCorrect})=>(
+                                        <FormControlLabel 
+                                            key={id}
+                                            control={<Radio
+                                                color="primary"
+                                                name={content} 
+                                                checked={isCorrect}
+                                                onClick={()=>optionClicked(id,content,true)}
+                                            />} 
+                                            label={content}
+                                        />
+                                    ))
+                                    
+                                }
+                            </RadioGroup>
+                        </>
+                    )
+                }
+                <div style={{"marginBottom":"1rem"}}>
+                    <TextField
+                        label="option"
+                        value={addOption}
+                        onChange={event=>setAddOption(event.target.value)}
+                    />
+                    <IconButton
+                        color="primary"
+                        onClick={addOptionButtonClicked}
+                    >
+                        <Add/>
+                    </IconButton>
+                </div>
+                {addOptionError && <FormHelperText>Options have to be unique</FormHelperText>}
+                <TextField 
+                    label="Hint"
+                    fullWidth
+                    multiline
+                    value={hint}
+                    onChange={event=>setHint(event.target.value)} 
+                    variant="outlined" 
+                />
+                <Button
+                    color="primary"
+                    type="submit"
+                    fullWidth
+                    disabled={quizLoading}
+                >
+                    {props.type==="NEW_QUESTION"?"Add Question":"Modify Question"}
+                </Button>
+            </form>
+          </div>
+        </Fade>
+      </Modal>
+    )
+
+
+}

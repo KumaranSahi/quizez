@@ -15,19 +15,24 @@ export type QuizAction=
     |{type:"LOAD_QUIZ_LIST";payload:Quiz[]}
     |{type:"LOAD_MY_QUIZES";payload:Quiz[]}
     |{type:"CREATE_QUIZ";payload:Quiz}
+    |{type:"LOAD_CREATING_QUIZ";payload:Quiz}
+    |{type:"LOAD_CURRENT_QUIZ";payload:Quiz}
+    |{type:"EDIT_QUESTION";payload:Quiz}
 
 export type Option={
     content:string;
     isCorrect:boolean;
+    id?:string;
 }
 
 export type Question={
+    id:string;
     question:string;
     options:Option[];
     multipleCorrect:boolean;
     points:number;
     negativePoints?:number;
-    hint:string;
+    hint?:string;
 }
 
 export type Quiz={
@@ -45,8 +50,12 @@ export type QuizContextTypes={
     myQuizes:Quiz[];
     getMyQuizes:(userId:string, token:string, dispatch:Dispatch<QuizAction>, setLoading:Dispatch<SetStateAction<boolean>>)=>void;
     currentQuiz:Quiz;
+    getQuiz:(quizId:string, token:string, dispatch:Dispatch<QuizAction>, setLoading:Dispatch<SetStateAction<boolean>>,currentQuiz:boolean)=>void;
     createQuiz:(quizData:QuizData, setLoading:Dispatch<SetStateAction<boolean>>, token:string,userId:string,dispatch:Dispatch<QuizAction>)=>void;
     dispatch:Dispatch<QuizAction>;
+    editQuestion:(questionData:NewQuestionData,token:string,questionId:string,setLoading:Dispatch<SetStateAction<boolean>>,dispatch:Dispatch<QuizAction>,creatingQuiz:Quiz)=>void;
+    createQuestion:(questionData:NewQuestionData,token:string,userId:string,setLoading:Dispatch<SetStateAction<boolean>>,dispatch:Dispatch<QuizAction>,creatingQuiz:Quiz)=>void;
+    creatingQuiz:Quiz;
 }
 
 export type QuizData={
@@ -55,3 +64,12 @@ export type QuizData={
     description:string;
 }
 
+export type NewQuestionData={
+    question:string;
+    options:Option[];
+    multipleCorrect:boolean;
+    points:number;
+    negativePoints:number;
+    quiz:string;
+    hint:string;
+}

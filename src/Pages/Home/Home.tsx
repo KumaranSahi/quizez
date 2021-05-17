@@ -33,6 +33,16 @@ export const Home=()=>{
             >
                 Create Quiz
             </Button>
+            <hr/>
+            <Button 
+                variant="contained"  
+                color="primary"
+                fullWidth
+                size="large"
+                onClick={()=>push("/my-quizes")}
+            >
+                My Quizes
+            </Button>
             </div>
         </div>
     )

@@ -1,9 +1,9 @@
 import {createContext, useContext, useState, useReducer, useEffect} from 'react'
-import {Props, State, QuizContextTypes} from './QuizContext.types'
+import {Props, State, QuizContextTypes, Quiz} from './QuizContext.types'
 import axios from 'axios'
 import {useAuth} from '../AuthContext/AuthContext'
 import {ResponseTemplate} from '../../Generics.types'
-import {quizReducer,createQuiz} from "./QuizReducer"
+import {quizReducer,createQuiz,getMyQuizes} from "./QuizReducer"
 
 export const QuizContext=createContext({});
 
@@ -12,7 +12,8 @@ export const useQuiz=()=>useContext(QuizContext) as QuizContextTypes;
 const initialState:State={
     quizes:[],
     currentQuiz:null,
-    creatingQuiz:null
+    creatingQuiz:null,
+    myQuizes:[],
 }
 
 export const QuizContextProvider=({children}:Props)=>{
@@ -28,8 +29,8 @@ export const QuizContextProvider=({children}:Props)=>{
         (
             async ()=>{
                 if(token){
-                    const {data:{data,ok}}=await axios.get<ResponseTemplate>('/api/quizes',config)
-                    if(ok){
+                    const {data:{data,ok}}=await axios.get<ResponseTemplate<Quiz[]>>('/api/quizes',config)
+                    if(ok&&data){
                         dispatch({
                             type:"LOAD_QUIZ_LIST",
                             payload:data
@@ -49,7 +50,9 @@ export const QuizContextProvider=({children}:Props)=>{
             quizes:state.quizes,
             currentQuiz:state.currentQuiz,
             createQuiz:createQuiz,
-            dispatch:dispatch
+            dispatch:dispatch,
+            myQuizes:state.myQuizes,
+            getMyQuizes:getMyQuizes
         }}>
             {children}
         </QuizContext.Provider>

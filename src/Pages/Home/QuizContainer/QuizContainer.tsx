@@ -8,7 +8,6 @@ export const QuizContainer=({id,name,image,description}:Quiz)=>{
         saturation: 80,
         lightness:[30,50]
     })
-    console.log(image)
     return(
         <li className={classes["quiz-container"]}  style={image?{backgroundImage:`url(${image})`}:{backgroundColor:`${color.color}`}}>
             <h1 className={classes["quiz-name"]}>{name}</h1>

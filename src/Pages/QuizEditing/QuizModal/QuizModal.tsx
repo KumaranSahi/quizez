@@ -3,7 +3,7 @@ import {Question,Option} from '../../../Store/QuizContext/QuizContext.types'
 import {SetStateAction, useState,Dispatch, SyntheticEvent} from 'react'
 import {Modal,Backdrop,Fade,TextField,FormControlLabel
     ,Checkbox,RadioGroup,Radio,FormGroup, IconButton,FormHelperText,Button} from '@material-ui/core';
-import {Add} from '@material-ui/icons'
+import {Add,Delete} from '@material-ui/icons'
 import {useQuiz} from '../../../Store/QuizContext/QuizContext'
 import {useAuth} from '../../../Store/AuthContext/AuthContext'
 
@@ -54,6 +54,14 @@ export const QuizModal=(props:PropTypes)=>{
             setOptions(state=>state && state.map(option=>option.id===id?{...option,isCorrect:!option.isCorrect}:{...option,isCorrect:radio?false:option.isCorrect}))
         }else{
             setOptions(state=>state && state.map(option=>option.content===content?{...option,isCorrect:!option.isCorrect}:{...option,isCorrect:radio?false:option.isCorrect}))
+        }
+    }
+
+    const optionDeleteClicked=(id="",content:string)=>{
+        if(id){
+            setOptions(state=>state && state.filter(option=>option.id!==id))
+        }else{
+            setOptions(state=>state && state.filter(option=>option.content!==content))
         }
     }
 
@@ -155,15 +163,24 @@ export const QuizModal=(props:PropTypes)=>{
                         <>
                             <FormGroup>
                                 {options && options.map(({content,isCorrect,id})=>
-                                (<FormControlLabel
-                                    key={id?id:content}
-                                    control={<Checkbox 
-                                        name={content} 
-                                        checked={isCorrect} 
-                                        onClick={()=>optionClicked(id,content)}
-                                    />}
-                                    label={content}
-                                />))}
+                                (<div  className={classes["option"]}>
+                                    <FormControlLabel
+                                        key={id?id:content}
+                                        control={<Checkbox 
+                                            name={content} 
+                                            checked={isCorrect} 
+                                            onClick={()=>optionClicked(id,content)}
+                                        />}
+                                        label={content}
+                                    />
+                                    <IconButton
+                                        color="secondary"
+                                        onClick={()=>optionDeleteClicked(id,content)}
+                                    >
+                                        <Delete/>
+                                    </IconButton>
+                                </div>
+                                ))}
                             </FormGroup>
                         </>
                     ):(
@@ -171,6 +188,7 @@ export const QuizModal=(props:PropTypes)=>{
                             <RadioGroup aria-label="option" name="option">
                                 {
                                     options?.map(({id,content,isCorrect})=>(
+                                        <div className={classes["option"]}>
                                         <FormControlLabel 
                                             key={id}
                                             control={<Radio
@@ -181,6 +199,13 @@ export const QuizModal=(props:PropTypes)=>{
                                             />} 
                                             label={content}
                                         />
+                                        <IconButton
+                                            color="secondary"
+                                            onClick={()=>optionDeleteClicked(id,content)}
+                                        >
+                                            <Delete/>
+                                        </IconButton>
+                                    </div>
                                     ))
                                     
                                 }
@@ -213,7 +238,9 @@ export const QuizModal=(props:PropTypes)=>{
                 <Button
                     color="primary"
                     type="submit"
+                    variant="contained"
                     fullWidth
+                    style={{"marginTop":"1rem"}}
                     disabled={quizLoading}
                 >
                     {props.type==="NEW_QUESTION"?"Add Question":"Modify Question"}

@@ -1,12 +1,14 @@
 import classes from "./Navbar.module.css"
 import {Avatar} from './Avatar/Avatar'
 import {useAuth} from '../../Store/AuthContext/AuthContext'
+import {useHistory} from 'react-router-dom'
 
 export const Navbar=()=>{
     const {token}=useAuth()
+    const {push}=useHistory()
     return (
     <div className={classes["navbar-container"]}>
-        <h1 className={classes["navbar-logo"]}>QuizEz</h1>
+        <h1 className={classes["navbar-logo"]} onClick={()=>push("/")}>QuizEz</h1>
         {token?<Avatar/>:<div></div>}
     </div>)
 }

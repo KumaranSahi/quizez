@@ -33,7 +33,7 @@ export const QuizEditing=()=>{
                 <ul className={classes["question-list"]}>
                     {
                         creatingQuiz && creatingQuiz.questions?.map(({id,question,points})=>(
-                            <li key={id}>
+                            <li key={id} style={{marginBottom:"1rem"}}>
                                 <QuestionListItem
                                     id={id}
                                     question={question}

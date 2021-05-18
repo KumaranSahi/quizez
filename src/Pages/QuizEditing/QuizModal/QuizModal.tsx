@@ -65,7 +65,7 @@ export const QuizModal=(props:PropTypes)=>{
 
     const questionSubmitted=(event:SyntheticEvent)=>{
         event.preventDefault();
-        if(question && options && options.length>1 && points>0){
+        if(question && options && options.length>1 && options.some(({isCorrect})=>isCorrect) && points>0){
             if(props.type==="NEW_QUESTION"){
                 createQuestion({
                     hint:hint,
@@ -76,6 +76,7 @@ export const QuizModal=(props:PropTypes)=>{
                     question:question,
                     quiz:props.quiz,
                 },token,userId,setQuizLoading,dispatch,creatingQuiz)
+                handleClose()
             }else{
                 editQuestion({
                     hint:hint,
@@ -86,6 +87,7 @@ export const QuizModal=(props:PropTypes)=>{
                     question:question,
                     quiz:props.quiz,
                 },token,props.payload.id,setQuizLoading,dispatch,creatingQuiz)
+                handleClose()
             }
         }
     }

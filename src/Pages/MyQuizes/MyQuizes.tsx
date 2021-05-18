@@ -25,17 +25,17 @@ export const MyQuizes=()=>{
                 <TableHead>
                     <TableRow>
                         <TableCell className={classes["table-head-cell"]}>name</TableCell>
+                        <TableCell className={classes["table-head-cell"]} align="right">Description</TableCell>
                         <TableCell className={classes["table-head-cell"]} align="right">Questions</TableCell>
-                        <TableCell className={classes["table-head-cell"]} align="right">Total Score</TableCell>
                         <TableCell className={classes["table-head-cell"]} align="right">Edit</TableCell>
                     </TableRow>
                 </TableHead>
             <TableBody>
-            {myQuizes.map(({id,name,questions})=>(
+            {myQuizes.map(({id,name,questions,description})=>(
                 <TableRow key={id} className={classes["tablebody-row"]}>
                     <TableCell>{name}</TableCell>
+                    <TableCell align="right">{description && description.slice(0,25)}...</TableCell>
                     <TableCell align="right">{questions?questions.length:0}</TableCell>
-                    <TableCell align="right">Total Score</TableCell>
                     <TableCell align="right">
                         <Button variant="outlined" disabled={quizLoading} color="primary" onClick={()=>push({pathname:"/edit-quiz",search:id})}>
                             Edit Quiz

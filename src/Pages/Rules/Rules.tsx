@@ -1,0 +1,52 @@
+import classes from './Rules.module.css'
+import {useQuiz} from '../../Store/QuizContext/QuizContext'
+import {Button} from '@material-ui/core'
+import { useHistory } from 'react-router-dom'
+import {usePlayQuiz} from '../../Store/PlayQuizContext/PlayQuizContext'
+
+export const Rules=()=>{
+    const {currentQuiz,calculateTotalScore}=useQuiz()
+    const {dispatch}=usePlayQuiz()
+    const {push}=useHistory()
+    return(
+        <div className={classes["rules-page"]}>
+            <div className={classes["rules-container"]}>
+                <h1>Rules</h1>
+                {currentQuiz&&(<div className={classes["quiz-info"]}>
+                    <h2>{currentQuiz.name}</h2>
+                    <h2>Total Points : {calculateTotalScore(currentQuiz)}</h2>
+                </div>)}
+                <ul className={classes["rules-list"]}>
+                    <li>
+                        Each question has its own points.
+                    </li>
+                    <li>
+                        Some questions may carry negative points.
+                    </li>
+                    <li>
+                        Some questions may have hints.
+                    </li>
+                    <li>
+                        Using hints will result in getting half the total amount of points for a given quesiton.
+                    </li>
+                    <li>
+                        Once the game has started you cannot navigate away or reload
+                    </li>
+                    <li>
+                        If you are ready to start click on the play button and may the odds be forever in your favour!
+                    </li>
+                </ul>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={()=>{
+                        push("/play-quiz")
+                        dispatch({type:"START_QUIZ"})
+                    }}
+                >
+                    Play Game!
+                </Button>
+            </div>    
+        </div>
+    )
+}

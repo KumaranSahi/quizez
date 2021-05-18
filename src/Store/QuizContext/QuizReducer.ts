@@ -199,3 +199,5 @@ export const deleteQuestion=async (questionId:string,token:string,dispatch:Dispa
         setLoading(false)
     }
 }
+
+export const calculateTotalScore=(currentQuiz:Quiz)=>currentQuiz.questions!.reduce((accumulator:number,currentValue:Question)=>accumulator+currentValue.points,0)

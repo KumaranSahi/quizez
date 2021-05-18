@@ -50,13 +50,14 @@ export type QuizContextTypes={
     myQuizes:Quiz[];
     getMyQuizes:(userId:string, token:string, dispatch:Dispatch<QuizAction>, setLoading:Dispatch<SetStateAction<boolean>>)=>void;
     currentQuiz:Quiz;
-    getQuiz:(quizId:string, token:string, dispatch:Dispatch<QuizAction>, setLoading:Dispatch<SetStateAction<boolean>>,currentQuiz:boolean)=>void;
+    getQuiz:(quizId:string, token:string, dispatch:Dispatch<QuizAction>, setLoading:Dispatch<SetStateAction<boolean>>,creatingQuiz:boolean)=>void;
     createQuiz:(quizData:QuizData, setLoading:Dispatch<SetStateAction<boolean>>, token:string,userId:string,dispatch:Dispatch<QuizAction>)=>void;
     dispatch:Dispatch<QuizAction>;
     editQuestion:(questionData:NewQuestionData,token:string,questionId:string,setLoading:Dispatch<SetStateAction<boolean>>,dispatch:Dispatch<QuizAction>,creatingQuiz:Quiz)=>void;
     createQuestion:(questionData:NewQuestionData,token:string,userId:string,setLoading:Dispatch<SetStateAction<boolean>>,dispatch:Dispatch<QuizAction>,creatingQuiz:Quiz)=>void;
     creatingQuiz:Quiz;
     deleteQuestion:(questionId:string,token:string,dispatch:Dispatch<QuizAction>,setLoading:Dispatch<SetStateAction<boolean>>,creatingQuiz:Quiz)=>void;
+    calculateTotalScore:(currentQuiz:Quiz)=>number;
 }
 
 export type QuizData={

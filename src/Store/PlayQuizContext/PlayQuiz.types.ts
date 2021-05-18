@@ -1,4 +1,4 @@
-import { ReactNode,Dispatch,SetStateAction } from "react";
+import { ReactNode,Dispatch } from "react";
 
 export type Props={
     children?:ReactNode;
@@ -6,6 +6,8 @@ export type Props={
 
 export type State={
     playQuizMode:boolean;
+    currentQuestion:Question|null;
+    score:number;
 }
 
 export type Option={
@@ -34,8 +36,12 @@ export type Quiz={
 
 export type PlayQuizAction=
     |{type:"START_QUIZ"}
+    |{type:"LOAD_QUESTION";payload:Question}
+    |{type:"SET_SCORE";payload:number}
 
 export type PlayQuizContextType={
     dispatch:Dispatch<PlayQuizAction>;
     playQuizMode:boolean;
+    currentQuestion:Question;
+    score:number;
 }

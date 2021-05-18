@@ -1,6 +1,6 @@
 .create-quiz-page{
     width: 100%;
-    height: calc(100vh - 4.4rem);
+    min-height: calc(100vh - 4.4rem);
     display: flex;
     justify-content: center;
     align-items: center;

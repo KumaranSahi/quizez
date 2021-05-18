@@ -7,7 +7,9 @@ export const PlayQuizContext=createContext({})
 export const usePlayQuiz=()=>useContext(PlayQuizContext) as PlayQuizContextType
 
 const initialState:State={
-    playQuizMode:false
+    playQuizMode:false,
+    currentQuestion:null,
+    score:0
 }
 
 export const PlayQuizContextProvider=({children}:Props)=>{
@@ -18,7 +20,9 @@ export const PlayQuizContextProvider=({children}:Props)=>{
         <PlayQuizContext.Provider
             value={{
                 dispatch:dispatch,
-                playQuizMode:state.playQuizMode
+                playQuizMode:state.playQuizMode,
+                currentQuestion:state.currentQuestion,
+                score:state.score
             }}
         >
             {children}

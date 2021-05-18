@@ -1,0 +1,22 @@
+.play-quiz-page{
+    width: 100%;
+    min-height: calc(100vh - 4.4rem);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    background-color: lightgray;
+}
+
+.play-quiz-container{
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    background-color: white;
+}
+
+@media (min-width:700px){
+    .play-quiz-container{
+        width: 40rem;
+        min-height: 30rem;
+    }
+}

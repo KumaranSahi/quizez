@@ -18,6 +18,12 @@ export const Rules=()=>{
                 </div>)}
                 <ul className={classes["rules-list"]}>
                     <li>
+                        You get 30 seconds to answer each question.
+                    </li>
+                    <li>
+                        If the question times out no point is scored.
+                    </li>
+                    <li>
                         Each question has its own points.
                     </li>
                     <li>
@@ -27,7 +33,7 @@ export const Rules=()=>{
                         Some questions may have hints.
                     </li>
                     <li>
-                        Using hints will result in getting half the total amount of points for a given quesiton.
+                        Using hints for question will only give you half the points.
                     </li>
                     <li>
                         Once the game has started you cannot navigate away or reload
@@ -42,6 +48,7 @@ export const Rules=()=>{
                     onClick={()=>{
                         push("/play-quiz")
                         dispatch({type:"START_QUIZ"})
+                        currentQuiz && currentQuiz.questions && dispatch({type:"LOAD_QUESTION",payload:currentQuiz.questions[0]})
                     }}
                 >
                     Play Game!

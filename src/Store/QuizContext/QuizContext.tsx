@@ -3,7 +3,7 @@ import {Props, State, QuizContextTypes, Quiz} from './QuizContext.types'
 import axios from 'axios'
 import {useAuth} from '../AuthContext/AuthContext'
 import {ResponseTemplate} from '../../Generics.types'
-import {quizReducer,createQuiz,getMyQuizes,getQuiz,createQuestion,editQuestion} from "./QuizReducer"
+import {quizReducer,createQuiz,getMyQuizes,getQuiz,createQuestion,editQuestion,deleteQuestion} from "./QuizReducer"
 
 export const QuizContext=createContext({});
 
@@ -56,7 +56,8 @@ export const QuizContextProvider=({children}:Props)=>{
             getQuiz:getQuiz,
             createQuestion:createQuestion,
             editQuestion:editQuestion,
-            creatingQuiz:state.creatingQuiz
+            creatingQuiz:state.creatingQuiz,
+            deleteQuestion:deleteQuestion
         }}>
             {children}
         </QuizContext.Provider>

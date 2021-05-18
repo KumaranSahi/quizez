@@ -136,6 +136,7 @@ export const createQuestion=async (questionData:NewQuestionData,token:string,use
                 type:"EDIT_QUESTION",
                 payload:newQuiz
             })
+            setLoading(false)
         }
     }catch(error){
         warningToast("Unable to create question")
@@ -162,9 +163,38 @@ export const editQuestion=async (questionData:NewQuestionData,token:string,quest
                 type:"EDIT_QUESTION",
                 payload:newQuiz
             })
+            setLoading(false)
         }
     }catch(error){
         warningToast("Unable to edit question")
+        console.log(error)
+        setLoading(false)
+    }
+}
+
+export const deleteQuestion=async (questionId:string,token:string,dispatch:Dispatch<QuizAction>,setLoading:Dispatch<SetStateAction<boolean>>,creatingQuiz:Quiz)=>{
+    setLoading(true)
+    const config = {
+        headers: {
+            Authorization: "Bearer " + token
+        }
+    }
+    try{
+        const {data:{ok}}=await axios.delete<ResponseTemplate>(`api/questions/${questionId}`,config)
+        if(ok){
+            const newQuiz:Quiz={
+                ...creatingQuiz,
+                questions:creatingQuiz.questions!.filter(question=>question.id!==questionId)
+            }
+            dispatch({
+                type:"EDIT_QUESTION",
+                payload:newQuiz
+            })
+            setLoading(false)
+            successToast("Question Deleted Successfully")
+        }
+    }catch(error){
+        warningToast("Unable to delete question")
         console.log(error)
         setLoading(false)
     }

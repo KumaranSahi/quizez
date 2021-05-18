@@ -37,7 +37,7 @@ export const MyQuizes=()=>{
                     <TableCell align="right">{questions?questions.length:0}</TableCell>
                     <TableCell align="right">Total Score</TableCell>
                     <TableCell align="right">
-                        <Button variant="outlined" color="primary" onClick={()=>push({pathname:"/edit-quiz",search:id})}>
+                        <Button variant="outlined" disabled={quizLoading} color="primary" onClick={()=>push({pathname:"/edit-quiz",search:id})}>
                             Edit Quiz
                         </Button>
                     </TableCell>

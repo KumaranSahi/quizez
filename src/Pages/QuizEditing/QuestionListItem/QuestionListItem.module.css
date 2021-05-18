@@ -1,0 +1,23 @@
+.quesiton-container{
+    width: 100%;
+    padding: 0.5rem;
+    text-align: left;
+    box-shadow: 2px 3px 9px 0px;
+    display: flex;
+    flex-direction: column;
+}
+
+.question{
+    flex: 5;
+}
+
+.action-buttons{
+    flex: 1;
+}
+
+@media (min-width:700px){
+    .quesiton-container{
+        flex-direction: row;
+    }
+}
+

@@ -12,12 +12,12 @@ type PropTypes=
     |{type:"EDIT_QUESTION";payload:Question;open:boolean;setOpen:Dispatch<SetStateAction<boolean>>;quiz:string}
 
 export const QuizModal=(props:PropTypes)=>{
-    const [question,setQuestion]=useState("")
-    const [options,setOptions]=useState<Option[]|null>(null)
-    const [points,setPoints]=useState(0)
-    const [negativePoints,setNegativePoints]=useState(0)
-    const [multipleCorrect,setMultipleCorrect]=useState(false)
-    const [hint,setHint]=useState("")
+    const [question,setQuestion]=useState(props.type==="EDIT_QUESTION"?props.payload.question:"")
+    const [options,setOptions]=useState<Option[]|null>(props.type==="EDIT_QUESTION"?props.payload.options:null)
+    const [points,setPoints]=useState(props.type==="EDIT_QUESTION"?props.payload.points:0)
+    const [negativePoints,setNegativePoints]=useState(props.type==="EDIT_QUESTION"&&props.payload.negativePoints?props.payload.negativePoints:0)
+    const [multipleCorrect,setMultipleCorrect]=useState(props.type==="EDIT_QUESTION"?props.payload.multipleCorrect:false)
+    const [hint,setHint]=useState(props.type==="EDIT_QUESTION"&&props.payload.hint?props.payload.hint:"")
 
     const [addOption,setAddOption]=useState("")
     const [addOptionError,setAddOptionError]=useState(false)
@@ -25,16 +25,14 @@ export const QuizModal=(props:PropTypes)=>{
     const {createQuestion,editQuestion,dispatch,setQuizLoading,quizLoading,creatingQuiz}=useQuiz()
     const {token,userId}=useAuth()
 
-    if(props.type==="EDIT_QUESTION"){
-        setQuestion(props.payload.question)
-        setOptions(props.payload.options)
-        setPoints(props.payload.points)
-        props.payload.negativePoints && setNegativePoints(props.payload.negativePoints)
-        setMultipleCorrect(props.payload.multipleCorrect)
-        props.payload.hint && setHint(props.payload.hint)
-    }
-
     const handleClose = () => {
+        setQuestion("")
+        setOptions(null)
+        setPoints(0)
+        setNegativePoints(0)
+        setMultipleCorrect(false)
+        setHint("")
+        setAddOption("")
         props.setOpen(false);
     };
 

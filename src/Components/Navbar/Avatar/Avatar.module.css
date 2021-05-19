@@ -29,20 +29,6 @@
     position: relative;
 }
 
-.avatar-bubble{
-    position: absolute;
-    bottom: 5%;
-    right: 1%;
-    width: 0.8rem;
-    height: 0.8rem;
-    border-radius: 50%;
-}
-
-.bubble-active{
-    background-color: var(--success-bright);
-}
-
-
 @media (min-width:700px){
     .name-container{
         display: block;

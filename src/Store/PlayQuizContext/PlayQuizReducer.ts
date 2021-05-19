@@ -26,9 +26,19 @@ export const playQuizReducer=(state:State,action:PlayQuizAction)=>{
                 ...state,
                 playQuizMode:false,
                 score:0,
-                currentQuestion:null
+                currentQuestion:null,
+                quizResponses:[]
             })
-
+        case "STORE_RESPONSE":
+            return({
+                ...state,
+                quizResponses:[...state.quizResponses,action.payload]
+            })
+        case "EXIT_PLAY_MODE":
+            return({
+                ...state,
+                playQuizMode:false,
+            })
         default:
             return state;
     }
@@ -42,12 +52,10 @@ export const submitQuiz=async (userId:string,quizData:SubmitQuizPayload,token:st
         }
     }
     try{
-        const {data:{ok}}=await axios.post<ResponseTemplate>(`/api/scorecards/${userId}`,quizData,config)
-        if(ok){
-            dispatch({
-                type:"END_QUIZ"
-            })
-        }
+        await axios.post<ResponseTemplate>(`/api/scorecards/${userId}`,quizData,config)
+        dispatch({
+            type:"EXIT_PLAY_MODE"
+        })
         return true;
     }catch(error){
         console.log(error);

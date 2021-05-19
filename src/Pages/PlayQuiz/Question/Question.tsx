@@ -1,5 +1,5 @@
 import classes from './Question.module.css'
-import {useState,useEffect} from 'react'
+import {useState,useEffect, SyntheticEvent} from 'react'
 import {Question as QuestionType} from '../../../Store/QuizContext/QuizContext.types'
 import {FormGroup,FormControlLabel,Checkbox,RadioGroup,Radio,Button} from '@material-ui/core'
 import {KeyboardArrowRight,SaveAlt} from '@material-ui/icons'
@@ -39,7 +39,7 @@ export const Question=({id,multipleCorrect,options,points,question,hint,negative
         return ()=>clearInterval(time)
     },[timer])
 
-    const submitButtonClicked=async ()=>{
+    const submitButtonClicked=async (totalScore=0)=>{
         setQuizLoading(true)
         const result=await submitQuiz(userId,{
             quizId:currentQuiz.id,
@@ -47,8 +47,10 @@ export const Question=({id,multipleCorrect,options,points,question,hint,negative
         },token,dispatch)
         if(result){
             setQuizLoading(false)
-            push("/")
+            console.log("good")
+            push("/quiz-result")
         }else{
+            console.log("bad")
             setQuizLoading(false)
         }
     }
@@ -65,7 +67,7 @@ export const Question=({id,multipleCorrect,options,points,question,hint,negative
         }
     }
 
-    const nexButtonClicked=()=>{
+    const nexButtonClicked=(event:SyntheticEvent)=>{
         let score=0
         if(checked.length>0){
             if(multipleCorrect){
@@ -81,10 +83,29 @@ export const Question=({id,multipleCorrect,options,points,question,hint,negative
                     }else{
                         score=points;
                     }
-                }else if(negativePoints&&negativePoints!==0){
-                    score=-negativePoints;
+                    dispatch({
+                        type:"STORE_RESPONSE",
+                        payload:{
+                            content:question,
+                            response:true,
+                            index:currentIndex
+                        }
+                    })
+                }else {
+                    if(negativePoints&&negativePoints!==0){                        
+                        score=-negativePoints;
+                    }
+                    dispatch({
+                        type:"STORE_RESPONSE",
+                        payload:{
+                            content:question,
+                            response:false,
+                            index:currentIndex
+                        }
+                    })
                 }
             }else{
+                let correctFlag=false
                 options.forEach(({id,isCorrect})=>{
                     if(id===checked[0] && isCorrect){
                         if(showHint){
@@ -92,11 +113,34 @@ export const Question=({id,multipleCorrect,options,points,question,hint,negative
                         }else{
                             score=points;
                         }
-                    }else if(negativePoints&&negativePoints!==0){
-                        score=-negativePoints;
+                        dispatch({
+                            type:"STORE_RESPONSE",
+                            payload:{
+                                content:question,
+                                response:true,
+                                index:currentIndex
+                            }
+                        })
+                        correctFlag=true;
                     }
                 })
+                if(!correctFlag){
+                    if(negativePoints&&negativePoints!==0){
+                        score=-negativePoints;
+                    }
+                    dispatch({
+                        type:"STORE_RESPONSE",
+                        payload:{
+                            content:question,
+                            response:false,
+                            index:currentIndex
+                        }
+                    })
+                }
             }
+        }
+        if(((event.target as HTMLElement).innerHTML.includes("Submit"))){
+            submitButtonClicked(totalScore+score)
         }
         dispatch({
             type:"SET_SCORE",
@@ -111,85 +155,87 @@ export const Question=({id,multipleCorrect,options,points,question,hint,negative
     }
     
     return(
-        <div className={classes["question-container"]}>
-            <div className={classes["index-points-timer"]}>
-                <p>{currentIndex}/{totalQuestions}</p>
-                <p>Timer: {timer}</p>
-                <p>Points: {showHint? points/2 :points}</p>
-            </div>
-            <p className={classes["question"]}>
-                {question}
-            </p>
-            {
-                    multipleCorrect?(
-                        <>
-                            <FormGroup>
-                                {options && options.map(({content,id})=>
-                                    <FormControlLabel
-                                        key={id}
-                                        control={<Checkbox 
-                                            name={content} 
-                                            checked={checked.some(value=>id===value)} 
-                                            onClick={()=>optionClicked(id!)}
-                                        />}
-                                        label={content}
-                                    />
-                                )}
-                            </FormGroup>
-                        </>
-                    ):(
-                        <>
-                            <RadioGroup aria-label="option" name="option">
-                                {
-                                    options?.map(({id,content})=>(
-                                        <FormControlLabel 
+        <>
+            <div className={classes["question-container"]}>
+                <div className={classes["index-points-timer"]}>
+                    <p>{currentIndex}/{totalQuestions}</p>
+                    <p>Timer: {timer}</p>
+                    <p>Points: {showHint? points/2 :points}</p>
+                </div>
+                <p className={classes["question"]}>
+                    {question}
+                </p>
+                {
+                        multipleCorrect?(
+                            <>
+                                <FormGroup>
+                                    {options && options.map(({content,id})=>
+                                        <FormControlLabel
                                             key={id}
-                                            control={<Radio
-                                                color="primary"
+                                            control={<Checkbox 
                                                 name={content} 
-                                                checked={checked.some(value=>id===value)}
+                                                checked={checked.some(value=>id===value)} 
                                                 onClick={()=>optionClicked(id!)}
-                                            />} 
+                                            />}
                                             label={content}
                                         />
-                                    ))
-                                }
-                            </RadioGroup>
-                        </>
-                    )
-                }
-                {hint&&
-                <Button
-                    color="primary"
-                    variant="outlined"
-                    disabled={showHint}
-                    onClick={()=>setShowHint(true)}
-                >
-                    Show hint
-                </Button>}
-                {showHint&&
-                    <p className={classes["hint"]}>
-                        {hint}
-                    </p>
-                }
-                <div style={{textAlign:"right",margin:"1rem"}}>
-                    {currentIndex===totalQuestions?(<Button
-                        variant="contained"
+                                    )}
+                                </FormGroup>
+                            </>
+                        ):(
+                            <>
+                                <RadioGroup aria-label="option" name="option">
+                                    {
+                                        options?.map(({id,content})=>(
+                                            <FormControlLabel 
+                                                key={id}
+                                                control={<Radio
+                                                    color="primary"
+                                                    name={content} 
+                                                    checked={checked.some(value=>id===value)}
+                                                    onClick={()=>optionClicked(id!)}
+                                                />} 
+                                                label={content}
+                                            />
+                                        ))
+                                    }
+                                </RadioGroup>
+                            </>
+                        )
+                    }
+                    {hint&&
+                    <Button
                         color="primary"
-                        endIcon={<SaveAlt/>}
-                        disabled={quizLoading}
-                        onClick={submitButtonClicked}
+                        variant="outlined"
+                        disabled={showHint}
+                        onClick={()=>setShowHint(true)}
                     >
-                        Submit
-                    </Button>):(<Button
-                        variant="contained"
-                        color="primary"
-                        endIcon={<KeyboardArrowRight/>}
-                        onClick={nexButtonClicked}
-                    >
-                        Next
-                    </Button>)}
-                </div>
-        </div>
+                        Show hint
+                    </Button>}
+                    {showHint&&
+                        <p className={classes["hint"]}>
+                            {hint}
+                        </p>
+                    }
+                    <div style={{textAlign:"right",margin:"1rem"}}>
+                        {currentIndex===totalQuestions?(<Button
+                            variant="contained"
+                            color="primary"
+                            endIcon={<SaveAlt/>}
+                            disabled={quizLoading}
+                            onClick={nexButtonClicked}
+                        >
+                            Submit
+                        </Button>):(<Button
+                            variant="contained"
+                            color="primary"
+                            endIcon={<KeyboardArrowRight/>}
+                            onClick={nexButtonClicked}
+                        >
+                            Next
+                        </Button>)}
+                    </div>                   
+            </div>
+        </>
     )
 }

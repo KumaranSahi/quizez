@@ -1,7 +1,7 @@
 import './App.css';
 import {Navbar,Spinner} from './Components'
 import {Route,Switch,Redirect, useHistory} from 'react-router-dom'
-import {Signup,Home,CreateQuiz,QuizEditing,MyQuizes,Rules,PlayQuiz} from './Pages'
+import {Signup,Home,CreateQuiz,QuizEditing,MyQuizes,Rules,PlayQuiz,QuizResult} from './Pages'
 import {PlayQuizContextProvider} from './Store/PlayQuizContext/PlayQuizContext'
 import {useAuth} from './Store/AuthContext/AuthContext'
 import { useQuiz } from './Store/QuizContext/QuizContext';
@@ -43,6 +43,7 @@ function App() {
               <PrivateLink path="/my-quizes" component={MyQuizes}/>
               <PrivateLink path="/rules" component={Rules}/>
               <PrivateLink path="/play-quiz" component={PlayQuiz}/>
+              <PrivateLink path="/quiz-result" component={QuizResult}/>
               {token?<PrivateLink path="/" component={Home}/>:<Route path="/" component={Signup}/>}
             </Switch>
           </PlayQuizContextProvider>

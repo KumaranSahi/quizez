@@ -27,7 +27,6 @@ export const Avatar=()=>{
                 <p className={classes["name-container"]}>Hello, {userName}</p>
                 <div className={classes["avatar-container"]}>
                     <img src={image?image:profileImage} className={classes["avatar"]}  alt="Active avatar"/>
-                    <div className={`${classes["avatar-bubble"]} ${classes["bubble-active"]}`}></div>
                 </div>
             </div>
             <Menu

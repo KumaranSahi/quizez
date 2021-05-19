@@ -47,10 +47,8 @@ export const Question=({id,multipleCorrect,options,points,question,hint,negative
         },token,dispatch)
         if(result){
             setQuizLoading(false)
-            console.log("good")
             push("/quiz-result")
         }else{
-            console.log("bad")
             setQuizLoading(false)
         }
     }
@@ -151,6 +149,7 @@ export const Question=({id,multipleCorrect,options,points,question,hint,negative
             payload:currentQuiz.questions![currentIndex]
         })
         setChecked([])
+        setShowHint(false)
         setTimer(30)
     }
     

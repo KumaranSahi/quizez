@@ -9,10 +9,19 @@ export type State={
     currentQuiz:Quiz|null;
     myQuizes:Quiz[]|[];
     creatingQuiz:Quiz|null;
+    leaderBoard:LeaderBoard[]|[];
+}
+
+export type LeaderBoard={
+    id:string;
+    score:number;
+    userName:string;
+    quizName:string;
 }
 
 export type QuizAction=
     |{type:"LOAD_QUIZ_LIST";payload:Quiz[]}
+    |{type:"LOAD_TOP_TEN";payload:LeaderBoard[]}
     |{type:"LOAD_MY_QUIZES";payload:Quiz[]}
     |{type:"CREATE_QUIZ";payload:Quiz}
     |{type:"LOAD_CREATING_QUIZ";payload:Quiz}
@@ -48,6 +57,7 @@ export type QuizContextTypes={
     quizLoading:boolean;
     quizes:Quiz[];
     myQuizes:Quiz[];
+    leaderBoard:LeaderBoard[];
     getMyQuizes:(userId:string, token:string, dispatch:Dispatch<QuizAction>, setLoading:Dispatch<SetStateAction<boolean>>)=>void;
     currentQuiz:Quiz;
     getQuiz:(quizId:string, token:string, dispatch:Dispatch<QuizAction>, setLoading:Dispatch<SetStateAction<boolean>>,creatingQuiz:boolean)=>void;

@@ -36,6 +36,11 @@ export const quizReducer=(state:State,action:QuizAction)=>{
                 ...state,
                 creatingQuiz:action.payload
             }
+        case "LOAD_TOP_TEN":
+            return{
+                ...state,
+                leaderBoard:action.payload
+            }
         default:
             return state;
     }

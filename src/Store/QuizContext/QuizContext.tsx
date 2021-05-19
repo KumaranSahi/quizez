@@ -1,5 +1,5 @@
 import {createContext, useContext, useState, useReducer, useEffect} from 'react'
-import {Props, State, QuizContextTypes, Quiz} from './QuizContext.types'
+import {Props, State, QuizContextTypes, Quiz,LeaderBoard} from './QuizContext.types'
 import axios from 'axios'
 import {useAuth} from '../AuthContext/AuthContext'
 import {ResponseTemplate} from '../../Generics.types'
@@ -14,6 +14,7 @@ const initialState:State={
     currentQuiz:null,
     creatingQuiz:null,
     myQuizes:[],
+    leaderBoard:[]
 }
 
 export const QuizContextProvider=({children}:Props)=>{
@@ -41,6 +42,22 @@ export const QuizContextProvider=({children}:Props)=>{
         )()
     },[token])
 
+    useEffect(()=>{
+        (
+            async ()=>{
+                if(token){
+                    const {data:{data,ok}}=await axios.get<ResponseTemplate<LeaderBoard[]>>('/api/scorecards',config)
+                    if(ok&&data){
+                        dispatch({
+                            type:"LOAD_TOP_TEN",
+                            payload:data
+                        })
+                    }
+                }
+            }
+        )()
+    },[token])
+
     const [state,dispatch]=useReducer(quizReducer,initialState)
 
     return(
@@ -58,7 +75,8 @@ export const QuizContextProvider=({children}:Props)=>{
             editQuestion:editQuestion,
             creatingQuiz:state.creatingQuiz,
             deleteQuestion:deleteQuestion,
-            calculateTotalScore:calculateTotalScore
+            calculateTotalScore:calculateTotalScore,
+            leaderBoard:state.leaderBoard
         }}>
             {children}
         </QuizContext.Provider>

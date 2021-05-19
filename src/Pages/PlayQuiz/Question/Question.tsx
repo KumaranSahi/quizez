@@ -4,7 +4,9 @@ import {Question as QuestionType} from '../../../Store/QuizContext/QuizContext.t
 import {FormGroup,FormControlLabel,Checkbox,RadioGroup,Radio,Button} from '@material-ui/core'
 import {KeyboardArrowRight,SaveAlt} from '@material-ui/icons'
 import {useQuiz} from '../../../Store/QuizContext/QuizContext'
+import { useAuth } from '../../../Store/AuthContext/AuthContext'
 import {usePlayQuiz} from '../../../Store/PlayQuizContext/PlayQuizContext'
+import {useHistory} from 'react-router-dom'
 
 interface QuestionProps extends QuestionType{
     totalQuestions:number;
@@ -16,8 +18,11 @@ export const Question=({id,multipleCorrect,options,points,question,hint,negative
     const [checked,setChecked]=useState<string[]>([])
     const [showHint,setShowHint]=useState(false)
 
-    const {currentQuiz}=useQuiz()
-    const {dispatch,score:totalScore}=usePlayQuiz()
+    const {currentQuiz,quizLoading,setQuizLoading}=useQuiz()
+    const {dispatch,score:totalScore,submitQuiz}=usePlayQuiz()
+    const {token,userId}=useAuth()
+
+    const {push}=useHistory()
 
     useEffect(()=>{
         let time=setInterval(()=>setTimer(state=>state-1),1000);
@@ -34,8 +39,18 @@ export const Question=({id,multipleCorrect,options,points,question,hint,negative
         return ()=>clearInterval(time)
     },[timer])
 
-    const submitButtonClicked=()=>{
-        
+    const submitButtonClicked=async ()=>{
+        setQuizLoading(true)
+        const result=await submitQuiz(userId,{
+            quizId:currentQuiz.id,
+            score:totalScore,
+        },token,dispatch)
+        if(result){
+            setQuizLoading(false)
+            push("/")
+        }else{
+            setQuizLoading(false)
+        }
     }
 
     const optionClicked=(id:string)=>{
@@ -161,17 +176,18 @@ export const Question=({id,multipleCorrect,options,points,question,hint,negative
                     {currentIndex===totalQuestions?(<Button
                         variant="contained"
                         color="primary"
+                        endIcon={<SaveAlt/>}
+                        disabled={quizLoading}
+                        onClick={submitButtonClicked}
+                    >
+                        Submit
+                    </Button>):(<Button
+                        variant="contained"
+                        color="primary"
                         endIcon={<KeyboardArrowRight/>}
                         onClick={nexButtonClicked}
                     >
                         Next
-                    </Button>):(<Button
-                        variant="contained"
-                        color="primary"
-                        endIcon={<SaveAlt/>}
-                        onClick={submitButtonClicked}
-                    >
-                        Submit
                     </Button>)}
                 </div>
         </div>

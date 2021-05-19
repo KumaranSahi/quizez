@@ -1,6 +1,6 @@
 import {useContext,createContext, useReducer} from 'react'
 import {Props, PlayQuizContextType, State} from './PlayQuiz.types'
-import {playQuizReducer} from './PlayQuizReducer'
+import {playQuizReducer,submitQuiz} from './PlayQuizReducer'
 
 export const PlayQuizContext=createContext({})
 
@@ -22,7 +22,8 @@ export const PlayQuizContextProvider=({children}:Props)=>{
                 dispatch:dispatch,
                 playQuizMode:state.playQuizMode,
                 currentQuestion:state.currentQuestion,
-                score:state.score
+                submitQuiz:submitQuiz,
+                score:state.score,
             }}
         >
             {children}

@@ -36,6 +36,7 @@ export type Quiz={
 
 export type PlayQuizAction=
     |{type:"START_QUIZ"}
+    |{type:"END_QUIZ"}
     |{type:"LOAD_QUESTION";payload:Question}
     |{type:"SET_SCORE";payload:number}
 
@@ -43,5 +44,11 @@ export type PlayQuizContextType={
     dispatch:Dispatch<PlayQuizAction>;
     playQuizMode:boolean;
     currentQuestion:Question;
+    score:number;
+    submitQuiz:(userId:string,quizData:SubmitQuizPayload,token:string,dispatch:Dispatch<PlayQuizAction>)=>Promise<boolean>;
+}
+
+export type SubmitQuizPayload={
+    quizId:string;
     score:number;
 }

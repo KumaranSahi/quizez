@@ -5,7 +5,7 @@ import {NavLink} from 'react-router-dom';
 import { useAuth } from '../../Store/AuthContext/AuthContext';
 
 export const MobileNavbar=()=>{
-    const {}=useAuth()
+    const {isAdmin}=useAuth()
     return(
         <div className={classes["mobile-nav-bar"]}>
             <p className={classes["nav-button"]}>
@@ -14,15 +14,15 @@ export const MobileNavbar=()=>{
                 </NavLink>
             </p>
             <p className={classes["nav-button"]}>
-                <NavLink to="/create-quiz-and-leaderboard" activeClassName={classes["active-mobile"]}>
+                <NavLink to="/mobile-leaderboard" activeClassName={classes["active-mobile"]}>
                     <FontAwesomeIcon icon={faBookOpen}/>
                 </NavLink>
             </p>
-            <p className={classes["nav-button"]}>
+            {isAdmin&&<p className={classes["nav-button"]}>
                 <NavLink to="/my-quizes" activeClassName={classes["active-mobile"]}>
                     <FontAwesomeIcon icon={faBook}/>
                 </NavLink>
-            </p>
+            </p>}
             <p className={classes["nav-button"]}>
                 <NavLink to="/my-scores" activeClassName={classes["active-mobile"]}>
                     <FontAwesomeIcon icon={faHistory}/>

@@ -2,13 +2,15 @@ import classes from './CreateQuizAndLeaderBoard.module.css'
 import {Table,TableBody,TableCell,TableContainer,TableHead,TableRow,Paper,Button} from '@material-ui/core';
 import {useHistory} from 'react-router-dom'
 import {useQuiz} from '../../Store/QuizContext/QuizContext'
+import { useAuth } from '../../Store/AuthContext/AuthContext';
 
 export const CreateQuizAndLeaderBoard=()=>{
     const {leaderBoard}=useQuiz()
     const {push}=useHistory()
+    const {isAdmin}=useAuth()
     return(
         <div className={classes["create-quiz-personal-scores"]}>
-            <Button 
+            {isAdmin&&<Button 
                 variant="outlined"  
                 color="primary"
                 fullWidth
@@ -16,9 +18,9 @@ export const CreateQuizAndLeaderBoard=()=>{
                 onClick={()=>push("/create-quiz")}
             >
                 Create Quiz
-            </Button>
+            </Button>}
             <hr/>
-            <Button 
+            {isAdmin&&<Button 
                 variant="contained"  
                 color="primary"
                 fullWidth
@@ -26,7 +28,7 @@ export const CreateQuizAndLeaderBoard=()=>{
                 onClick={()=>push("/my-quizes")}
             >
                 My Quizes
-            </Button>    
+            </Button>  }  
             <h1>
                 Top 10 Leader Board
             </h1>

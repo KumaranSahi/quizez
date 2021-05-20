@@ -26,6 +26,13 @@ const LockSignup=({...props})=>{
   )
 }
 
+const AdminAuthGaurd=({...props})=>{
+  const {token,isAdmin}=useAuth()
+  return(
+      (token&&isAdmin)?<Redirect to="/"/>:<Route {...props}/>
+  )
+}
+
 function App() {
   const {token,authLoading}=useAuth()
   const {quizLoading}=useQuiz()
@@ -44,14 +51,14 @@ function App() {
           <PlayQuizContextProvider>
             <Switch>
               <LockSignup path="/sign-up" component={Signup}/>
-              <PrivateLink path="/edit-quiz" component={QuizEditing}/>
-              <PrivateLink path="/create-quiz" component={CreateQuiz}/>
-              <PrivateLink path="/my-quizes" component={MyQuizes}/>
+              <AdminAuthGaurd path="/edit-quiz" component={QuizEditing}/>
+              <AdminAuthGaurd path="/create-quiz" component={CreateQuiz}/>
+              <AdminAuthGaurd path="/my-quizes" component={MyQuizes}/>
               <PrivateLink path="/rules" component={Rules}/>
               <PrivateLink path="/play-quiz" component={PlayQuiz}/>
               <PrivateLink path="/quiz-result" component={QuizResult}/>
               <PrivateLink path="/my-scores" component={MyScores}/>
-              <PrivateLink path="/create-quiz-and-leaderboard" component={CreateQuizAndLeaderBoardPage}/>
+              <PrivateLink path="/mobile-leaderboard" component={CreateQuizAndLeaderBoardPage}/>
               {token?<PrivateLink path="/" component={Home}/>:<Route path="/" component={Signup}/>}
             </Switch>
           </PlayQuizContextProvider>

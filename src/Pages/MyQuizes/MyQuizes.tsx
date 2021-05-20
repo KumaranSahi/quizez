@@ -20,6 +20,16 @@ export const MyQuizes=()=>{
             <h1>
                 My Quizes
             </h1>
+            <Button 
+                variant="outlined"  
+                color="primary"
+                fullWidth
+                size="large"
+                onClick={()=>push("/create-quiz")}
+                style={{marginBottom:"1rem"}}
+            >
+                Create Quiz
+            </Button>
             <TableContainer component={Paper}>
             <Table className={classes.table} aria-label="customized table">
                 <TableHead>

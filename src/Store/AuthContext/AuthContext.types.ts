@@ -18,6 +18,7 @@ export type AuthContextType={
     authLoading:boolean;
     setAuthLoading:Dispatch<SetStateAction<boolean>>;
     dispatch:Dispatch<Action>;
+    isAdmin:string;
 }
 
 export type State={

@@ -14,12 +14,13 @@ const initialState:State={
     currentQuiz:null,
     creatingQuiz:null,
     myQuizes:[],
-    leaderBoard:[]
+    leaderBoard:[],
+    myLeaderBoard:[]
 }
 
 export const QuizContextProvider=({children}:Props)=>{
     const [loading,setLoading]=useState(false)
-    const {token}=useAuth();
+    const {token,userId}=useAuth();
     const config = {
         headers: {
             Authorization: "Bearer " + token
@@ -58,6 +59,22 @@ export const QuizContextProvider=({children}:Props)=>{
         )()
     },[token])
 
+    useEffect(()=>{
+        (
+            async ()=>{
+                if(token){
+                    const {data:{data,ok}}=await axios.get<ResponseTemplate<LeaderBoard[]>>(`/api/scorecards/${userId}`,config)
+                    if(ok&&data){
+                        dispatch({
+                            type:"LOAD_MY_TOP_TEN",
+                            payload:data
+                        })
+                    }
+                }
+            }
+        )()
+    },[token])
+
     const [state,dispatch]=useReducer(quizReducer,initialState)
 
     return(
@@ -76,7 +93,8 @@ export const QuizContextProvider=({children}:Props)=>{
             creatingQuiz:state.creatingQuiz,
             deleteQuestion:deleteQuestion,
             calculateTotalScore:calculateTotalScore,
-            leaderBoard:state.leaderBoard
+            leaderBoard:state.leaderBoard,
+            myLeaderBoard:state.myLeaderBoard
         }}>
             {children}
         </QuizContext.Provider>

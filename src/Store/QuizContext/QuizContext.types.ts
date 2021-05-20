@@ -10,18 +10,21 @@ export type State={
     myQuizes:Quiz[]|[];
     creatingQuiz:Quiz|null;
     leaderBoard:LeaderBoard[]|[];
+    myLeaderBoard:LeaderBoard[]|[];
 }
 
 export type LeaderBoard={
     id:string;
     score:number;
-    userName:string;
+    userName?:string;
+    quizId?:string;
     quizName:string;
 }
 
 export type QuizAction=
     |{type:"LOAD_QUIZ_LIST";payload:Quiz[]}
     |{type:"LOAD_TOP_TEN";payload:LeaderBoard[]}
+    |{type:"LOAD_MY_TOP_TEN";payload:LeaderBoard[]}
     |{type:"LOAD_MY_QUIZES";payload:Quiz[]}
     |{type:"CREATE_QUIZ";payload:Quiz}
     |{type:"LOAD_CREATING_QUIZ";payload:Quiz}
@@ -68,6 +71,7 @@ export type QuizContextTypes={
     creatingQuiz:Quiz;
     deleteQuestion:(questionId:string,token:string,dispatch:Dispatch<QuizAction>,setLoading:Dispatch<SetStateAction<boolean>>,creatingQuiz:Quiz)=>void;
     calculateTotalScore:(currentQuiz:Quiz)=>number;
+    myLeaderBoard:LeaderBoard[];
 }
 
 export type QuizData={

@@ -56,7 +56,7 @@ function App() {
             </Switch>
           </PlayQuizContextProvider>
         </main>
-        {token && pathname==="/play-quiz" && <MobileNavbar/>}
+        {token && !(pathname==="/play-quiz") && <MobileNavbar/>}
         {(authLoading||quizLoading)&&<Spinner/>}
     </div>
   );

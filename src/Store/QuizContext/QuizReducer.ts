@@ -68,10 +68,12 @@ export const createQuiz=async (quizData:QuizData, setLoading:Dispatch<SetStateAc
             successToast("Quiz Created")
             setLoading(false)
         }
+        return data!.id
     }catch(error){
         warningToast("Unable to create quiz")
         console.log(error)
         setLoading(false)
+        return ""
     }
 }
 

@@ -42,7 +42,7 @@
 @media (min-width:700px){
     .quiz-container{
         width: 15rem;
-        min-height: 20rem;
+        height: 20rem;
         margin: 1rem;
     }
     .quiz-description{

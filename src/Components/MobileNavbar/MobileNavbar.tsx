@@ -1,9 +1,11 @@
 import classes from './MobileNavbar.module.css'
-import {faHome,faHistory,faBookOpen} from '@fortawesome/free-solid-svg-icons';
+import {faHome,faHistory,faBookOpen,faBook} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {NavLink} from 'react-router-dom';
+import { useAuth } from '../../Store/AuthContext/AuthContext';
 
 export const MobileNavbar=()=>{
+    const {}=useAuth()
     return(
         <div className={classes["mobile-nav-bar"]}>
             <p className={classes["nav-button"]}>
@@ -14,6 +16,11 @@ export const MobileNavbar=()=>{
             <p className={classes["nav-button"]}>
                 <NavLink to="/create-quiz-and-leaderboard" activeClassName={classes["active-mobile"]}>
                     <FontAwesomeIcon icon={faBookOpen}/>
+                </NavLink>
+            </p>
+            <p className={classes["nav-button"]}>
+                <NavLink to="/my-quizes" activeClassName={classes["active-mobile"]}>
+                    <FontAwesomeIcon icon={faBook}/>
                 </NavLink>
             </p>
             <p className={classes["nav-button"]}>

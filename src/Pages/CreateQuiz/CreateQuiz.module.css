@@ -3,7 +3,7 @@
     min-height: calc(100vh - 4.4rem);
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     background-color: lightgray;
 }
 
@@ -23,7 +23,7 @@
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
-    height: 75%;
+    height: 30rem;
 }
 
 .profile-picture{
@@ -37,5 +37,8 @@
     .create-quiz-container{
         width: 40rem;
         min-height: 30rem;
+    }
+    .create-quiz-page{
+        align-items: center;
     }
 }

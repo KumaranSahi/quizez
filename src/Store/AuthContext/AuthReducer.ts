@@ -13,7 +13,8 @@ export const authReducer=(state:State,action:Action)=>{
                 token:action.payload.token,
                 userName:action.payload.userName,
                 expiresIn:action.payload.expiresIn,
-                image:action.payload.image
+                image:action.payload.image,
+                isAdmin:action.payload.isAdmin
             }
         case "SIGNOUT_USER":
             return{
@@ -22,7 +23,8 @@ export const authReducer=(state:State,action:Action)=>{
                 token:null,
                 image:null,
                 userName:null,
-                expiresIn:null
+                expiresIn:null,
+                isAdmin:null
             }
         default:
             return state;
@@ -67,7 +69,8 @@ export const signOutUser=(dispatch:Dispatch<Action>,setLoading:Dispatch<SetState
     localStorage.removeItem("userId");
     localStorage.removeItem("userName");
     localStorage.removeItem('expiresIn');
-    localStorage.removeItem('image')
+    localStorage.removeItem('image');
+    localStorage.removeItem("isAdmin")
     dispatch({
         type:"SIGNOUT_USER"
     })
@@ -104,6 +107,7 @@ export const onReload=(dispatch:Dispatch<Action>,setLoading:Dispatch<SetStateAct
         const userId=localStorage.getItem('userId');
         const userName=localStorage.getItem('userName')
         const image=localStorage.getItem('image')
+        const isAdmin=localStorage.getItem('isAdmin')
         checkAuthTimeout((expiresIn.getTime()-new Date().getTime())/1000,dispatch,setLoading)
         dispatch({
             type:"SIGNIN_USER",
@@ -112,7 +116,8 @@ export const onReload=(dispatch:Dispatch<Action>,setLoading:Dispatch<SetStateAct
                 token:token,
                 userName:userName,
                 expiresIn:expiresIn,
-                image:image
+                image:image,
+                isAdmin:isAdmin
             }
         })
     }
@@ -127,6 +132,7 @@ export const signInUser=async (emailAndPassword:SigninUser,dispatch:Dispatch<Act
             localStorage.setItem("token",data!.token);
             localStorage.setItem("userId",data!.userId);
             localStorage.setItem("userName",data!.userName);
+            data?.isAdmin && localStorage.setItem("isAdmin",data.isAdmin);
             data?.image && localStorage.setItem("image",data.image)
             const expiresIn=new Date(new Date().getTime()+3600000);
             localStorage.setItem('expiresIn',""+expiresIn);
@@ -137,7 +143,9 @@ export const signInUser=async (emailAndPassword:SigninUser,dispatch:Dispatch<Act
                     userId:data!.userId,
                     token:data!.token,
                     userName:data!.userName,
-                    expiresIn:new Date(expiresIn)
+                    expiresIn:new Date(expiresIn),
+                    isAdmin:data?.isAdmin,
+                    image:data?.image
                 }
             })
             successToast("User Logged in Successfully")

@@ -11,7 +11,8 @@ export const initialState:State={
     token:null,
     userName:null,
     expiresIn:null,
-    image:null
+    image:null,
+    isAdmin:null
 }
 
 export const AuthContextProvider : FC=({children}:Props)=>{
@@ -38,7 +39,8 @@ export const AuthContextProvider : FC=({children}:Props)=>{
             setCurrentPage:setCurrentPage,
             authLoading:loading,
             setAuthLoading:setLoading,
-            dispatch:dispatch
+            dispatch:dispatch,
+            isAdmin:state.isAdmin
         }}>
             {children}
         </AuthContext.Provider>

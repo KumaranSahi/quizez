@@ -19,7 +19,7 @@ export const MyScores=()=>{
         <div className={classes["my-scores-page"]}>
             <div className={classes["my-scores-container"]}>
                 <h1>
-                    Top 10 Leader Board
+                    My Top 10
                 </h1>
                 <TableContainer component={Paper}>
                 <Table className={classes.table} aria-label="customized table">

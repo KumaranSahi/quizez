@@ -6,6 +6,7 @@ import {useQuiz} from '../../Store/QuizContext/QuizContext'
 import {useAuth} from '../../Store/AuthContext/AuthContext'
 import axios from 'axios'
 import {successToast,warningToast} from '../../Components'
+import {useHistory} from 'react-router-dom'
 
 export const CreateQuiz=()=>{
 
@@ -16,7 +17,9 @@ export const CreateQuiz=()=>{
     const [fileUploadInfo,setFileUploadInfo]=useState("")
 
     const {userName,token,userId}=useAuth()
-    const {setQuizLoading,quizLoading,createQuiz,dispatch}=useQuiz()
+    const {setQuizLoading,quizLoading,createQuiz,dispatch,creatingQuiz}=useQuiz()
+
+    const {push}=useHistory()
 
     const fileUpload=async (file:FileList|null)=>{
         const allowedExtensions=new RegExp("^.*(.jpg|.jpeg|.png)")
@@ -46,14 +49,18 @@ export const CreateQuiz=()=>{
         setQuizDescription(`${userName}'s quiz on ${name}`)
     }
 
-    const createQuizSubmitted=(event:SyntheticEvent)=>{
+    const createQuizSubmitted=async (event:SyntheticEvent)=>{
         event.preventDefault()
         if(quizName && quizDescription){
-            createQuiz({
+            const id =await createQuiz({
                 name:quizName,
                 description:quizDescription,
                 image:image
             },setQuizLoading,token,userId,dispatch)
+
+            if(id){
+                push({pathname:"/edit-quiz",search:id})
+            }
         }
     }
 

@@ -26,6 +26,7 @@ export type State={
     userName:string|null;
     expiresIn:Date|null;
     image?:string|null;
+    isAdmin?:string|null;
 }
 
 export type Action=
@@ -60,4 +61,5 @@ export type SignedInUserInfo={
     userName:string;
     expiresIn:Date;
     image?:string;
+    isAdmin?:string;
 }

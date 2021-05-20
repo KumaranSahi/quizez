@@ -1,5 +1,5 @@
 import './App.css';
-import {Navbar,Spinner} from './Components'
+import {Navbar,Spinner,MobileNavbar} from './Components'
 import {Route,Switch,Redirect, useHistory} from 'react-router-dom'
 import {Signup,Home,CreateQuiz,QuizEditing,MyQuizes,Rules,PlayQuiz,QuizResult,MyScores} from './Pages'
 import {PlayQuizContextProvider} from './Store/PlayQuizContext/PlayQuizContext'
@@ -49,6 +49,7 @@ function App() {
             </Switch>
           </PlayQuizContextProvider>
         </main>
+        <MobileNavbar/>
         {(authLoading||quizLoading)&&<Spinner/>}
     </div>
   );

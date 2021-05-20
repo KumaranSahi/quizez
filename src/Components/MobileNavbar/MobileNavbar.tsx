@@ -12,7 +12,7 @@ export const MobileNavbar=()=>{
                 </NavLink>
             </p>
             <p className={classes["nav-button"]}>
-                <NavLink to="/my-quizes" activeClassName={classes["active-mobile"]}>
+                <NavLink to="/create-quiz-and-leaderboard" activeClassName={classes["active-mobile"]}>
                     <FontAwesomeIcon icon={faBookOpen}/>
                 </NavLink>
             </p>

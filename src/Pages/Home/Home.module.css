@@ -15,7 +15,7 @@
 
 .create-quiz-personal-scores{
     flex:2;
-    border:1px solid black;
+    box-shadow: 1px 1px 13px 1px;
     display: none;
     padding: 1rem
 }

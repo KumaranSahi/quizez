@@ -1,7 +1,7 @@
 import './App.css';
 import {Navbar,Spinner,MobileNavbar} from './Components'
-import {Route,Switch,Redirect, useHistory} from 'react-router-dom'
-import {Signup,Home,CreateQuiz,QuizEditing,MyQuizes,Rules,PlayQuiz,QuizResult,MyScores} from './Pages'
+import {Route,Switch,Redirect, useHistory,useLocation} from 'react-router-dom'
+import {Signup,Home,CreateQuiz,QuizEditing,MyQuizes,Rules,PlayQuiz,QuizResult,MyScores,CreateQuizAndLeaderBoardPage} from './Pages'
 import {PlayQuizContextProvider} from './Store/PlayQuizContext/PlayQuizContext'
 import {useAuth} from './Store/AuthContext/AuthContext'
 import { useQuiz } from './Store/QuizContext/QuizContext';
@@ -29,6 +29,12 @@ const LockSignup=({...props})=>{
 function App() {
   const {token,authLoading}=useAuth()
   const {quizLoading}=useQuiz()
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+}, [pathname]);
+
   return (
     <div className="App">
         <header>
@@ -45,11 +51,12 @@ function App() {
               <PrivateLink path="/play-quiz" component={PlayQuiz}/>
               <PrivateLink path="/quiz-result" component={QuizResult}/>
               <PrivateLink path="/my-scores" component={MyScores}/>
+              <PrivateLink path="/create-quiz-and-leaderboard" component={CreateQuizAndLeaderBoardPage}/>
               {token?<PrivateLink path="/" component={Home}/>:<Route path="/" component={Signup}/>}
             </Switch>
           </PlayQuizContextProvider>
         </main>
-        <MobileNavbar/>
+        {token && pathname==="/play-quiz" && <MobileNavbar/>}
         {(authLoading||quizLoading)&&<Spinner/>}
     </div>
   );

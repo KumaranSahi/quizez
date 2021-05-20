@@ -20,19 +20,8 @@
     padding: 1rem
 }
 
-.table-head-cell{
-    color:white !important;
-    background-color: var(--primary);
-}
-
-.tablebody-row:nth-child(2n+1){
-    background-color: lightgray;
-}
-
-
 @media (min-width:700px) {
     .create-quiz-personal-scores{
-        display: flex;
-        flex-direction: column;
+        display: block;
     }
 }

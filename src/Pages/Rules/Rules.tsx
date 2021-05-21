@@ -5,7 +5,7 @@ import { useHistory } from 'react-router-dom'
 import {usePlayQuiz} from '../../Store/PlayQuizContext/PlayQuizContext'
 
 export const Rules=()=>{
-    const {currentQuiz,calculateTotalScore}=useQuiz()
+    const {currentQuiz,calculateTotalScore,quizLoading}=useQuiz()
     const {dispatch}=usePlayQuiz()
     const {push}=useHistory()
     return(
@@ -45,6 +45,7 @@ export const Rules=()=>{
                 <Button
                     variant="contained"
                     color="primary"
+                    disabled={quizLoading}
                     onClick={()=>{
                         push("/play-quiz")
                         dispatch({type:"START_QUIZ"})

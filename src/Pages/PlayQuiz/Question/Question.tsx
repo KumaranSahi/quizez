@@ -18,7 +18,7 @@ export const Question=({id,multipleCorrect,options,points,question,hint,negative
     const [checked,setChecked]=useState<string[]>([])
     const [showHint,setShowHint]=useState(false)
 
-    const {currentQuiz,quizLoading,setQuizLoading}=useQuiz()
+    const {currentQuiz,quizLoading,setQuizLoading,loadTopTen,loadMyTopTen,dispatch:quizDispatch}=useQuiz()
     const {dispatch,score:totalScore,submitQuiz}=usePlayQuiz()
     const {token,userId}=useAuth()
 
@@ -47,6 +47,8 @@ export const Question=({id,multipleCorrect,options,points,question,hint,negative
         },token,dispatch)
         if(result){
             setQuizLoading(false)
+            loadTopTen(quizDispatch,token,setQuizLoading)
+            loadMyTopTen(quizDispatch,token,setQuizLoading,userId)
             push("/quiz-result")
         }else{
             setQuizLoading(false)

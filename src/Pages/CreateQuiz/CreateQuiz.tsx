@@ -18,7 +18,7 @@ export const CreateQuiz=()=>{
     const [fileUploadInfo,setFileUploadInfo]=useState("")
 
     const {userName,token,userId}=useAuth()
-    const {setQuizLoading,quizLoading,createQuiz,dispatch,creatingQuiz}=useQuiz()
+    const {setQuizLoading,quizLoading,createQuiz,dispatch}=useQuiz()
 
     const {push}=useHistory()
 

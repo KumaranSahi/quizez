@@ -163,7 +163,7 @@ export const QuizModal=(props:PropTypes)=>{
                         <>
                             <FormGroup>
                                 {options && options.map(({content,isCorrect,id})=>
-                                (<div  className={classes["option"]}>
+                                (<div key={content} className={classes["option"]}>
                                     <FormControlLabel
                                         key={id?id:content}
                                         control={<Checkbox 
@@ -188,7 +188,7 @@ export const QuizModal=(props:PropTypes)=>{
                             <RadioGroup aria-label="option" name="option">
                                 {
                                     options?.map(({id,content,isCorrect})=>(
-                                        <div className={classes["option"]}>
+                                        <div key={content} className={classes["option"]}>
                                         <FormControlLabel 
                                             key={id}
                                             control={<Radio

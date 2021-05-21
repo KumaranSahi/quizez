@@ -21,7 +21,7 @@ export const QuizResult=()=>{
                             <h3>Here are your results</h3>
                             <ul className={classes["response-list"]}>
                                 {quizResponses.map(({content,response})=>(
-                                <li className={response?classes["right-response"]:classes["wrong-response"]}>
+                                <li key={content} className={response?classes["right-response"]:classes["wrong-response"]}>
                                     {content}
                                 </li>))}
                             </ul>

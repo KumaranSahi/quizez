@@ -2,9 +2,15 @@ import classes from './Home.module.css';
 import {QuizContainer} from './QuizContainer/QuizContainer'
 import {useQuiz} from '../../Store/QuizContext/QuizContext'
 import {CreateQuizAndLeaderBoard} from '../../Components'
+import { useEffect } from 'react';
+import { useAuth } from '../../Store/AuthContext/AuthContext';
 
 export const Home=()=>{
-    const {quizes}=useQuiz();
+    const {quizes,loadQuizList,dispatch,setQuizLoading}=useQuiz();
+    const {token}=useAuth()
+    useEffect(()=>{
+        loadQuizList(dispatch,token,setQuizLoading);
+    },[])
 
     return(
         <div className={classes["homepage-container"]}>

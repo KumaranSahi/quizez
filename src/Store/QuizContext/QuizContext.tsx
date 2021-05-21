@@ -20,12 +20,7 @@ const initialState:State={
 export const QuizContextProvider=({children}:Props)=>{
     const [loading,setLoading]=useState(false)
     const {token,userId}=useAuth();
-
-    useEffect(()=>{
-        if(token)
-            loadQuizList(dispatch,token,setLoading)
-    },[token])
-
+    
     useEffect(()=>{
         if(token)
         loadTopTen(dispatch,token,setLoading)  
@@ -57,7 +52,8 @@ export const QuizContextProvider=({children}:Props)=>{
             leaderBoard:state.leaderBoard,
             myLeaderBoard:state.myLeaderBoard,
             loadQuizList:loadQuizList,
-            loadMyTopTen:loadMyTopTen
+            loadMyTopTen:loadMyTopTen,
+            loadTopTen:loadTopTen
         }}>
             {children}
         </QuizContext.Provider>

@@ -1,7 +1,8 @@
 import {State,Action,UserData,SigninPages,ChangePassword,SigninUser,SignedInUserInfo} from './AuthContext.types'
 import {Dispatch,SetStateAction} from 'react'
 import {ResponseTemplate} from '../../Generics.types'
-import axios from 'axios'
+// import axios from 'axios'
+import axios from '../../useAxios'
 import {successToast,warningToast,infoToast} from '../../Components/'
 
 export const authReducer=(state:State,action:Action)=>{

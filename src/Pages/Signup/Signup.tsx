@@ -5,7 +5,8 @@ import {SigninPages} from '../../Store/AuthContext/AuthContext.types'
 import {successToast, warningToast} from '../../Components/'
 import {TextField,Button,IconButton,Checkbox} from '@material-ui/core'
 import {PhotoCamera} from '@material-ui/icons'
-import axios from 'axios'
+// import axios from 'axios'
+import axios from '../../useAxios'
 
 export const Signup=()=>{
 

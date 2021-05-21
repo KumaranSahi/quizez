@@ -72,6 +72,9 @@ export type QuizContextTypes={
     deleteQuestion:(questionId:string,token:string,dispatch:Dispatch<QuizAction>,setLoading:Dispatch<SetStateAction<boolean>>,creatingQuiz:Quiz)=>void;
     calculateTotalScore:(currentQuiz:Quiz)=>number;
     myLeaderBoard:LeaderBoard[];
+    loadQuizList:(dispatch:Dispatch<QuizAction>,token:string,setLoading:Dispatch<SetStateAction<boolean>>)=>void;
+    loadTopTen:(dispatch:Dispatch<QuizAction>,token:string,setLoading:Dispatch<SetStateAction<boolean>>)=>void;
+    loadMyTopTen:(dispatch:Dispatch<QuizAction>,token:string,setLoading:Dispatch<SetStateAction<boolean>>,userId:string)=>void;
 }
 
 export type QuizData={

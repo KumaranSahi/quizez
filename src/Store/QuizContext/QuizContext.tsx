@@ -1,9 +1,8 @@
 import {createContext, useContext, useState, useReducer, useEffect} from 'react'
-import {Props, State, QuizContextTypes, Quiz,LeaderBoard} from './QuizContext.types'
-import axios from 'axios'
+import {Props, State, QuizContextTypes} from './QuizContext.types'
 import {useAuth} from '../AuthContext/AuthContext'
-import {ResponseTemplate} from '../../Generics.types'
-import {quizReducer,createQuiz,getMyQuizes,getQuiz,createQuestion,editQuestion,deleteQuestion,calculateTotalScore} from "./QuizReducer"
+import {quizReducer,createQuiz,getMyQuizes,getQuiz,createQuestion
+    ,editQuestion,deleteQuestion,calculateTotalScore,loadQuizList,loadTopTen,loadMyTopTen} from "./QuizReducer"
 
 export const QuizContext=createContext({});
 
@@ -21,59 +20,21 @@ const initialState:State={
 export const QuizContextProvider=({children}:Props)=>{
     const [loading,setLoading]=useState(false)
     const {token,userId}=useAuth();
-    const config = {
-        headers: {
-            Authorization: "Bearer " + token
-        }
-    }
 
     useEffect(()=>{
-        (
-            async ()=>{
-                if(token){
-                    const {data:{data,ok}}=await axios.get<ResponseTemplate<Quiz[]>>('/api/quizes',config)
-                    if(ok&&data){
-                        dispatch({
-                            type:"LOAD_QUIZ_LIST",
-                            payload:data
-                        })
-                    }
-                }
-            }
-        )()
+        if(token)
+            loadQuizList(dispatch,token,setLoading)
     },[token])
 
     useEffect(()=>{
-        (
-            async ()=>{
-                if(token){
-                    const {data:{data,ok}}=await axios.get<ResponseTemplate<LeaderBoard[]>>('/api/scorecards',config)
-                    if(ok&&data){
-                        dispatch({
-                            type:"LOAD_TOP_TEN",
-                            payload:data
-                        })
-                    }
-                }
-            }
-        )()
+        if(token)
+        loadTopTen(dispatch,token,setLoading)  
     },[token])
 
     useEffect(()=>{
-        (
-            async ()=>{
-                if(token){
-                    const {data:{data,ok}}=await axios.get<ResponseTemplate<LeaderBoard[]>>(`/api/scorecards/${userId}`,config)
-                    if(ok&&data){
-                        dispatch({
-                            type:"LOAD_MY_TOP_TEN",
-                            payload:data
-                        })
-                    }
-                }
-            }
-        )()
-    },[token])
+        if(token)
+            loadMyTopTen(dispatch,token,setLoading,userId)   
+    },[token,userId])
 
     const [state,dispatch]=useReducer(quizReducer,initialState)
 
@@ -94,7 +55,9 @@ export const QuizContextProvider=({children}:Props)=>{
             deleteQuestion:deleteQuestion,
             calculateTotalScore:calculateTotalScore,
             leaderBoard:state.leaderBoard,
-            myLeaderBoard:state.myLeaderBoard
+            myLeaderBoard:state.myLeaderBoard,
+            loadQuizList:loadQuizList,
+            loadMyTopTen:loadMyTopTen
         }}>
             {children}
         </QuizContext.Provider>

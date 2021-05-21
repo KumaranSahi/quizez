@@ -1,8 +1,9 @@
 import { Dispatch, SetStateAction } from 'react';
-import {State,QuizAction,QuizData,Quiz,NewQuestionData,Question} from './QuizContext.types'
+import {State,QuizAction,QuizData,Quiz,NewQuestionData,Question,LeaderBoard} from './QuizContext.types'
 import {warningToast,successToast} from '../../Components'
 import {ResponseTemplate} from '../../Generics.types'
-import axios from 'axios'
+// import axios from 'axios'
+import axios from '../../useAxios'
 
 export const quizReducer=(state:State,action:QuizAction)=>{
     switch (action.type) {
@@ -213,3 +214,66 @@ export const deleteQuestion=async (questionId:string,token:string,dispatch:Dispa
 }
 
 export const calculateTotalScore=(currentQuiz:Quiz)=>currentQuiz.questions!.reduce((accumulator:number,currentValue:Question)=>accumulator+currentValue.points,0)
+
+export const loadQuizList=async (dispatch:Dispatch<QuizAction>,token:string,setLoading:Dispatch<SetStateAction<boolean>>)=>{
+    const config = {
+        headers: {
+            Authorization: "Bearer " + token
+        }
+    }
+    try{
+        const {data:{data,ok}}=await axios.get<ResponseTemplate<Quiz[]>>('/api/quizes',config)
+        if(ok&&data){
+            dispatch({
+                type:"LOAD_QUIZ_LIST",
+                payload:data
+            })
+        }
+    }catch(error){
+        warningToast("Unable to load quizlist")
+        console.log(error)
+        setLoading(false)
+    }
+}
+
+export const loadTopTen=async (dispatch:Dispatch<QuizAction>,token:string,setLoading:Dispatch<SetStateAction<boolean>>)=>{
+    const config = {
+        headers: {
+            Authorization: "Bearer " + token
+        }
+    }
+    try{
+        const {data:{data,ok}}=await axios.get<ResponseTemplate<LeaderBoard[]>>('/api/scorecards',config)
+        if(ok&&data){
+            dispatch({
+                type:"LOAD_TOP_TEN",
+                payload:data
+            })
+        }
+    }catch(error){
+        warningToast("Unable to load top ten")
+        console.log(error)
+        setLoading(false)
+    }
+}
+
+export const loadMyTopTen=async (dispatch:Dispatch<QuizAction>,token:string,setLoading:Dispatch<SetStateAction<boolean>>,userId:string)=>{
+    const config = {
+        headers: {
+            Authorization: "Bearer " + token
+        }
+    }
+    try{
+        const {data:{data,ok}}=await axios.get<ResponseTemplate<LeaderBoard[]>>(`/api/scorecards/${userId}`,config)
+        if(ok&&data){
+            dispatch({
+                type:"LOAD_MY_TOP_TEN",
+                payload:data
+            })
+        }
+    }catch(error){
+        warningToast("Unable to load my top ten")
+        console.log(error)
+        setLoading(false)
+    }
+}

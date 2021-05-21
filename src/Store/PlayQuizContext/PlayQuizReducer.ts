@@ -2,7 +2,8 @@ import { Dispatch } from 'react'
 import { warningToast } from '../../Components'
 import {ResponseTemplate} from '../../Generics.types'
 import {State, PlayQuizAction,SubmitQuizPayload} from './PlayQuiz.types'
-import axios from 'axios';
+// import axios from 'axios';
+import axios from '../../useAxios'
 
 export const playQuizReducer=(state:State,action:PlayQuizAction)=>{
     switch (action.type) {

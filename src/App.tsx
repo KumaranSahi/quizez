@@ -29,7 +29,7 @@ const LockSignup=({...props})=>{
 const AdminAuthGaurd=({...props})=>{
   const {token,isAdmin}=useAuth()
   return(
-      (token&&isAdmin)?<Redirect to="/"/>:<Route {...props}/>
+      (token&&isAdmin)?<Route {...props}/>:<Redirect to="/"/>
   )
 }
 

@@ -15,6 +15,15 @@
     background-color: white;
 }
 
+.table-head-cell{
+    color:white !important;
+    background-color: var(--primary);
+}
+
+.tablebody-row:nth-child(2n+1){
+    background-color: lightgray;
+}
+
 @media (min-width:700px){
     .my-scores-container{
         width: 40rem;

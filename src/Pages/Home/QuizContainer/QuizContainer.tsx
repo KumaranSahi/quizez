@@ -25,7 +25,12 @@ export const QuizContainer = ({ id, name, image, description }: Quiz) => {
       className={classes["quiz-container"]}
       style={
         image
-          ? { backgroundImage: `url(${image})` }
+          ? {
+              backgroundImage: ` linear-gradient(
+                                rgba(0, 0, 0, 1),
+                                rgba(0, 0, 0, 0.5)
+                              ),url(${image})`,
+            }
           : { backgroundColor: `${color.color}` }
       }
     >

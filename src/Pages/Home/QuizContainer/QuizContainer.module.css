@@ -11,6 +11,10 @@
   align-items: center;
   justify-content: space-between;
   animation: all 0.5s ease-in-out;
+  background-image: linear-gradient(
+      rgba(0, 0, 0, 0.5),
+      rgba(0, 0, 0, 0.5)
+    );
 }
 
 .quiz-name {
@@ -41,7 +45,7 @@
 
 @media (min-width: 700px) {
   .quiz-container {
-    width: 15rem;
+    width: 22rem;
     height: 20rem;
     margin: 1rem;
   }

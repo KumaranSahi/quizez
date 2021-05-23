@@ -78,12 +78,7 @@ export const signOutUser = (
   dispatch: Dispatch<AuthAction>,
   setLoading: Dispatch<SetStateAction<boolean>>
 ) => {
-  localStorage.removeItem("token");
-  localStorage.removeItem("userId");
-  localStorage.removeItem("userName");
-  localStorage.removeItem("expiresIn");
-  localStorage.removeItem("image");
-  localStorage.removeItem("isAdmin");
+  localStorage.clear();
   dispatch({
     type: "SIGNOUT_USER",
   });
@@ -155,7 +150,11 @@ export const signInUser = async (
       emailAndPassword
     );
     if (ok) {
-      localStorage.clear()
+      localStorage.setItem("token", data!.token);
+      localStorage.setItem("userId", data!.userId);
+      localStorage.setItem("userName", data!.userName);
+      data?.isAdmin && localStorage.setItem("isAdmin", data.isAdmin);
+      data?.image && localStorage.setItem("image", data.image);
       const expiresIn = new Date(new Date().getTime() + 3600000);
       localStorage.setItem("expiresIn", "" + expiresIn);
       checkAuthTimeout(3600, dispatch, setLoading);

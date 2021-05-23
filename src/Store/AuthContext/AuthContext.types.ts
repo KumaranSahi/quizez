@@ -16,11 +16,11 @@ export type AuthContextType = {
   ) => void;
   signInUser: (
     emailAndPassword: SigninUser,
-    dispatch: Dispatch<Action>,
+    dispatch: Dispatch<AuthAction>,
     setLoading: Dispatch<SetStateAction<boolean>>
   ) => void;
   signOutUser: (
-    dispatch: Dispatch<Action>,
+    dispatch: Dispatch<AuthAction>,
     setLoading: Dispatch<SetStateAction<boolean>>
   ) => void;
   currentPage: SigninPages;
@@ -31,7 +31,7 @@ export type AuthContextType = {
   setCurrentPage: Dispatch<SetStateAction<SigninPages>>;
   authLoading: boolean;
   setAuthLoading: Dispatch<SetStateAction<boolean>>;
-  dispatch: Dispatch<Action>;
+  dispatch: Dispatch<AuthAction>;
   isAdmin: string;
 };
 
@@ -44,7 +44,7 @@ export type State = {
   isAdmin?: string | null;
 };
 
-export type Action =
+export type AuthAction =
   | { type: "SIGNIN_USER"; payload: State }
   | { type: "SIGNOUT_USER" };
 

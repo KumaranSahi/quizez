@@ -248,7 +248,7 @@ export const Question = ({
           </Button>
         )}
         {showHint && <p className={classes["hint"]}>{hint}</p>}
-        <div style={{ textAlign: "right", margin: "1rem" }}>
+        <div className={classes["button-container"]}>
           {currentIndex === totalQuestions ? (
             <Button
               variant="contained"

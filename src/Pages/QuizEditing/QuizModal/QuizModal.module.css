@@ -1,0 +1,38 @@
+.quiz-modal {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+}
+.quiz-modal-paper {
+    background-color: white;
+    padding: 1rem;
+    width: 100%;
+    height: 90%;
+    overflow-y: scroll;
+}
+
+.quiz-modal-headings{
+    color: var(--primary);
+}
+
+.option{
+    display: flex;
+}
+
+.question-form{
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.adjacent-textfield{
+    display: flex;
+    justify-content: space-between;
+}
+
+
+@media (min-width:700px){
+    .quiz-modal-paper{
+        width: 40rem;
+    }
+}

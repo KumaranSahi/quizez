@@ -1,0 +1,32 @@
+.my-scores-page{
+    width: 100%;
+    min-height: calc(100vh - 4.4rem);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    background-color: lightgray;
+}
+
+.my-scores-container{
+    width: 100%;
+    height: 100%;
+    padding: 1rem;
+    text-align: center;
+    background-color: white;
+}
+
+.table-head-cell{
+    color:white !important;
+    background-color: var(--primary);
+}
+
+.tablebody-row:nth-child(2n+1){
+    background-color: lightgray;
+}
+
+@media (min-width:700px){
+    .my-scores-container{
+        width: 40rem;
+        min-height: 30rem;
+    }
+}

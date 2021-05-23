@@ -155,11 +155,7 @@ export const signInUser = async (
       emailAndPassword
     );
     if (ok) {
-      localStorage.setItem("token", data!.token);
-      localStorage.setItem("userId", data!.userId);
-      localStorage.setItem("userName", data!.userName);
-      data?.isAdmin && localStorage.setItem("isAdmin", data.isAdmin);
-      data?.image && localStorage.setItem("image", data.image);
+      localStorage.clear()
       const expiresIn = new Date(new Date().getTime() + 3600000);
       localStorage.setItem("expiresIn", "" + expiresIn);
       checkAuthTimeout(3600, dispatch, setLoading);

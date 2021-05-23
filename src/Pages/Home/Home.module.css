@@ -1,27 +1,27 @@
-.homepage-container{
-    width: 100%;
-    display: flex;
+.homepage-container {
+  width: 100%;
+  display: flex;
 }
 
-.active-quizes{
-    flex:4;
-    list-style: none;
-    margin:0;
-    padding-top:1rem;
-    display: flex;
-    flex-wrap: wrap;
-    padding-inline-start: 0;
+.active-quizes {
+  flex: 4;
+  list-style: none;
+  margin: 0;
+  padding-top: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  padding-inline-start: 0;
 }
 
-.create-quiz-personal-scores{
-    flex:2;
-    box-shadow: 1px 1px 13px 1px;
-    display: none;
-    padding: 1rem
+.create-quiz-personal-scores {
+  flex: 2;
+  box-shadow: 1px 1px 13px 1px;
+  display: none;
+  padding: 1rem;
 }
 
-@media (min-width:700px) {
-    .create-quiz-personal-scores{
-        display: block;
-    }
+@media (min-width: 700px) {
+  .create-quiz-personal-scores {
+    display: block;
+  }
 }

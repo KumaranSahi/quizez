@@ -4,4 +4,4 @@ const instance=axios.create({
     baseURL:"https://quizez-api.herokuapp.com/"
 })
 
-export default instance
+export default instance;

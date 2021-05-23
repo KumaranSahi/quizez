@@ -1,37 +1,36 @@
 body {
   margin: 0;
-  font-family:'Segoe UI';
+  font-family: "Segoe UI";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
 
-*{
+* {
   box-sizing: border-box;
 }
 
-a{
+a {
   text-decoration: none;
 }
 
-:root{
-  --primary:#311b92;
-  --success:green;
-  --success-mild:#016c5d;
-  --success-bright:limegreen;
-  --failure:red;
-  --failure-mild:salmon;
-  --neutral:gray;
-  --neutral-mild:lightgrey;
-  --z-index-high:200;
-  --z-index-mid:100;
-  --z-index-low:1;
+:root {
+  --primary: #311b92;
+  --success: green;
+  --success-mild: #016c5d;
+  --success-bright: limegreen;
+  --failure: red;
+  --failure-mild: salmon;
+  --neutral: gray;
+  --neutral-mild: lightgrey;
+  --z-index-high: 200;
+  --z-index-mid: 100;
+  --z-index-low: 1;
 }
-
 
 ::-webkit-scrollbar {
   width: 0.5rem;
@@ -39,11 +38,11 @@ a{
 
 /* Track */
 ::-webkit-scrollbar-track {
-  background: #58595a
+  background: #58595a;
 }
- 
+
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #282c34; 
+  background: #282c34;
   border-radius: 2rem;
 }

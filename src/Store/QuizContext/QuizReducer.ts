@@ -2,7 +2,6 @@ import { Dispatch, SetStateAction } from 'react';
 import {State,QuizAction,QuizData,Quiz,NewQuestionData,Question,LeaderBoard} from './QuizContext.types'
 import {warningToast,successToast} from '../../Components'
 import {ResponseTemplate} from '../../Generics.types'
-// import axios from 'axios'
 import axios from '../../useAxios'
 
 export const quizReducer=(state:State,action:QuizAction)=>{

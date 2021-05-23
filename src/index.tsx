@@ -1,23 +1,22 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
-import {createMuiTheme,ThemeProvider} from '@material-ui/core'
-import {BrowserRouter} from 'react-router-dom'
-import 'react-toastify/dist/ReactToastify.css'
-import {ToastContainer} from 'react-toastify'
-import {AuthContextProvider} from './Store/AuthContext/AuthContext'
-import {QuizContextProvider} from './Store/QuizContext/QuizContext'
+import React from "react";
+import ReactDOM from "react-dom";
+import "./index.css";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
+import { createMuiTheme, ThemeProvider } from "@material-ui/core";
+import { BrowserRouter } from "react-router-dom";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
+import { AuthContextProvider } from "./Store/AuthContext/AuthContext";
+import { QuizContextProvider } from "./Store/QuizContext/QuizContext";
 
 const theme = createMuiTheme({
   palette: {
     primary: {
       main: "#311b92",
-    }
+    },
   },
 });
-
 
 ReactDOM.render(
   <React.StrictMode>
@@ -26,13 +25,13 @@ ReactDOM.render(
         <AuthContextProvider>
           <QuizContextProvider>
             <App />
-            <ToastContainer/>
+            <ToastContainer />
           </QuizContextProvider>
         </AuthContextProvider>
       </BrowserRouter>
     </ThemeProvider>
   </React.StrictMode>,
-  document.getElementById('root')
+  document.getElementById("root")
 );
 
 // If you want to start measuring performance in your app, pass a function

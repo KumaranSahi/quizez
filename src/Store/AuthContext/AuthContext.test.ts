@@ -1,5 +1,5 @@
 import { authReducer, signUpUser } from "./AuthReducer";
-import { Action, UserData, State } from "./AuthContext.types";
+import { AuthAction, UserData, State } from "./AuthContext.types";
 import axios from "axios";
 
 jest.mock("axios");
@@ -16,7 +16,7 @@ const initialState: State = {
 
 describe("Testing Auth Reducer", () => {
   test("Sign in user test", () => {
-    const action: Action = {
+    const action: AuthAction = {
       type: "SIGNIN_USER",
       payload: {
         userId: "userId",
@@ -37,8 +37,8 @@ describe("Testing Auth Reducer", () => {
     });
   });
 
-  test("Sign out user test", () => {
-    const signinAction: Action = {
+  test("Should Sign out user", () => {
+    const signinAction: AuthAction = {
       type: "SIGNIN_USER",
       payload: {
         userId: "userId",
@@ -49,7 +49,7 @@ describe("Testing Auth Reducer", () => {
       },
     };
     const signinActionOutput = authReducer(initialState, signinAction);
-    const signoutAction: Action = {
+    const signoutAction: AuthAction = {
       type: "SIGNOUT_USER",
     };
     const signoutActionOutput = authReducer(signinActionOutput, signoutAction);
@@ -58,7 +58,7 @@ describe("Testing Auth Reducer", () => {
 });
 
 describe("Test Signup user", () => {
-  test("signup successfull", async () => {
+  test("should signup new user", async () => {
     const userData: UserData = {
       email: "kumaran@gmail.com",
       name: "Kumaran",

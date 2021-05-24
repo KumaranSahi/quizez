@@ -5,7 +5,7 @@ import { SigninPages } from "../../Store/AuthContext/AuthContext.types";
 import { successToast, warningToast } from "../../Components/";
 import { TextField, Button, IconButton, Checkbox } from "@material-ui/core";
 import { PhotoCamera } from "@material-ui/icons";
-// import axios from 'axios'
+import { useSignupReducer } from "./SignupReducer";
 import axios from "../../useAxios";
 
 export const Signup = () => {
@@ -20,23 +20,25 @@ export const Signup = () => {
     dispatch,
   } = useAuth();
 
-  const [userName, setUserName] = useState("");
-  const [userNameValid, setUserNameValid] = useState(true);
-
-  const [email, setEmail] = useState("");
-  const [emailValid, setEmailValid] = useState(true);
-
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-
-  const [image, setImage] = useState("");
-  const [fileUploadInfo, setFileUploadInfo] = useState("");
-
-  const [isAdmin, setIsAdmin] = useState(false);
+  const {
+    dispatch: signupDispatch,
+    state: {
+      confirmPassword,
+      email,
+      emailValid,
+      fileUploadInfo,
+      image,
+      isAdmin,
+      password,
+      userName,
+      userNameValid,
+    },
+  } = useSignupReducer();
 
   const validateUserName = () => {
-    if (userName.length === 0) setUserNameValid(false);
-    else setUserNameValid(true);
+    if (userName.length === 0)
+      signupDispatch({ type: "SET_USERNAME_VALID", payload: false });
+    else signupDispatch({ type: "SET_USERNAME_VALID", payload: true });
   };
 
   const validateEmail = () => {
@@ -44,8 +46,8 @@ export const Signup = () => {
       email.length > 0 &&
       new RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$").test(email)
     )
-      setEmailValid(true);
-    else setEmailValid(false);
+      signupDispatch({ type: "SET_EMAIL_VALID", payload: true });
+    else signupDispatch({ type: "SET_EMAIL_VALID", payload: false });
   };
 
   const fileUpload = async (file: FileList | null) => {
@@ -65,7 +67,10 @@ export const Signup = () => {
           "https://api.cloudinary.com/v1_1/conclave/image/upload",
           data
         );
-        setImage(imageData.url);
+        signupDispatch({
+          type: "ADD_IMAGE",
+          payload: imageData.url,
+        });
         setAuthLoading(false);
         successToast("Image uploaded successfully");
       } catch (error) {
@@ -73,7 +78,10 @@ export const Signup = () => {
         warningToast("Unable to upload image");
       }
     } else {
-      setFileUploadInfo("Please upload a .jpg or .png file under 4mb");
+      signupDispatch({
+        type: "SET_FILE_UPLOAD_INFO",
+        payload: "Please upload a .jpg or .png file under 4mb",
+      });
     }
   };
 
@@ -178,7 +186,12 @@ export const Signup = () => {
                   required
                   fullWidth
                   value={userName}
-                  onChange={(event) => setUserName(event.target.value)}
+                  onChange={(event) =>
+                    signupDispatch({
+                      type: "ADD_USERNAME",
+                      payload: event.target.value,
+                    })
+                  }
                 />
                 {!userNameValid && (
                   <p className={classes["error-text"]}>
@@ -194,7 +207,12 @@ export const Signup = () => {
                   required
                   fullWidth
                   value={email}
-                  onChange={(event) => setEmail(event.target.value)}
+                  onChange={(event) =>
+                    signupDispatch({
+                      type: "ADD_EMAIL",
+                      payload: event.target.value,
+                    })
+                  }
                 />
                 {!emailValid && (
                   <p className={classes["error-text"]}>
@@ -209,11 +227,21 @@ export const Signup = () => {
                 required
                 fullWidth
                 value={password}
-                onChange={(event) => setPassword(event.target.value)}
+                onChange={(event) =>
+                  signupDispatch({
+                    type: "ADD_PASSWORD",
+                    payload: event.target.value,
+                  })
+                }
               />
               <label>
                 <Checkbox
-                  onClick={() => setIsAdmin((state) => !state)}
+                  onClick={() =>
+                    signupDispatch({
+                      type: "SET_IS_ADMIN",
+                      payload: !isAdmin,
+                    })
+                  }
                   checked={isAdmin}
                   color="primary"
                   inputProps={{ "aria-label": "secondary checkbox" }}
@@ -247,7 +275,12 @@ export const Signup = () => {
                   required
                   fullWidth
                   value={email}
-                  onChange={(event) => setEmail(event.target.value)}
+                  onChange={(event) =>
+                    signupDispatch({
+                      type: "ADD_EMAIL",
+                      payload: event.target.value,
+                    })
+                  }
                 />
                 {!emailValid && (
                   <p className={classes["error-text"]}>
@@ -262,7 +295,12 @@ export const Signup = () => {
                 fullWidth
                 required
                 value={password}
-                onChange={(event) => setPassword(event.target.value)}
+                onChange={(event) =>
+                  signupDispatch({
+                    type: "ADD_PASSWORD",
+                    payload: event.target.value,
+                  })
+                }
               />
               <Button
                 variant="contained"
@@ -290,7 +328,12 @@ export const Signup = () => {
                 required
                 fullWidth
                 value={email}
-                onChange={(event) => setEmail(event.target.value)}
+                onChange={(event) =>
+                  signupDispatch({
+                    type: "ADD_EMAIL",
+                    payload: event.target.value,
+                  })
+                }
               />
               <TextField
                 label="Password"
@@ -298,7 +341,12 @@ export const Signup = () => {
                 type="password"
                 required
                 value={password}
-                onChange={(event) => setPassword(event.target.value)}
+                onChange={(event) =>
+                  signupDispatch({
+                    type: "ADD_PASSWORD",
+                    payload: event.target.value,
+                  })
+                }
               />
               <TextField
                 label="Confirm Password"
@@ -307,7 +355,12 @@ export const Signup = () => {
                 required
                 fullWidth
                 value={confirmPassword}
-                onChange={(event) => setConfirmPassword(event.target.value)}
+                onChange={(event) =>
+                  signupDispatch({
+                    type: "ADD_CONFIRM_PASSWORD",
+                    payload: event.target.value,
+                  })
+                }
               />
               <Button
                 variant="contained"

@@ -26,7 +26,6 @@ export const AuthContext = createContext({});
 export const useAuth = () => useContext(AuthContext) as AuthContextType;
 
 export const initialState: State = {
-  userId: null,
   token: null,
   userName: null,
   expiresIn: null,
@@ -47,7 +46,6 @@ export const AuthContextProvider: FC = ({ children }: Props) => {
   return (
     <AuthContext.Provider
       value={{
-        userId: state.userId,
         token: state.token,
         userName: state.userName,
         image: state.image,

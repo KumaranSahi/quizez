@@ -7,7 +7,6 @@ jest.mock("axios");
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 
 const initialState: State = {
-  userId: null,
   token: null,
   userName: null,
   expiresIn: null,
@@ -19,7 +18,6 @@ describe("Testing Auth Reducer", () => {
     const action: AuthAction = {
       type: "SIGNIN_USER",
       payload: {
-        userId: "userId",
         token: "JWT token",
         userName: "userName",
         expiresIn: new Date("1998"),
@@ -29,7 +27,6 @@ describe("Testing Auth Reducer", () => {
     const reducerOutput = authReducer(initialState, action);
 
     expect(reducerOutput).toEqual({
-      userId: "userId",
       token: "JWT token",
       userName: "userName",
       expiresIn: new Date("1998"),
@@ -41,7 +38,6 @@ describe("Testing Auth Reducer", () => {
     const signinAction: AuthAction = {
       type: "SIGNIN_USER",
       payload: {
-        userId: "userId",
         token: "JWT token",
         userName: "userName",
         expiresIn: new Date("1998"),

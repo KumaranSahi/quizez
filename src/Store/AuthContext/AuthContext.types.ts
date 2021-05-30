@@ -5,7 +5,6 @@ export type Props = {
 };
 
 export type AuthContextType = {
-  userId: string;
   token: string;
   userName: string;
   image: string;
@@ -36,7 +35,6 @@ export type AuthContextType = {
 };
 
 export type State = {
-  userId: string | null;
   token: string | null;
   userName: string | null;
   expiresIn: Date | null;
@@ -71,7 +69,7 @@ export type ChangePassword = {
 
 export type SignedInUserInfo = {
   token: string;
-  userId: string;
+
   userName: string;
   expiresIn: Date;
   image?: string;

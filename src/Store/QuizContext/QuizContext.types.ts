@@ -62,7 +62,6 @@ export type QuizContextTypes = {
   myQuizes: Quiz[];
   leaderBoard: LeaderBoard[];
   getMyQuizes: (
-    userId: string,
     token: string,
     dispatch: Dispatch<QuizAction>,
     setLoading: Dispatch<SetStateAction<boolean>>
@@ -79,7 +78,6 @@ export type QuizContextTypes = {
     quizData: QuizData,
     setLoading: Dispatch<SetStateAction<boolean>>,
     token: string,
-    userId: string,
     dispatch: Dispatch<QuizAction>
   ) => string;
   dispatch: Dispatch<QuizAction>;
@@ -94,7 +92,6 @@ export type QuizContextTypes = {
   createQuestion: (
     questionData: NewQuestionData,
     token: string,
-    userId: string,
     setLoading: Dispatch<SetStateAction<boolean>>,
     dispatch: Dispatch<QuizAction>,
     creatingQuiz: Quiz
@@ -123,7 +120,6 @@ export type QuizContextTypes = {
     dispatch: Dispatch<QuizAction>,
     token: string,
     setLoading: Dispatch<SetStateAction<boolean>>,
-    userId: string
   ) => void;
 };
 

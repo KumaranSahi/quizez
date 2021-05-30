@@ -9,20 +9,19 @@ import {
   Paper,
   Button,
 } from "@material-ui/core";
-import { useQuiz } from "../../Store/QuizContext/QuizContext";
-import { useAuth } from "../../Store/AuthContext/AuthContext";
+import { useQuiz, useAuth } from "../../Store";
 import { useEffect } from "react";
 import { useHistory } from "react-router-dom";
 
 export const MyQuizes = () => {
   const { myQuizes, dispatch, quizLoading, setQuizLoading, getMyQuizes } =
     useQuiz();
-  const { token, userId } = useAuth();
+  const { token } = useAuth();
   const { push } = useHistory();
 
   useEffect(() => {
-    getMyQuizes(userId, token, dispatch, setQuizLoading);
-  }, []);
+    getMyQuizes(token, dispatch, setQuizLoading);
+  }, [dispatch, setQuizLoading, getMyQuizes, token]);
 
   return (
     <div className={classes["my-quizes-page"]}>

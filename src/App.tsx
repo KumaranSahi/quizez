@@ -19,9 +19,7 @@ import {
   MyScores,
   CreateQuizAndLeaderBoardPage,
 } from "./Pages";
-import { PlayQuizContextProvider } from "./Store/PlayQuizContext/PlayQuizContext";
-import { useAuth } from "./Store/AuthContext/AuthContext";
-import { useQuiz } from "./Store/QuizContext/QuizContext";
+import { PlayQuizContextProvider, useAuth, useQuiz } from "./Store";
 import { useEffect } from "react";
 
 const PrivateLink = ({ ...props }) => {
@@ -29,7 +27,7 @@ const PrivateLink = ({ ...props }) => {
   const { push } = useHistory();
   useEffect(() => {
     if (!token) push("/sign-up");
-  }, [token]);
+  }, [token, push]);
   return <Route {...props} />;
 };
 

@@ -23,7 +23,7 @@ export const QuizModal=(props:PropTypes)=>{
     const [addOptionError,setAddOptionError]=useState(false)
 
     const {createQuestion,editQuestion,dispatch,setQuizLoading,quizLoading,creatingQuiz}=useQuiz()
-    const {token,userId}=useAuth()
+    const {token}=useAuth()
 
     const handleClose = () => {
         setQuestion("")
@@ -75,7 +75,7 @@ export const QuizModal=(props:PropTypes)=>{
                     points:points,
                     question:question,
                     quiz:props.quiz,
-                },token,userId,setQuizLoading,dispatch,creatingQuiz)
+                },token,setQuizLoading,dispatch,creatingQuiz)
                 handleClose()
             }else{
                 editQuestion({

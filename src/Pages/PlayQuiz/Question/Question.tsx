@@ -44,7 +44,7 @@ export const Question = ({
     dispatch: quizDispatch,
   } = useQuiz();
   const { dispatch, score: totalScore, submitQuiz } = usePlayQuiz();
-  const { token, userId } = useAuth();
+  const { token } = useAuth();
 
   const { push } = useHistory();
 
@@ -67,7 +67,6 @@ export const Question = ({
   const submitButtonClicked = async (totalScore = 0) => {
     setQuizLoading(true);
     const result = await submitQuiz(
-      userId,
       {
         quizId: currentQuiz.id,
         score: totalScore,
@@ -78,7 +77,7 @@ export const Question = ({
     if (result) {
       setQuizLoading(false);
       loadTopTen(quizDispatch, token, setQuizLoading);
-      loadMyTopTen(quizDispatch, token, setQuizLoading, userId);
+      loadMyTopTen(quizDispatch, token, setQuizLoading);
       push("/quiz-result");
     } else {
       setQuizLoading(false);

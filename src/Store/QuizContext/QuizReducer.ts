@@ -51,7 +51,7 @@ export const quizReducer=(state:State,action:QuizAction)=>{
     }
 }
 
-export const createQuiz=async (quizData:QuizData, setLoading:Dispatch<SetStateAction<boolean>>, token:string,userId:string,dispatch:Dispatch<QuizAction>)=>{
+export const createQuiz=async (quizData:QuizData, setLoading:Dispatch<SetStateAction<boolean>>, token:string,dispatch:Dispatch<QuizAction>)=>{
     setLoading(true);
     const config = {
         headers: {
@@ -59,7 +59,7 @@ export const createQuiz=async (quizData:QuizData, setLoading:Dispatch<SetStateAc
         }
     }
     try{
-        const {data:{data,ok}}=await axios.post<ResponseTemplate<Quiz>>(`/api/quizes/${userId}/create`,quizData,config)
+        const {data:{data,ok}}=await axios.post<ResponseTemplate<Quiz>>(`/api/quizes`,quizData,config)
         if(ok && data){
             dispatch({
                 type:'CREATE_QUIZ',
@@ -77,7 +77,7 @@ export const createQuiz=async (quizData:QuizData, setLoading:Dispatch<SetStateAc
     }
 }
 
-export const getMyQuizes=async (userId:string, token:string, dispatch:Dispatch<QuizAction>, setLoading:Dispatch<SetStateAction<boolean>>)=>{
+export const getMyQuizes=async (token:string, dispatch:Dispatch<QuizAction>, setLoading:Dispatch<SetStateAction<boolean>>)=>{
     setLoading(true)
     const config = {
         headers: {
@@ -85,7 +85,7 @@ export const getMyQuizes=async (userId:string, token:string, dispatch:Dispatch<Q
         }
     }
     try{
-        const {data:{data,ok}}=await axios.get<ResponseTemplate<Quiz[]>>(`/api/quizes/${userId}/user`,config)
+        const {data:{data,ok}}=await axios.get<ResponseTemplate<Quiz[]>>(`/api/quizes`,config)
         if(data&&ok){
             dispatch({
                 type:"LOAD_MY_QUIZES",
@@ -130,7 +130,7 @@ export const getQuiz=async (quizId:string, token:string, dispatch:Dispatch<QuizA
     }
 }
 
-export const createQuestion=async (questionData:NewQuestionData,token:string,userId:string,setLoading:Dispatch<SetStateAction<boolean>>,dispatch:Dispatch<QuizAction>,creatingQuiz:Quiz)=>{
+export const createQuestion=async (questionData:NewQuestionData,token:string,setLoading:Dispatch<SetStateAction<boolean>>,dispatch:Dispatch<QuizAction>,creatingQuiz:Quiz)=>{
     setLoading(true)
     const config = {
         headers: {
@@ -138,7 +138,7 @@ export const createQuestion=async (questionData:NewQuestionData,token:string,use
         }
     }
     try{
-        const {data:{data,ok}}=await axios.post<ResponseTemplate<Question>>(`/api/questions/${userId}`,questionData,config)
+        const {data:{data,ok}}=await axios.post<ResponseTemplate<Question>>(`/api/questions`,questionData,config)
         if(ok && data){
             const newQuiz:Quiz={
                 ...creatingQuiz,
@@ -256,14 +256,14 @@ export const loadTopTen=async (dispatch:Dispatch<QuizAction>,token:string,setLoa
     }
 }
 
-export const loadMyTopTen=async (dispatch:Dispatch<QuizAction>,token:string,setLoading:Dispatch<SetStateAction<boolean>>,userId:string)=>{
+export const loadMyTopTen=async (dispatch:Dispatch<QuizAction>,token:string,setLoading:Dispatch<SetStateAction<boolean>>)=>{
     const config = {
         headers: {
             Authorization: "Bearer " + token
         }
     }
     try{
-        const {data:{data,ok}}=await axios.get<ResponseTemplate<LeaderBoard[]>>(`/api/scorecards/${userId}`,config)
+        const {data:{data,ok}}=await axios.get<ResponseTemplate<LeaderBoard[]>>(`/api/scorecards`,config)
         if(ok&&data){
             dispatch({
                 type:"LOAD_MY_TOP_TEN",

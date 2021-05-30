@@ -15,7 +15,7 @@ export const CreateQuiz = () => {
   const [image, setImage] = useState("");
   const [fileUploadInfo, setFileUploadInfo] = useState("");
 
-  const { userName, token, userId } = useAuth();
+  const { userName, token } = useAuth();
   const { setQuizLoading, quizLoading, createQuiz, dispatch } = useQuiz();
 
   const { push } = useHistory();
@@ -66,7 +66,6 @@ export const CreateQuiz = () => {
         },
         setQuizLoading,
         token,
-        userId,
         dispatch
       );
 

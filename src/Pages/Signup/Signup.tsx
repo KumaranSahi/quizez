@@ -1,5 +1,5 @@
 import classes from "./Singup.module.css";
-import { useState, SyntheticEvent } from "react";
+import { SyntheticEvent } from "react";
 import { useAuth } from "../../Store/AuthContext/AuthContext";
 import { SigninPages } from "../../Store/AuthContext/AuthContext.types";
 import { successToast, warningToast } from "../../Components/";

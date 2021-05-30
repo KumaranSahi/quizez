@@ -44,7 +44,7 @@ export const playQuizReducer=(state:State,action:PlayQuizAction)=>{
     }
 }
 
-export const submitQuiz=async (userId:string,quizData:SubmitQuizPayload,token:string,dispatch:Dispatch<PlayQuizAction>)=>{
+export const submitQuiz=async (quizData:SubmitQuizPayload,token:string,dispatch:Dispatch<PlayQuizAction>)=>{
     
     const config = {
         headers: {
@@ -52,7 +52,7 @@ export const submitQuiz=async (userId:string,quizData:SubmitQuizPayload,token:st
         }
     }
     try{
-        await axios.post<ResponseTemplate>(`/api/scorecards/${userId}`,quizData,config)
+        await axios.post<ResponseTemplate>(`/api/scorecards`,quizData,config)
         dispatch({
             type:"EXIT_PLAY_MODE"
         })

@@ -17,7 +17,6 @@ export const authReducer = (state: State, action: AuthAction) => {
     case "SIGNIN_USER":
       return {
         ...state,
-        userId: action.payload.userId,
         token: action.payload.token,
         userName: action.payload.userName,
         expiresIn: action.payload.expiresIn,
@@ -27,7 +26,6 @@ export const authReducer = (state: State, action: AuthAction) => {
     case "SIGNOUT_USER":
       return {
         ...state,
-        userId: null,
         token: null,
         image: null,
         userName: null,
@@ -113,7 +111,6 @@ export const onReload = (
   if (expiresIn <= new Date()) {
     signOutUser(dispatch, setLoading);
   } else {
-    const userId = localStorage.getItem("userId");
     const userName = localStorage.getItem("userName");
     const image = localStorage.getItem("image");
     const isAdmin = localStorage.getItem("isAdmin");
@@ -125,7 +122,6 @@ export const onReload = (
     dispatch({
       type: "SIGNIN_USER",
       payload: {
-        userId: userId,
         token: token,
         userName: userName,
         expiresIn: expiresIn,
@@ -151,7 +147,6 @@ export const signInUser = async (
     );
     if (ok) {
       localStorage.setItem("token", data!.token);
-      localStorage.setItem("userId", data!.userId);
       localStorage.setItem("userName", data!.userName);
       data?.isAdmin && localStorage.setItem("isAdmin", data.isAdmin);
       data?.image && localStorage.setItem("image", data.image);
@@ -161,7 +156,6 @@ export const signInUser = async (
       dispatch({
         type: "SIGNIN_USER",
         payload: {
-          userId: data!.userId,
           token: data!.token,
           userName: data!.userName,
           expiresIn: new Date(expiresIn),

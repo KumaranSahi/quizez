@@ -7,10 +7,10 @@ import {
   SigninUser,
   SignedInUserInfo,
 } from "./AuthContext.types";
-import {Dispatch,SetStateAction} from 'react'
-import {ResponseTemplate} from '../../Generics.types'
-import axios from '../../useAxios'
-import {successToast,warningToast,infoToast} from '../../Components/'
+import { Dispatch, SetStateAction } from "react";
+import { ResponseTemplate } from "../../Generics.types";
+import axios from "../../useAxios";
+import { successToast, warningToast, infoToast } from "../../Components/";
 
 export const authReducer = (state: State, action: AuthAction) => {
   switch (action.type) {
@@ -37,30 +37,34 @@ export const authReducer = (state: State, action: AuthAction) => {
   }
 };
 
-export const signUpUser=async (userData:UserData,setLoading:Dispatch<SetStateAction<boolean>>,setCurrentPage:Dispatch<SetStateAction<SigninPages>>)=>{
-    setLoading(true)
-    try{
-        const {data,status}=await axios.post<ResponseTemplate>('/api/users/signup',userData);
-        if(data.ok){
-            successToast("User Added Successfully")
-            setCurrentPage("SIGNIN_PAGE")
-            setLoading(false)
-        }
-        else{
-            if(+status===208){
-                infoToast("User already exists")
-                infoToast("Please Try loging in")
-            }
-            else
-                warningToast("Failed to add user")
-            setLoading(false)
-        }
-    }catch(error){
-        warningToast("Failed to add user")
-        console.log(error)
-        setLoading(false)
+export const signUpUser = async (
+  userData: UserData,
+  setLoading: Dispatch<SetStateAction<boolean>>,
+  setCurrentPage: Dispatch<SetStateAction<SigninPages>>
+) => {
+  setLoading(true);
+  try {
+    const { data, status } = await axios.post<ResponseTemplate>(
+      "/api/users/signup",
+      userData
+    );
+    if (data.ok) {
+      successToast("User Added Successfully");
+      setCurrentPage("SIGNIN_PAGE");
+      setLoading(false);
+    } else {
+      if (+status === 208) {
+        infoToast("User already exists");
+        infoToast("Please Try loging in");
+      } else warningToast("Failed to add user");
+      setLoading(false);
     }
-}
+  } catch (error) {
+    warningToast("Failed to add user");
+    console.log(error);
+    setLoading(false);
+  }
+};
 
 export const checkAuthTimeout = (
   expirationTime: number,
@@ -83,21 +87,28 @@ export const signOutUser = (
   setLoading(false);
 };
 
-export const changePassword=async (userData:ChangePassword,setLoading:Dispatch<SetStateAction<boolean>>,setCurrentPage:Dispatch<SetStateAction<SigninPages>>)=>{
-    setLoading(true)
-    try{
-        const {data}=await axios.post<ResponseTemplate>('/api/users/password',userData);
-        if(data.ok){
-            successToast("Password changed successfully");
-            setCurrentPage("SIGNIN_PAGE");
-        }
-        setLoading(false)
-    }catch(error){
-        warningToast("Unable to change password please try again later")
-        console.log(error)
-        setLoading(false)
+export const changePassword = async (
+  userData: ChangePassword,
+  setLoading: Dispatch<SetStateAction<boolean>>,
+  setCurrentPage: Dispatch<SetStateAction<SigninPages>>
+) => {
+  setLoading(true);
+  try {
+    const { data } = await axios.post<ResponseTemplate>(
+      "/api/users/password",
+      userData
+    );
+    if (data.ok) {
+      successToast("Password changed successfully");
+      setCurrentPage("SIGNIN_PAGE");
     }
-}
+    setLoading(false);
+  } catch (error) {
+    warningToast("Unable to change password please try again later");
+    console.log(error);
+    setLoading(false);
+  }
+};
 
 export const onReload = (
   dispatch: Dispatch<AuthAction>,

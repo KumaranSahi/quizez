@@ -45,7 +45,7 @@ export const MyScores = () => {
             </TableHead>
             <TableBody>
               {myLeaderBoard.map(
-                ({ id, score, userName, quizName, quizId }) => (
+                ({ id, score, quizName, quizId }) => (
                   <TableRow key={id} className={classes["tablebody-row"]}>
                     <TableCell>{quizName}</TableCell>
                     <TableCell align="right">{score}</TableCell>

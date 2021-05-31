@@ -10,7 +10,7 @@ export const Home = () => {
   const { token } = useAuth();
   useEffect(() => {
     loadQuizList(dispatch, token, setQuizLoading);
-  }, []);
+  }, [dispatch, token, setQuizLoading, loadQuizList]);
 
   return (
     <div className={classes["homepage-container"]}>

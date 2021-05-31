@@ -1,3 +1,5 @@
+import { Dispatch, SyntheticEvent } from "react";
+
 export type SignupInitialState = {
   userName: string;
   userNameValid: boolean;
@@ -20,3 +22,36 @@ export type SignupAction =
   | { type: "ADD_IMAGE"; payload: string }
   | { type: "SET_FILE_UPLOAD_INFO"; payload: string }
   | { type: "SET_IS_ADMIN"; payload: boolean };
+
+export type SigninContainerProps = {
+  signInSubmit: (event: SyntheticEvent) => void;
+  signupDispatch: Dispatch<SignupAction>;
+  email: string;
+  emailValid: boolean;
+  password: string;
+  authLoading: boolean;
+};
+
+export type SignupContainerProps = {
+  image: string;
+  fileUpload: (file: FileList | null) => void;
+  fileUploadInfo: string;
+  email: string;
+  emailValid: boolean;
+  password: string;
+  userName: string;
+  userNameValid: boolean;
+  signUpSubmit: (event: SyntheticEvent) => void;
+  authLoading: boolean;
+  isAdmin: boolean;
+  signupDispatch: Dispatch<SignupAction>;
+};
+
+export type ConfirmPasswordContainerProps = {
+  email: string;
+  password: string;
+  confirmPassword: string;
+  authLoading: boolean;
+  changePasswordSubmit: (event: SyntheticEvent) => void;
+  signupDispatch: Dispatch<SignupAction>;
+};

@@ -119,7 +119,7 @@ export type QuizContextTypes = {
   loadMyTopTen: (
     dispatch: Dispatch<QuizAction>,
     token: string,
-    setLoading: Dispatch<SetStateAction<boolean>>,
+    setLoading: Dispatch<SetStateAction<boolean>>
   ) => void;
 };
 

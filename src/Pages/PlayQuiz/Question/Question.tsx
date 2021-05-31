@@ -48,22 +48,6 @@ export const Question = ({
 
   const { push } = useHistory();
 
-  useEffect(() => {
-    let time = setInterval(() => setTimer((state) => state - 1), 1000);
-    if (timer === 0) {
-      clearInterval(time);
-      setChecked([]);
-      currentIndex === totalQuestions
-        ? submitButtonClicked()
-        : dispatch({
-            type: "LOAD_QUESTION",
-            payload: currentQuiz.questions![currentIndex],
-          });
-      setTimer(30);
-    }
-    return () => clearInterval(time);
-  }, [timer]);
-
   const submitButtonClicked = async (totalScore = 0) => {
     setQuizLoading(true);
     const result = await submitQuiz(
@@ -185,6 +169,22 @@ export const Question = ({
     setShowHint(false);
     setTimer(30);
   };
+
+  useEffect(() => {
+    let time = setInterval(() => setTimer((state) => state - 1), 1000);
+    if (timer === 0) {
+      clearInterval(time);
+      setChecked([]);
+      currentIndex === totalQuestions
+        ? submitButtonClicked()
+        : dispatch({
+            type: "LOAD_QUESTION",
+            payload: currentQuiz.questions![currentIndex],
+          });
+      setTimer(30);
+    }
+    return () => clearInterval(time);
+  }, [timer]);
 
   return (
     <>

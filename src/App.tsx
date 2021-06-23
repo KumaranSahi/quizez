@@ -18,7 +18,7 @@ import {
   QuizResult,
   MyScores,
   CreateQuizAndLeaderBoardPage,
-} from "./Pages";
+} from "./pages";
 import { PlayQuizContextProvider, useAuth, useQuiz } from "./store";
 import { useEffect } from "react";
 

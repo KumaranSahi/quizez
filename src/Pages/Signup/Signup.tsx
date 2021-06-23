@@ -2,7 +2,7 @@ import classes from "./Singup.module.css";
 import { SyntheticEvent } from "react";
 import { useAuth } from "../../store";
 import { SigninPages } from "../../store/authContext/AuthContext.types";
-import { successToast, warningToast } from "../../Components/";
+import { successToast, warningToast } from "../../components/";
 import { useSignupReducer } from "./SignupReducer";
 import axios from "axios";
 import {

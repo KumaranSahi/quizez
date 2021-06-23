@@ -8,7 +8,7 @@ import {
   Question,
   LeaderBoard,
 } from "./QuizContext.types";
-import { warningToast, successToast } from "../../Components";
+import { warningToast, successToast } from "../../components";
 import { ResponseTemplate } from "../../Generics.types";
 import { APP_URL } from "../../axiosUtils";
 import axios from "axios";

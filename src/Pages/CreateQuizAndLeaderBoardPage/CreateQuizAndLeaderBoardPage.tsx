@@ -1,5 +1,5 @@
 import classes from "./CreateQuizAndLeaderBoard.module.css";
-import { CreateQuizAndLeaderBoard } from "../../Components";
+import { CreateQuizAndLeaderBoard } from "../../components";
 
 export const CreateQuizAndLeaderBoardPage = () => {
   return (

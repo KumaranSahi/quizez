@@ -4,7 +4,7 @@ import { useState, SyntheticEvent, ChangeEvent } from "react";
 import { PhotoCamera } from "@material-ui/icons";
 import { useQuiz, useAuth } from "../../store";
 import axios from "axios";
-import { successToast, warningToast } from "../../Components";
+import { successToast, warningToast } from "../../components";
 import { useHistory } from "react-router-dom";
 
 export const CreateQuiz = () => {

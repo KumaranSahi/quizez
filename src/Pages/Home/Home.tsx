@@ -1,6 +1,6 @@
 import classes from "./Home.module.css";
 import { QuizContainer } from "./QuizContainer/QuizContainer";
-import { CreateQuizAndLeaderBoard } from "../../Components";
+import { CreateQuizAndLeaderBoard } from "../../components";
 import { useEffect } from "react";
 import { useAuth, useQuiz } from "../../store";
 

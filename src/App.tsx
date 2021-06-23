@@ -1,5 +1,5 @@
 import "./App.css";
-import { Navbar, Spinner, MobileNavbar } from "./Components";
+import { Navbar, Spinner, MobileNavbar } from "./components";
 import {
   Route,
   Switch,

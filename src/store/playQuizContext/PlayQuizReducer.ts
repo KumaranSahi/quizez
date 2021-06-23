@@ -1,5 +1,5 @@
 import { Dispatch } from "react";
-import { warningToast } from "../../Components";
+import { warningToast } from "../../components";
 import { ResponseTemplate } from "../../Generics.types";
 import { State, PlayQuizAction, SubmitQuizPayload } from "./PlayQuiz.types";
 import { APP_URL } from "../../axiosUtils";

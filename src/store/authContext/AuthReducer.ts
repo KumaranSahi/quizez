@@ -11,7 +11,7 @@ import { Dispatch, SetStateAction } from "react";
 import { ResponseTemplate } from "../../Generics.types";
 import axios from "axios";
 import { APP_URL, setupAuthHeaderForServiceCalls } from "../../axiosUtils";
-import { successToast, warningToast, infoToast } from "../../Components/";
+import { successToast, warningToast, infoToast } from "../../components/";
 
 export const authReducer = (state: State, action: AuthAction) => {
   switch (action.type) {

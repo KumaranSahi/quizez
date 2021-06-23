@@ -1,6 +1,6 @@
 import classes from "./Avatar.module.css";
 import { useState, SyntheticEvent } from "react";
-import profileImage from "../../../Assets/profileimage.jpg";
+import profileImage from "../../../assets/profileimage.jpg";
 import { useAuth } from "../../../store";
 import { Menu, MenuItem } from "@material-ui/core";
 import { useHistory } from "react-router-dom";

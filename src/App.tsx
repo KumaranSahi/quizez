@@ -19,7 +19,7 @@ import {
   MyScores,
   CreateQuizAndLeaderBoardPage,
 } from "./Pages";
-import { PlayQuizContextProvider, useAuth, useQuiz } from "./Store";
+import { PlayQuizContextProvider, useAuth, useQuiz } from "./store";
 import { useEffect } from "react";
 
 const PrivateLink = ({ ...props }) => {

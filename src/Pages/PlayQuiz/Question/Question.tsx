@@ -1,6 +1,6 @@
 import classes from "./Question.module.css";
 import { useState, useEffect, SyntheticEvent } from "react";
-import { Question as QuestionType } from "../../../Store/QuizContext/QuizContext.types";
+import { Question as QuestionType } from "../../../store/quizContext/QuizContext.types";
 import {
   FormGroup,
   FormControlLabel,
@@ -10,8 +10,7 @@ import {
   Button,
 } from "@material-ui/core";
 import { KeyboardArrowRight, SaveAlt } from "@material-ui/icons";
-import { useQuiz } from "../../../Store/QuizContext/QuizContext";
-import { usePlayQuiz } from "../../../Store/PlayQuizContext/PlayQuizContext";
+import { useQuiz, usePlayQuiz } from "../../../store";
 import { useHistory } from "react-router-dom";
 
 interface QuestionProps extends QuestionType {

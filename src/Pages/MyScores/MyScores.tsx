@@ -1,5 +1,5 @@
 import classes from "./MyScores.module.css";
-import { useQuiz } from "../../Store/QuizContext/QuizContext";
+import { useQuiz } from "../../store";
 import {
   Table,
   TableBody,
@@ -42,23 +42,21 @@ export const MyScores = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {myLeaderBoard.map(
-                ({ id, score, quizName, quizId }) => (
-                  <TableRow key={id} className={classes["tablebody-row"]}>
-                    <TableCell>{quizName}</TableCell>
-                    <TableCell align="right">{score}</TableCell>
-                    <TableCell align="right">
-                      <Button
-                        color="primary"
-                        variant="contained"
-                        onClick={() => playQuiz(quizId!)}
-                      >
-                        Play Again
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                )
-              )}
+              {myLeaderBoard.map(({ id, score, quizName, quizId }) => (
+                <TableRow key={id} className={classes["tablebody-row"]}>
+                  <TableCell>{quizName}</TableCell>
+                  <TableCell align="right">{score}</TableCell>
+                  <TableCell align="right">
+                    <Button
+                      color="primary"
+                      variant="contained"
+                      onClick={() => playQuiz(quizId!)}
+                    >
+                      Play Again
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
             </TableBody>
           </Table>
         </TableContainer>

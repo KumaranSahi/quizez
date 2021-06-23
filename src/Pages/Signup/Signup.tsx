@@ -1,7 +1,7 @@
 import classes from "./Singup.module.css";
 import { SyntheticEvent } from "react";
-import { useAuth } from "../../Store/AuthContext/AuthContext";
-import { SigninPages } from "../../Store/AuthContext/AuthContext.types";
+import { useAuth } from "../../store";
+import { SigninPages } from "../../store/authContext/AuthContext.types";
 import { successToast, warningToast } from "../../Components/";
 import { useSignupReducer } from "./SignupReducer";
 import axios from "axios";

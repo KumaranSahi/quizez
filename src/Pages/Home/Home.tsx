@@ -1,9 +1,8 @@
 import classes from "./Home.module.css";
 import { QuizContainer } from "./QuizContainer/QuizContainer";
-import { useQuiz } from "../../Store/QuizContext/QuizContext";
 import { CreateQuizAndLeaderBoard } from "../../Components";
 import { useEffect } from "react";
-import { useAuth } from "../../Store/AuthContext/AuthContext";
+import { useAuth, useQuiz } from "../../store";
 
 export const Home = () => {
   const { quizes, loadQuizList, dispatch, setQuizLoading } = useQuiz();

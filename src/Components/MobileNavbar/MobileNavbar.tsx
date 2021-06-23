@@ -7,7 +7,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { NavLink } from "react-router-dom";
-import { useAuth } from "../../Store/AuthContext/AuthContext";
+import { useAuth } from "../../store";
 
 export const MobileNavbar = () => {
   const { isAdmin } = useAuth();

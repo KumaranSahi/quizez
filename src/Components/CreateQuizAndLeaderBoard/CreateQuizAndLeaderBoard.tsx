@@ -10,8 +10,7 @@ import {
   Button,
 } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
-import { useQuiz } from "../../Store/QuizContext/QuizContext";
-import { useAuth } from "../../Store/AuthContext/AuthContext";
+import { useQuiz, useAuth } from "../../store";
 
 export const CreateQuizAndLeaderBoard = () => {
   const { leaderBoard } = useQuiz();

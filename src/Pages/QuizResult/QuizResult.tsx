@@ -1,6 +1,5 @@
 import classes from "./QuizResult.module.css";
-import { usePlayQuiz } from "../../Store/PlayQuizContext/PlayQuizContext";
-import { useQuiz } from "../../Store/QuizContext/QuizContext";
+import { usePlayQuiz, useQuiz } from "../../store";
 import { useHistory } from "react-router-dom";
 import { Button } from "@material-ui/core";
 

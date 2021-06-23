@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import classes from "./PlayQuiz.module.css";
-import { useQuiz } from "../../Store/QuizContext/QuizContext";
-import { usePlayQuiz } from "../../Store/PlayQuizContext/PlayQuizContext";
+import { useQuiz, usePlayQuiz } from "../../store";
 import { Prompt, useHistory } from "react-router-dom";
 import { Question } from "./Question/Question";
 

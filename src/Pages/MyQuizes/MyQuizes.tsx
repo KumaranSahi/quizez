@@ -9,10 +9,9 @@ import {
   Paper,
   Button,
 } from "@material-ui/core";
-import { useAuth, useQuiz } from "../../Store";
+import { useAuth, useQuiz } from "../../store";
 import { useEffect } from "react";
-import { useHistory
- } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 export const MyQuizes = () => {
   const { myQuizes, dispatch, quizLoading, setQuizLoading, getMyQuizes } =

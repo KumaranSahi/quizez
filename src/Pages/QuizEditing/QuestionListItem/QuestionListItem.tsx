@@ -1,7 +1,7 @@
 import { IconButton } from "@material-ui/core";
 import { Delete, Edit } from "@material-ui/icons";
 import classes from "./QuestionListItem.module.css";
-import { useQuiz } from "../../../Store/QuizContext/QuizContext";
+import { useQuiz } from "../../../store";
 
 type QuestionListItemType = {
   id: string;

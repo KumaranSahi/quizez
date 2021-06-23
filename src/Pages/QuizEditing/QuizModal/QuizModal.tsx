@@ -1,5 +1,5 @@
 import classes from "./QuizModal.module.css";
-import { Question, Option } from "../../../Store/QuizContext/QuizContext.types";
+import { Question, Option } from "../../../store/quizContext/QuizContext.types";
 import { SetStateAction, useState, Dispatch, SyntheticEvent } from "react";
 import {
   Modal,
@@ -16,7 +16,7 @@ import {
   Button,
 } from "@material-ui/core";
 import { Add, Delete } from "@material-ui/icons";
-import { useQuiz } from "../../../Store/QuizContext/QuizContext";
+import { useQuiz } from "../../../store";
 
 type PropTypes =
   | {

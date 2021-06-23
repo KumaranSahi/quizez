@@ -1,6 +1,6 @@
 import classes from "./Navbar.module.css";
 import { Avatar } from "./Avatar/Avatar";
-import { useAuth } from "../../Store/AuthContext/AuthContext";
+import { useAuth } from "../../store";
 import { useHistory } from "react-router-dom";
 
 export const Navbar = () => {

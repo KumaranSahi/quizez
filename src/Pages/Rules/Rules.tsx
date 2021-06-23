@@ -1,8 +1,7 @@
 import classes from "./Rules.module.css";
-import { useQuiz } from "../../Store/QuizContext/QuizContext";
+import { useQuiz, usePlayQuiz } from "../../store";
 import { Button } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
-import { usePlayQuiz } from "../../Store/PlayQuizContext/PlayQuizContext";
 
 export const Rules = () => {
   const { currentQuiz, calculateTotalScore, quizLoading } = useQuiz();

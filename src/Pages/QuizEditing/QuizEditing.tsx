@@ -1,7 +1,7 @@
 import classes from "./QuizEditing.module.css";
 import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { useQuiz } from "../../Store/QuizContext/QuizContext";
+import { useQuiz } from "../../store";
 import { Button } from "@material-ui/core";
 import { QuizModal } from "./QuizModal/QuizModal";
 import { QuestionListItem } from "./QuestionListItem/QuestionListItem";

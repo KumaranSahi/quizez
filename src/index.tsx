@@ -7,7 +7,7 @@ import { createMuiTheme, ThemeProvider } from "@material-ui/core";
 import { BrowserRouter } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
-import { AuthContextProvider, QuizContextProvider } from "./Store";
+import { AuthContextProvider, QuizContextProvider } from "./store";
 
 const theme = createMuiTheme({
   palette: {

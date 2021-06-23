@@ -54,7 +54,7 @@ export const signUpUser = async (
       setCurrentPage("SIGNIN_PAGE");
       setLoading(false);
     }
-  } catch (error) {
+  } catch (error: any) {
     if (+error.response.status === 409) {
       infoToast("User already exists in quizez");
       infoToast("Please Try loging in");

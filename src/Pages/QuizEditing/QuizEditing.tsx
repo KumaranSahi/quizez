@@ -15,7 +15,7 @@ export const QuizEditing = () => {
 
   useEffect(() => {
     getQuiz(search.substring(1), dispatch, setQuizLoading, true);
-  }, [search]);
+  }, [search, dispatch, setQuizLoading, getQuiz]);
 
   const selectedQuestion = (id: string) => {
     setQuizModalOpen(true);

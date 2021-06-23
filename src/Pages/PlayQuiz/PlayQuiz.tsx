@@ -25,7 +25,7 @@ export const PlayQuiz = () => {
     if (!playQuizMode) {
       push("/");
     }
-  }, []);
+  }, [playQuizMode, push]);
 
   return (
     <>

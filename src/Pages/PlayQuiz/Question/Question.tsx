@@ -165,7 +165,7 @@ export const Question = ({
     setShowHint(false);
     setTimer(30);
   };
-
+  /*eslint-disable*/
   useEffect(() => {
     let time = setInterval(() => setTimer((state) => state - 1), 1000);
     if (timer === 0) {

@@ -98,7 +98,7 @@ export const getMyQuizes = async (
   try {
     const {
       data: { data, ok },
-    } = await axios.get<ResponseTemplate<Quiz[]>>(`${APP_URL}/api/quizes`);
+    } = await axios.get<ResponseTemplate<Quiz[]>>(`${APP_URL}/api/my-quizes`);
     if (data && ok) {
       dispatch({
         type: "LOAD_MY_QUIZES",

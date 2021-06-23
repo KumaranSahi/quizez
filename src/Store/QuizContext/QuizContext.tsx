@@ -36,15 +36,15 @@ const initialState: State = {
 
 export const QuizContextProvider = ({ children }: Props) => {
   const [loading, setLoading] = useState(false);
-  const { token, userId } = useAuth();
+  const { token } = useAuth();
 
   useEffect(() => {
-    if (token) loadTopTen(dispatch, token, setLoading);
+    if (token) loadTopTen(dispatch, setLoading);
   }, [token]);
 
   useEffect(() => {
-    if (token) loadMyTopTen(dispatch, token, setLoading, userId);
-  }, [token, userId]);
+    if (token) loadMyTopTen(dispatch, setLoading);
+  }, [token]);
 
   const [state, dispatch] = useReducer(quizReducer, initialState);
 

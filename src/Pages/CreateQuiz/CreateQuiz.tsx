@@ -4,7 +4,7 @@ import { useState, SyntheticEvent, ChangeEvent } from "react";
 import { PhotoCamera } from "@material-ui/icons";
 import { useQuiz } from "../../Store/QuizContext/QuizContext";
 import { useAuth } from "../../Store/AuthContext/AuthContext";
-import axios from "../../useAxios";
+import axios from "axios";
 import { successToast, warningToast } from "../../Components";
 import { useHistory } from "react-router-dom";
 
@@ -15,7 +15,7 @@ export const CreateQuiz = () => {
   const [image, setImage] = useState("");
   const [fileUploadInfo, setFileUploadInfo] = useState("");
 
-  const { userName, token, userId } = useAuth();
+  const { userName } = useAuth();
   const { setQuizLoading, quizLoading, createQuiz, dispatch } = useQuiz();
 
   const { push } = useHistory();
@@ -65,8 +65,6 @@ export const CreateQuiz = () => {
           image: image,
         },
         setQuizLoading,
-        token,
-        userId,
         dispatch
       );
 

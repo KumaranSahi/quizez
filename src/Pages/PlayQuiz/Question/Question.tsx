@@ -11,7 +11,6 @@ import {
 } from "@material-ui/core";
 import { KeyboardArrowRight, SaveAlt } from "@material-ui/icons";
 import { useQuiz } from "../../../Store/QuizContext/QuizContext";
-import { useAuth } from "../../../Store/AuthContext/AuthContext";
 import { usePlayQuiz } from "../../../Store/PlayQuizContext/PlayQuizContext";
 import { useHistory } from "react-router-dom";
 
@@ -44,41 +43,21 @@ export const Question = ({
     dispatch: quizDispatch,
   } = useQuiz();
   const { dispatch, score: totalScore, submitQuiz } = usePlayQuiz();
-  const { token, userId } = useAuth();
-
   const { push } = useHistory();
-
-  useEffect(() => {
-    let time = setInterval(() => setTimer((state) => state - 1), 1000);
-    if (timer === 0) {
-      clearInterval(time);
-      setChecked([]);
-      currentIndex === totalQuestions
-        ? submitButtonClicked()
-        : dispatch({
-            type: "LOAD_QUESTION",
-            payload: currentQuiz.questions![currentIndex],
-          });
-      setTimer(30);
-    }
-    return () => clearInterval(time);
-  }, [timer]);
 
   const submitButtonClicked = async (totalScore = 0) => {
     setQuizLoading(true);
     const result = await submitQuiz(
-      userId,
       {
         quizId: currentQuiz.id,
         score: totalScore,
       },
-      token,
       dispatch
     );
     if (result) {
       setQuizLoading(false);
-      loadTopTen(quizDispatch, token, setQuizLoading);
-      loadMyTopTen(quizDispatch, token, setQuizLoading, userId);
+      loadTopTen(quizDispatch, setQuizLoading);
+      loadMyTopTen(quizDispatch, setQuizLoading);
       push("/quiz-result");
     } else {
       setQuizLoading(false);
@@ -186,6 +165,22 @@ export const Question = ({
     setShowHint(false);
     setTimer(30);
   };
+  /*eslint-disable*/
+  useEffect(() => {
+    let time = setInterval(() => setTimer((state) => state - 1), 1000);
+    if (timer === 0) {
+      clearInterval(time);
+      setChecked([]);
+      currentIndex === totalQuestions
+        ? submitButtonClicked()
+        : dispatch({
+            type: "LOAD_QUESTION",
+            payload: currentQuiz.questions![currentIndex],
+          });
+      setTimer(30);
+    }
+    return () => clearInterval(time);
+  }, [timer]);
 
   return (
     <>

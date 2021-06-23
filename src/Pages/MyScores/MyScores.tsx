@@ -11,16 +11,14 @@ import {
   Button,
 } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
-import { useAuth } from "../../Store/AuthContext/AuthContext";
 
 export const MyScores = () => {
   const { myLeaderBoard } = useQuiz();
   const { push } = useHistory();
-  const { token } = useAuth();
   const { getQuiz, setQuizLoading, dispatch: quizDispatch } = useQuiz();
 
   const playQuiz = (quizId: string) => {
-    getQuiz(quizId, token, quizDispatch, setQuizLoading, false);
+    getQuiz(quizId, quizDispatch, setQuizLoading, false);
     push("/rules");
   };
 
@@ -45,7 +43,7 @@ export const MyScores = () => {
             </TableHead>
             <TableBody>
               {myLeaderBoard.map(
-                ({ id, score, userName, quizName, quizId }) => (
+                ({ id, score, quizName, quizId }) => (
                   <TableRow key={id} className={classes["tablebody-row"]}>
                     <TableCell>{quizName}</TableCell>
                     <TableCell align="right">{score}</TableCell>

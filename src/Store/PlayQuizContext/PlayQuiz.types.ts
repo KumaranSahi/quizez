@@ -55,9 +55,7 @@ export type PlayQuizContextType = {
   currentQuestion: Question;
   score: number;
   submitQuiz: (
-    userId: string,
     quizData: SubmitQuizPayload,
-    token: string,
     dispatch: Dispatch<PlayQuizAction>
   ) => Promise<boolean>;
   quizResponses: QuizResponses[];

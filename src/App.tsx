@@ -19,27 +19,26 @@ import {
   MyScores,
   CreateQuizAndLeaderBoardPage,
 } from "./Pages";
-import { PlayQuizContextProvider } from "./Store/PlayQuizContext/PlayQuizContext";
-import { useAuth } from "./Store/AuthContext/AuthContext";
-import { useQuiz } from "./Store/QuizContext/QuizContext";
+import { PlayQuizContextProvider, useAuth, useQuiz } from "./Store";
 import { useEffect } from "react";
 
 const PrivateLink = ({ ...props }) => {
-  const { token } = useAuth();
+  const token = localStorage.getItem("token");
   const { push } = useHistory();
   useEffect(() => {
     if (!token) push("/sign-up");
-  }, [token]);
+  }, [token, push]);
   return <Route {...props} />;
 };
 
 const LockSignup = ({ ...props }) => {
-  const { token } = useAuth();
+  const token = localStorage.getItem("token");
   return token ? <Redirect to="/" /> : <Route {...props} />;
 };
 
 const AdminAuthGaurd = ({ ...props }) => {
-  const { token, isAdmin } = useAuth();
+  const token = localStorage.getItem("token");
+  const isAdmin = localStorage.getItem("isAdmin");
   return token && isAdmin ? <Route {...props} /> : <Redirect to="/" />;
 };
 
@@ -72,11 +71,7 @@ function App() {
               path="/mobile-leaderboard"
               component={CreateQuizAndLeaderBoardPage}
             />
-            {token ? (
-              <PrivateLink path="/" component={Home} />
-            ) : (
-              <Route path="/" component={Signup} />
-            )}
+            <PrivateLink path="/" component={Home} />
           </Switch>
         </PlayQuizContextProvider>
       </main>

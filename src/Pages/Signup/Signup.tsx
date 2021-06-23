@@ -1,12 +1,15 @@
 import classes from "./Singup.module.css";
-import { useState, SyntheticEvent } from "react";
+import { SyntheticEvent } from "react";
 import { useAuth } from "../../Store/AuthContext/AuthContext";
 import { SigninPages } from "../../Store/AuthContext/AuthContext.types";
 import { successToast, warningToast } from "../../Components/";
-import { TextField, Button, IconButton, Checkbox } from "@material-ui/core";
-import { PhotoCamera } from "@material-ui/icons";
-// import axios from 'axios'
-import axios from "../../useAxios";
+import { useSignupReducer } from "./SignupReducer";
+import axios from "axios";
+import {
+  SigninContainer,
+  SignupContainer,
+  ConfirmPasswordContainer,
+} from "./SignupComponents";
 
 export const Signup = () => {
   const {
@@ -20,23 +23,25 @@ export const Signup = () => {
     dispatch,
   } = useAuth();
 
-  const [userName, setUserName] = useState("");
-  const [userNameValid, setUserNameValid] = useState(true);
-
-  const [email, setEmail] = useState("");
-  const [emailValid, setEmailValid] = useState(true);
-
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-
-  const [image, setImage] = useState("");
-  const [fileUploadInfo, setFileUploadInfo] = useState("");
-
-  const [isAdmin, setIsAdmin] = useState(false);
+  const {
+    dispatch: signupDispatch,
+    state: {
+      confirmPassword,
+      email,
+      emailValid,
+      fileUploadInfo,
+      image,
+      isAdmin,
+      password,
+      userName,
+      userNameValid,
+    },
+  } = useSignupReducer();
 
   const validateUserName = () => {
-    if (userName.length === 0) setUserNameValid(false);
-    else setUserNameValid(true);
+    if (userName.length === 0)
+      signupDispatch({ type: "SET_USERNAME_VALID", payload: false });
+    else signupDispatch({ type: "SET_USERNAME_VALID", payload: true });
   };
 
   const validateEmail = () => {
@@ -44,8 +49,8 @@ export const Signup = () => {
       email.length > 0 &&
       new RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$").test(email)
     )
-      setEmailValid(true);
-    else setEmailValid(false);
+      signupDispatch({ type: "SET_EMAIL_VALID", payload: true });
+    else signupDispatch({ type: "SET_EMAIL_VALID", payload: false });
   };
 
   const fileUpload = async (file: FileList | null) => {
@@ -65,7 +70,10 @@ export const Signup = () => {
           "https://api.cloudinary.com/v1_1/conclave/image/upload",
           data
         );
-        setImage(imageData.url);
+        signupDispatch({
+          type: "ADD_IMAGE",
+          payload: imageData.url,
+        });
         setAuthLoading(false);
         successToast("Image uploaded successfully");
       } catch (error) {
@@ -73,7 +81,10 @@ export const Signup = () => {
         warningToast("Unable to upload image");
       }
     } else {
-      setFileUploadInfo("Please upload a .jpg or .png file under 4mb");
+      signupDispatch({
+        type: "SET_FILE_UPLOAD_INFO",
+        payload: "Please upload a .jpg or .png file under 4mb",
+      });
     }
   };
 
@@ -131,197 +142,60 @@ export const Signup = () => {
     switch (currentPage) {
       case "SIGNUP_PAGE":
         return (
-          <>
-            <h1>Sign Up:</h1>
-            <form
-              className={classes["signup-container"]}
-              onSubmit={signUpSubmit}
-            >
-              {image ? (
-                <img
-                  src={image}
-                  alt="Profile"
-                  className={classes["profile-picture"]}
-                />
-              ) : (
-                <div>
-                  <input
-                    accept="image/*"
-                    style={{ display: "none" }}
-                    id="icon-button-file"
-                    type="file"
-                    onChange={(event) => fileUpload(event.target.files)}
-                  />
-                  <label htmlFor="icon-button-file">
-                    <IconButton
-                      color="primary"
-                      aria-label="upload picture"
-                      component="span"
-                    >
-                      <PhotoCamera />
-                    </IconButton>
-                    <span className={classes["upload-profile-picture"]}>
-                      Upload Profile picture
-                    </span>
-                  </label>
-                  {fileUploadInfo && (
-                    <p className={classes["file-upload-info"]}>
-                      {fileUploadInfo}
-                    </p>
-                  )}
-                </div>
-              )}
-              <div>
-                <TextField
-                  label="Username"
-                  variant="outlined"
-                  required
-                  fullWidth
-                  value={userName}
-                  onChange={(event) => setUserName(event.target.value)}
-                />
-                {!userNameValid && (
-                  <p className={classes["error-text"]}>
-                    Please enter a valid user name
-                  </p>
-                )}
-              </div>
-              <div>
-                <TextField
-                  label="Email"
-                  variant="outlined"
-                  type="email"
-                  required
-                  fullWidth
-                  value={email}
-                  onChange={(event) => setEmail(event.target.value)}
-                />
-                {!emailValid && (
-                  <p className={classes["error-text"]}>
-                    Please enter a valid email
-                  </p>
-                )}
-              </div>
-              <TextField
-                label="Password"
-                variant="outlined"
-                type="password"
-                required
-                fullWidth
-                value={password}
-                onChange={(event) => setPassword(event.target.value)}
-              />
-              <label>
-                <Checkbox
-                  onClick={() => setIsAdmin((state) => !state)}
-                  checked={isAdmin}
-                  color="primary"
-                  inputProps={{ "aria-label": "secondary checkbox" }}
-                />
-                Quiz Creator Account
-              </label>
-              <Button
-                variant="contained"
-                color="primary"
-                type="submit"
-                disabled={authLoading}
-              >
-                Sign up!
-              </Button>
-            </form>
-          </>
+          <SignupContainer
+            image={image}
+            fileUpload={fileUpload}
+            fileUploadInfo={fileUploadInfo}
+            signUpSubmit={signUpSubmit}
+            authLoading={authLoading}
+            isAdmin={isAdmin}
+            signupDispatch={signupDispatch}
+            email={email}
+            emailValid={emailValid}
+            password={password}
+            userName={userName}
+            userNameValid={userNameValid}
+          />
         );
       case "SIGNIN_PAGE":
         return (
-          <>
-            <h1>Sign In:</h1>
-            <form
-              className={classes["signup-container"]}
-              onSubmit={signInSubmit}
-            >
-              <div>
-                <TextField
-                  label="Email"
-                  type="email"
-                  variant="outlined"
-                  required
-                  fullWidth
-                  value={email}
-                  onChange={(event) => setEmail(event.target.value)}
-                />
-                {!emailValid && (
-                  <p className={classes["error-text"]}>
-                    Please enter a valid email
-                  </p>
-                )}
-              </div>
-              <TextField
-                label="Password"
-                variant="outlined"
-                type="password"
-                fullWidth
-                required
-                value={password}
-                onChange={(event) => setPassword(event.target.value)}
-              />
-              <Button
-                variant="contained"
-                color="primary"
-                type="submit"
-                disabled={authLoading}
-              >
-                Sign In
-              </Button>
-            </form>
-          </>
+          <SigninContainer
+            signInSubmit={signInSubmit}
+            signupDispatch={signupDispatch}
+            email={email}
+            emailValid={emailValid}
+            password={password}
+            authLoading={authLoading}
+          />
         );
       case "CHANGE_PASSWORD":
         return (
-          <>
-            <h1>Change Password:</h1>
-            <form
-              className={classes["signup-container"]}
-              onSubmit={changePasswordSubmit}
-            >
-              <TextField
-                label="Email"
-                type="email"
-                variant="outlined"
-                required
-                fullWidth
-                value={email}
-                onChange={(event) => setEmail(event.target.value)}
-              />
-              <TextField
-                label="Password"
-                variant="outlined"
-                type="password"
-                required
-                value={password}
-                onChange={(event) => setPassword(event.target.value)}
-              />
-              <TextField
-                label="Confirm Password"
-                variant="outlined"
-                type="password"
-                required
-                fullWidth
-                value={confirmPassword}
-                onChange={(event) => setConfirmPassword(event.target.value)}
-              />
-              <Button
-                variant="contained"
-                color="primary"
-                type="submit"
-                disabled={authLoading}
-              >
-                Change Password
-              </Button>
-            </form>
-          </>
+          <ConfirmPasswordContainer
+            authLoading={authLoading}
+            changePasswordSubmit={changePasswordSubmit}
+            confirmPassword={confirmPassword}
+            email={email}
+            password={password}
+            signupDispatch={signupDispatch}
+          />
         );
       default:
-        <p>Something went wrong</p>;
+        return (
+          <SignupContainer
+            image={image}
+            fileUpload={fileUpload}
+            fileUploadInfo={fileUploadInfo}
+            signUpSubmit={signUpSubmit}
+            authLoading={authLoading}
+            isAdmin={isAdmin}
+            signupDispatch={signupDispatch}
+            email={email}
+            emailValid={emailValid}
+            password={password}
+            userName={userName}
+            userNameValid={userNameValid}
+          />
+        );
     }
   };
 

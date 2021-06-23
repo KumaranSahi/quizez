@@ -62,15 +62,12 @@ export type QuizContextTypes = {
   myQuizes: Quiz[];
   leaderBoard: LeaderBoard[];
   getMyQuizes: (
-    userId: string,
-    token: string,
     dispatch: Dispatch<QuizAction>,
     setLoading: Dispatch<SetStateAction<boolean>>
   ) => void;
   currentQuiz: Quiz;
   getQuiz: (
     quizId: string,
-    token: string,
     dispatch: Dispatch<QuizAction>,
     setLoading: Dispatch<SetStateAction<boolean>>,
     creatingQuiz: boolean
@@ -78,14 +75,11 @@ export type QuizContextTypes = {
   createQuiz: (
     quizData: QuizData,
     setLoading: Dispatch<SetStateAction<boolean>>,
-    token: string,
-    userId: string,
     dispatch: Dispatch<QuizAction>
   ) => string;
   dispatch: Dispatch<QuizAction>;
   editQuestion: (
     questionData: NewQuestionData,
-    token: string,
     questionId: string,
     setLoading: Dispatch<SetStateAction<boolean>>,
     dispatch: Dispatch<QuizAction>,
@@ -93,8 +87,6 @@ export type QuizContextTypes = {
   ) => void;
   createQuestion: (
     questionData: NewQuestionData,
-    token: string,
-    userId: string,
     setLoading: Dispatch<SetStateAction<boolean>>,
     dispatch: Dispatch<QuizAction>,
     creatingQuiz: Quiz
@@ -102,7 +94,6 @@ export type QuizContextTypes = {
   creatingQuiz: Quiz;
   deleteQuestion: (
     questionId: string,
-    token: string,
     dispatch: Dispatch<QuizAction>,
     setLoading: Dispatch<SetStateAction<boolean>>,
     creatingQuiz: Quiz
@@ -111,19 +102,15 @@ export type QuizContextTypes = {
   myLeaderBoard: LeaderBoard[];
   loadQuizList: (
     dispatch: Dispatch<QuizAction>,
-    token: string,
     setLoading: Dispatch<SetStateAction<boolean>>
   ) => void;
   loadTopTen: (
     dispatch: Dispatch<QuizAction>,
-    token: string,
     setLoading: Dispatch<SetStateAction<boolean>>
   ) => void;
   loadMyTopTen: (
     dispatch: Dispatch<QuizAction>,
-    token: string,
-    setLoading: Dispatch<SetStateAction<boolean>>,
-    userId: string
+    setLoading: Dispatch<SetStateAction<boolean>>
   ) => void;
 };
 

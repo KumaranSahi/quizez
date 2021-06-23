@@ -4,7 +4,7 @@ import { useAuth } from "../../Store/AuthContext/AuthContext";
 import { SigninPages } from "../../Store/AuthContext/AuthContext.types";
 import { successToast, warningToast } from "../../Components/";
 import { useSignupReducer } from "./SignupReducer";
-import axios from "../../useAxios";
+import axios from "axios";
 import {
   SigninContainer,
   SignupContainer,

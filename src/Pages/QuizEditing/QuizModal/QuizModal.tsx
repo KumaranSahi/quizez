@@ -17,7 +17,6 @@ import {
 } from "@material-ui/core";
 import { Add, Delete } from "@material-ui/icons";
 import { useQuiz } from "../../../Store/QuizContext/QuizContext";
-import { useAuth } from "../../../Store/AuthContext/AuthContext";
 
 type PropTypes =
   | {
@@ -69,7 +68,6 @@ export const QuizModal = (props: PropTypes) => {
     quizLoading,
     creatingQuiz,
   } = useQuiz();
-  const { token } = useAuth();
 
   const handleClose = () => {
     setQuestion("");
@@ -161,7 +159,6 @@ export const QuizModal = (props: PropTypes) => {
             question: question,
             quiz: props.quiz,
           },
-          token,
           setQuizLoading,
           dispatch,
           creatingQuiz
@@ -178,7 +175,6 @@ export const QuizModal = (props: PropTypes) => {
             question: question,
             quiz: props.quiz,
           },
-          token,
           props.payload.id,
           setQuizLoading,
           dispatch,

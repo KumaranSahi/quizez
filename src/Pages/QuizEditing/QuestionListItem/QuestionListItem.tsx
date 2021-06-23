@@ -2,7 +2,6 @@ import { IconButton } from "@material-ui/core";
 import { Delete, Edit } from "@material-ui/icons";
 import classes from "./QuestionListItem.module.css";
 import { useQuiz } from "../../../Store/QuizContext/QuizContext";
-import { useAuth } from "../../../Store/AuthContext/AuthContext";
 
 type QuestionListItemType = {
   id: string;
@@ -18,7 +17,6 @@ export const QuestionListItem = ({
   points,
 }: QuestionListItemType) => {
   const { deleteQuestion, dispatch, setQuizLoading, creatingQuiz } = useQuiz();
-  const { token } = useAuth();
 
   return (
     <div className={classes["quesiton-container"]}>
@@ -33,7 +31,7 @@ export const QuestionListItem = ({
         <IconButton
           color="secondary"
           onClick={() =>
-            deleteQuestion(id, token, dispatch, setQuizLoading, creatingQuiz)
+            deleteQuestion(id, dispatch, setQuizLoading, creatingQuiz)
           }
         >
           <Delete />

@@ -2,7 +2,8 @@ import { Dispatch } from "react";
 import { warningToast } from "../../Components";
 import { ResponseTemplate } from "../../Generics.types";
 import { State, PlayQuizAction, SubmitQuizPayload } from "./PlayQuiz.types";
-import axios from "../../useAxios";
+import { APP_URL } from "../../axiosUtils";
+import axios from "axios";
 
 export const playQuizReducer = (state: State, action: PlayQuizAction) => {
   switch (action.type) {
@@ -46,16 +47,10 @@ export const playQuizReducer = (state: State, action: PlayQuizAction) => {
 
 export const submitQuiz = async (
   quizData: SubmitQuizPayload,
-  token: string,
   dispatch: Dispatch<PlayQuizAction>
 ) => {
-  const config = {
-    headers: {
-      Authorization: "Bearer " + token,
-    },
-  };
   try {
-    await axios.post<ResponseTemplate>(`/api/scorecards`, quizData, config);
+    await axios.post<ResponseTemplate>(`${APP_URL}/api/scorecards`, quizData);
     dispatch({
       type: "EXIT_PLAY_MODE",
     });

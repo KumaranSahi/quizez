@@ -2,7 +2,6 @@ import classes from "./QuizContainer.module.css";
 import { Quiz } from "../../../Store/QuizContext/QuizContext.types";
 import uniqolor from "uniqolor";
 import { useQuiz } from "../../../Store/QuizContext/QuizContext";
-import { useAuth } from "../../../Store/AuthContext/AuthContext";
 import { useHistory } from "react-router-dom";
 
 export const QuizContainer = ({ id, name, image, description }: Quiz) => {
@@ -11,12 +10,11 @@ export const QuizContainer = ({ id, name, image, description }: Quiz) => {
     lightness: [30, 50],
   });
 
-  const { token } = useAuth();
   const { getQuiz, setQuizLoading, dispatch: quizDispatch } = useQuiz();
   const { push } = useHistory();
 
   const playQuiz = () => {
-    getQuiz(id, token, quizDispatch, setQuizLoading, false);
+    getQuiz(id, quizDispatch, setQuizLoading, false);
     push("/rules");
   };
 

@@ -69,7 +69,6 @@ export type ChangePassword = {
 
 export type SignedInUserInfo = {
   token: string;
-
   userName: string;
   expiresIn: Date;
   image?: string;

@@ -11,7 +11,6 @@ import {
 } from "@material-ui/core";
 import { KeyboardArrowRight, SaveAlt } from "@material-ui/icons";
 import { useQuiz } from "../../../Store/QuizContext/QuizContext";
-import { useAuth } from "../../../Store/AuthContext/AuthContext";
 import { usePlayQuiz } from "../../../Store/PlayQuizContext/PlayQuizContext";
 import { useHistory } from "react-router-dom";
 
@@ -44,8 +43,6 @@ export const Question = ({
     dispatch: quizDispatch,
   } = useQuiz();
   const { dispatch, score: totalScore, submitQuiz } = usePlayQuiz();
-  const { token } = useAuth();
-
   const { push } = useHistory();
 
   const submitButtonClicked = async (totalScore = 0) => {
@@ -55,13 +52,12 @@ export const Question = ({
         quizId: currentQuiz.id,
         score: totalScore,
       },
-      token,
       dispatch
     );
     if (result) {
       setQuizLoading(false);
-      loadTopTen(quizDispatch, token, setQuizLoading);
-      loadMyTopTen(quizDispatch, token, setQuizLoading);
+      loadTopTen(quizDispatch, setQuizLoading);
+      loadMyTopTen(quizDispatch, setQuizLoading);
       push("/quiz-result");
     } else {
       setQuizLoading(false);

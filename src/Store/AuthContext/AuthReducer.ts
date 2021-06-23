@@ -9,7 +9,8 @@ import {
 } from "./AuthContext.types";
 import { Dispatch, SetStateAction } from "react";
 import { ResponseTemplate } from "../../Generics.types";
-import axios from "../../useAxios";
+import axios from "axios";
+import { APP_URL, setupAuthHeaderForServiceCalls } from "../../axiosUtils";
 import { successToast, warningToast, infoToast } from "../../Components/";
 
 export const authReducer = (state: State, action: AuthAction) => {
@@ -44,22 +45,22 @@ export const signUpUser = async (
 ) => {
   setLoading(true);
   try {
-    const { data, status } = await axios.post<ResponseTemplate>(
-      "/api/users/signup",
+    const { data } = await axios.post<ResponseTemplate>(
+      `${APP_URL}/api/users/signup`,
       userData
     );
     if (data.ok) {
       successToast("User Added Successfully");
       setCurrentPage("SIGNIN_PAGE");
       setLoading(false);
-    } else {
-      if (+status === 208) {
-        infoToast("User already exists");
-        infoToast("Please Try loging in");
-      } else warningToast("Failed to add user");
-      setLoading(false);
     }
   } catch (error) {
+    if (+error.response.status === 409) {
+      infoToast("User already exists in quizez");
+      infoToast("Please Try loging in");
+      setLoading(false);
+      return;
+    }
     warningToast("Failed to add user");
     console.log(error);
     setLoading(false);
@@ -95,7 +96,7 @@ export const changePassword = async (
   setLoading(true);
   try {
     const { data } = await axios.post<ResponseTemplate>(
-      "/api/users/password",
+      `${APP_URL}/api/users/password`,
       userData
     );
     if (data.ok) {
@@ -118,7 +119,6 @@ export const onReload = (
   let date = localStorage.getItem("expiresIn");
   let expiresIn: Date = new Date();
   if (date) expiresIn = new Date(date);
-
   if (expiresIn <= new Date()) {
     signOutUser(dispatch, setLoading);
   } else {
@@ -130,6 +130,7 @@ export const onReload = (
       dispatch,
       setLoading
     );
+    setupAuthHeaderForServiceCalls(token!);
     dispatch({
       type: "SIGNIN_USER",
       payload: {
@@ -153,10 +154,11 @@ export const signInUser = async (
     const {
       data: { data, ok },
     } = await axios.post<ResponseTemplate<SignedInUserInfo>>(
-      "/api/users/signin",
+      `${APP_URL}/api/users/signin`,
       emailAndPassword
     );
     if (ok) {
+      setupAuthHeaderForServiceCalls(data!.token);
       localStorage.setItem("token", data!.token);
       localStorage.setItem("userName", data!.userName);
       data?.isAdmin && localStorage.setItem("isAdmin", data.isAdmin);

@@ -2,7 +2,6 @@ import classes from "./QuizEditing.module.css";
 import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useQuiz } from "../../Store/QuizContext/QuizContext";
-import { useAuth } from "../../Store/AuthContext/AuthContext";
 import { Button } from "@material-ui/core";
 import { QuizModal } from "./QuizModal/QuizModal";
 import { QuestionListItem } from "./QuestionListItem/QuestionListItem";
@@ -10,13 +9,12 @@ import { QuestionListItem } from "./QuestionListItem/QuestionListItem";
 export const QuizEditing = () => {
   const { search } = useLocation();
   const { getQuiz, creatingQuiz, dispatch, setQuizLoading } = useQuiz();
-  const { token } = useAuth();
   const [quizModalOpen, setQuizModalOpen] = useState(false);
 
   const [selected, setSelected] = useState("");
 
   useEffect(() => {
-    getQuiz(search.substring(1), token, dispatch, setQuizLoading, true);
+    getQuiz(search.substring(1), dispatch, setQuizLoading, true);
   }, [search]);
 
   const selectedQuestion = (id: string) => {

@@ -1,13 +1,14 @@
 import { useContext, createContext, useReducer } from "react";
-import { Props, PlayQuizContextType, State } from "./PlayQuiz.types";
-import { playQuizReducer, submitQuiz } from "./PlayQuizReducer";
+import { Props, PlayQuizContextType, State } from "./playQuiz.types";
+import { submitQuiz } from "./playQuizMethods";
+import { playQuizReducer } from "./playQuizReducer/playQuizReducer";
 
 export const PlayQuizContext = createContext({});
 
 export const usePlayQuiz = () =>
   useContext(PlayQuizContext) as PlayQuizContextType;
 
-const initialState: State = {
+export const playQuizInitialState: State = {
   playQuizMode: false,
   currentQuestion: null,
   score: 0,
@@ -15,7 +16,7 @@ const initialState: State = {
 };
 
 export const PlayQuizContextProvider = ({ children }: Props) => {
-  const [state, dispatch] = useReducer(playQuizReducer, initialState);
+  const [state, dispatch] = useReducer(playQuizReducer, playQuizInitialState);
 
   return (
     <PlayQuizContext.Provider

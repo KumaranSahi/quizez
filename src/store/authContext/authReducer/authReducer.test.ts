@@ -6,6 +6,7 @@ const initialState: State = {
   userName: null,
   expiresIn: null,
   image: null,
+  isAdmin: null,
 };
 
 describe("Testing Auth Reducer", () => {

@@ -1,64 +1,16 @@
 import { Dispatch, SetStateAction } from "react";
 import {
-  State,
   QuizAction,
   QuizData,
   Quiz,
   NewQuestionData,
   Question,
   LeaderBoard,
-} from "./QuizContext.types";
+} from "./quiz.types";
 import { warningToast, successToast } from "../../components";
 import { ResponseTemplate } from "../../Generics.types";
 import { APP_URL } from "../../axiosUtils";
 import axios from "axios";
-
-export const quizReducer = (state: State, action: QuizAction) => {
-  switch (action.type) {
-    case "LOAD_QUIZ_LIST":
-      return {
-        ...state,
-        quizes: action.payload,
-      };
-    case "CREATE_QUIZ":
-      return {
-        ...state,
-        creatingQuiz: action.payload,
-      };
-    case "LOAD_CURRENT_QUIZ":
-      return {
-        ...state,
-        currentQuiz: action.payload,
-      };
-    case "LOAD_CREATING_QUIZ":
-      return {
-        ...state,
-        creatingQuiz: action.payload,
-      };
-    case "LOAD_MY_QUIZES":
-      return {
-        ...state,
-        myQuizes: action.payload,
-      };
-    case "EDIT_QUESTION":
-      return {
-        ...state,
-        creatingQuiz: action.payload,
-      };
-    case "LOAD_TOP_TEN":
-      return {
-        ...state,
-        leaderBoard: action.payload,
-      };
-    case "LOAD_MY_TOP_TEN":
-      return {
-        ...state,
-        myLeaderBoard: action.payload,
-      };
-    default:
-      return state;
-  }
-};
 
 export const createQuiz = async (
   quizData: QuizData,
@@ -75,7 +27,7 @@ export const createQuiz = async (
     );
     if (ok && data) {
       dispatch({
-        type: "CREATE_QUIZ",
+        type: "LOAD_CREATING_QUIZ",
         payload: data,
       });
       successToast("Quiz Created");
@@ -169,7 +121,7 @@ export const createQuestion = async (
           : [data],
       };
       dispatch({
-        type: "EDIT_QUESTION",
+        type: "LOAD_CREATING_QUIZ",
         payload: newQuiz,
       });
       setLoading(false);
@@ -204,7 +156,7 @@ export const editQuestion = async (
         ),
       };
       dispatch({
-        type: "EDIT_QUESTION",
+        type: "LOAD_CREATING_QUIZ",
         payload: newQuiz,
       });
       setLoading(false);
@@ -237,7 +189,7 @@ export const deleteQuestion = async (
         ),
       };
       dispatch({
-        type: "EDIT_QUESTION",
+        type: "LOAD_CREATING_QUIZ",
         payload: newQuiz,
       });
       setLoading(false);

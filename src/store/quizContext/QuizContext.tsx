@@ -5,10 +5,9 @@ import {
   useReducer,
   useEffect,
 } from "react";
-import { Props, State, QuizContextTypes } from "./QuizContext.types";
+import { Props, State, QuizContextTypes } from "./quiz.types";
 import { useAuth } from "../authContext/AuthContext";
 import {
-  quizReducer,
   createQuiz,
   getMyQuizes,
   getQuiz,
@@ -19,13 +18,14 @@ import {
   loadQuizList,
   loadTopTen,
   loadMyTopTen,
-} from "./QuizReducer";
+} from "./quizMethods";
+import { quizReducer } from "./quizReducer/quizReducer";
 
 export const QuizContext = createContext({});
 
 export const useQuiz = () => useContext(QuizContext) as QuizContextTypes;
 
-const initialState: State = {
+export const quizInitialState: State = {
   quizes: [],
   currentQuiz: null,
   creatingQuiz: null,
@@ -46,7 +46,7 @@ export const QuizContextProvider = ({ children }: Props) => {
     if (token) loadMyTopTen(dispatch, setLoading);
   }, [token]);
 
-  const [state, dispatch] = useReducer(quizReducer, initialState);
+  const [state, dispatch] = useReducer(quizReducer, quizInitialState);
 
   return (
     <QuizContext.Provider

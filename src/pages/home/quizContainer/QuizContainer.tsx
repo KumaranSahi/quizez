@@ -1,5 +1,5 @@
 import classes from "./QuizContainer.module.css";
-import { Quiz } from "../../../store/quizContext/QuizContext.types";
+import { Quiz } from "../../../store/quizContext/quiz.types";
 import uniqolor from "uniqolor";
 import { useQuiz } from "../../../store";
 import { useHistory } from "react-router-dom";

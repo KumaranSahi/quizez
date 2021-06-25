@@ -1,6 +1,6 @@
 import classes from "./Question.module.css";
 import { useState, useEffect, SyntheticEvent } from "react";
-import { Question as QuestionType } from "../../../store/quizContext/QuizContext.types";
+import { Question as QuestionType } from "../../../store/quizContext/quiz.types";
 import {
   FormGroup,
   FormControlLabel,

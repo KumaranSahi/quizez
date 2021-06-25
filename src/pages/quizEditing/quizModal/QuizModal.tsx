@@ -1,5 +1,5 @@
 import classes from "./QuizModal.module.css";
-import { Question, Option } from "../../../store/quizContext/QuizContext.types";
+import { Question, Option } from "../../../store/quizContext/quiz.types";
 import { SetStateAction, useState, Dispatch, SyntheticEvent } from "react";
 import {
   Modal,

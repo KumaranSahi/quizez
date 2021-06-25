@@ -26,10 +26,8 @@ export type QuizAction =
   | { type: "LOAD_TOP_TEN"; payload: LeaderBoard[] }
   | { type: "LOAD_MY_TOP_TEN"; payload: LeaderBoard[] }
   | { type: "LOAD_MY_QUIZES"; payload: Quiz[] }
-  | { type: "CREATE_QUIZ"; payload: Quiz }
   | { type: "LOAD_CREATING_QUIZ"; payload: Quiz }
-  | { type: "LOAD_CURRENT_QUIZ"; payload: Quiz }
-  | { type: "EDIT_QUESTION"; payload: Quiz };
+  | { type: "LOAD_CURRENT_QUIZ"; payload: Quiz };
 
 export type Option = {
   content: string;

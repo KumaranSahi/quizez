@@ -1,7 +1,18 @@
 import classes from "../Singup.module.css";
-import { TextField, Button, IconButton, Checkbox } from "@material-ui/core";
+import {
+  TextField,
+  Button,
+  FormControl,
+  InputLabel,
+  InputAdornment,
+  IconButton,
+  Input,
+  Checkbox,
+} from "@material-ui/core";
 import { PhotoCamera } from "@material-ui/icons";
 import { SignupContainerProps } from "../Signup.types";
+import { useState } from "react";
+import { Visibility, VisibilityOff } from "@material-ui/icons";
 
 export const SignupContainer = ({
   image,
@@ -17,6 +28,7 @@ export const SignupContainer = ({
   isAdmin,
   signupDispatch,
 }: SignupContainerProps) => {
+  const [showPassword, setShowPassword] = useState(false);
   return (
     <>
       <h1>Sign Up:</h1>
@@ -56,7 +68,6 @@ export const SignupContainer = ({
         <div>
           <TextField
             label="Username"
-            variant="outlined"
             required
             fullWidth
             value={userName}
@@ -76,7 +87,6 @@ export const SignupContainer = ({
         <div>
           <TextField
             label="Email"
-            variant="outlined"
             type="email"
             required
             fullWidth
@@ -92,20 +102,34 @@ export const SignupContainer = ({
             <p className={classes["error-text"]}>Please enter a valid email</p>
           )}
         </div>
-        <TextField
-          label="Password"
-          variant="outlined"
-          type="password"
-          required
-          fullWidth
-          value={password}
-          onChange={(event) =>
-            signupDispatch({
-              type: "ADD_PASSWORD",
-              payload: event.target.value,
-            })
-          }
-        />
+        <FormControl fullWidth>
+          <InputLabel htmlFor="standard-adornment-password">
+            Password
+          </InputLabel>
+          <Input
+            type={showPassword ? "text" : "password"}
+            className={classes["edit-form-element"]}
+            required={true}
+            value={password}
+            onChange={(event) =>
+              signupDispatch({
+                type: "ADD_PASSWORD",
+                payload: event.target.value,
+              })
+            }
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={() => setShowPassword((state) => !state)}
+                  onMouseDown={(event) => event.preventDefault()}
+                >
+                  {showPassword ? <Visibility /> : <VisibilityOff />}
+                </IconButton>
+              </InputAdornment>
+            }
+          />
+        </FormControl>
         <label>
           <Checkbox
             onClick={() =>

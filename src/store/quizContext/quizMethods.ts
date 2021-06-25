@@ -261,7 +261,7 @@ export const loadMyTopTen = async (
     const {
       data: { data, ok },
     } = await axios.get<ResponseTemplate<LeaderBoard[]>>(
-      `${APP_URL}/api/scorecards`
+      `${APP_URL}/api/my-scorecards`
     );
     if (ok && data) {
       dispatch({

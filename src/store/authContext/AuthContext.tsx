@@ -11,15 +11,15 @@ import {
   State,
   SigninPages,
   AuthContextType,
-} from "./AuthContext.types";
+} from "./auth.types";
 import {
-  authReducer,
   signUpUser,
   signOutUser,
   changePassword,
   onReload,
   signInUser,
-} from "./AuthReducer";
+} from "./authMethods";
+import { authReducer } from "./authReducer/authReducer";
 
 export const AuthContext = createContext({});
 

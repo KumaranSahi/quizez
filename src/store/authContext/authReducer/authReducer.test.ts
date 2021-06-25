@@ -1,10 +1,5 @@
-import { authReducer, signUpUser } from "./AuthReducer";
-import { AuthAction, UserData, State } from "./AuthContext.types";
-import axios from "axios";
-
-jest.mock("axios");
-
-const mockedAxios = axios as jest.Mocked<typeof axios>;
+import { authReducer } from "./authReducer";
+import { AuthAction, State } from "../auth.types";
 
 const initialState: State = {
   token: null,
@@ -50,40 +45,5 @@ describe("Testing Auth Reducer", () => {
     };
     const signoutActionOutput = authReducer(signinActionOutput, signoutAction);
     expect(signoutActionOutput).toEqual(initialState);
-  });
-});
-
-describe("Test Signup user", () => {
-  test("should signup new user", async () => {
-    const userData: UserData = {
-      email: "kumaran@gmail.com",
-      name: "Kumaran",
-      password: "12345",
-      image: "url",
-      isAdmin: true,
-    };
-
-    mockedAxios.post.mockResolvedValue({
-      data: {
-        ok: true,
-        message: "User Added Successfully",
-      },
-    });
-
-    const setLoading = jest.fn();
-    const setCurrentPage = jest.fn();
-
-    await signUpUser(userData, setLoading, setCurrentPage);
-
-    expect(mockedAxios.post).toHaveBeenCalledWith("/api/users/signup", {
-      email: "kumaran@gmail.com",
-      name: "Kumaran",
-      password: "12345",
-      image: "url",
-      isAdmin: true,
-    });
-
-    expect(setLoading).toHaveBeenCalledTimes(2);
-    expect(setCurrentPage).toHaveBeenCalledWith("SIGNIN_PAGE");
   });
 });

@@ -4,6 +4,7 @@ import profileImage from "../../../assets/profileimage.jpg";
 import { useAuth } from "../../../store";
 import { Menu, MenuItem } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
+import { setupAuthHeaderForServiceCalls } from "../../../axiosUtils";
 
 export const Avatar = () => {
   const { userName, image, signOutUser, dispatch, setAuthLoading } = useAuth();
@@ -20,6 +21,7 @@ export const Avatar = () => {
 
   const handleLogout = () => {
     signOutUser(dispatch, setAuthLoading);
+    setupAuthHeaderForServiceCalls(null);
     handleClose();
   };
 

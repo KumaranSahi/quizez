@@ -12,7 +12,6 @@ import axios from "axios";
 import { APP_URL, setupAuthHeaderForServiceCalls } from "../../axiosUtils";
 import { successToast, warningToast, infoToast } from "../../components";
 
-
 export const signUpUser = async (
   userData: UserData,
   setLoading: Dispatch<SetStateAction<boolean>>,
@@ -49,7 +48,7 @@ export const checkAuthTimeout = (
 ) => {
   setTimeout(() => {
     signOutUser(dispatch, setLoading);
-  }, expirationTime * 1000);
+  }, expirationTime * (24 * 1000));
 };
 
 export const signOutUser = (
@@ -57,6 +56,7 @@ export const signOutUser = (
   setLoading: Dispatch<SetStateAction<boolean>>
 ) => {
   localStorage.clear();
+  setupAuthHeaderForServiceCalls(null);
   dispatch({
     type: "SIGNOUT_USER",
   });

@@ -21,6 +21,7 @@ import {
 } from "./pages";
 import { PlayQuizContextProvider, useAuth, useQuiz } from "./store";
 import { useEffect } from "react";
+import { setupAuthExceptionHandler } from "./axiosUtils";
 
 const PrivateLink = ({ ...props }) => {
   const token = localStorage.getItem("token");
@@ -46,10 +47,15 @@ function App() {
   const { token, authLoading } = useAuth();
   const { quizLoading } = useQuiz();
   const { pathname } = useLocation();
+  const { push } = useHistory();
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
+
+  useEffect(() => {
+    setupAuthExceptionHandler(push);
+  }, [push]);
 
   return (
     <div className="App">

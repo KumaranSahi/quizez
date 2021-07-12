@@ -3,7 +3,6 @@ import { TextField, IconButton, Button } from "@material-ui/core";
 import { useState, SyntheticEvent, ChangeEvent } from "react";
 import { PhotoCamera } from "@material-ui/icons";
 import { useQuiz, useAuth } from "../../store";
-import axios from "axios";
 import { successToast, warningToast } from "../../components";
 import { useHistory } from "react-router-dom";
 
@@ -32,15 +31,20 @@ export const CreateQuiz = () => {
         data.append("file", file[0]);
         data.append("upload_preset", "conclave");
         data.append("cloud_name", "conclave");
-        const { data: imageData } = await axios.post(
+        const someData = await fetch(
           "https://api.cloudinary.com/v1_1/conclave/image/upload",
-          data
+          {
+            method: "POST",
+            body: data,
+          }
         );
+        const imageData = await someData.json();
         setImage(imageData.url);
         setQuizLoading(false);
         successToast("Image uploaded successfully");
       } catch (error) {
         console.log(error);
+        setQuizLoading(false);
         warningToast("Unable to upload image");
       }
     } else {

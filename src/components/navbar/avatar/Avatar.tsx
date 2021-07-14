@@ -1,55 +1,43 @@
-import classes from "./Avatar.module.css";
-import { useState, SyntheticEvent } from "react";
-import profileImage from "../../../assets/profileimage.jpg";
+import {
+  Avatar,
+  WrapItem,
+  Menu,
+  MenuItem,
+  MenuList,
+  MenuButton,
+} from "@chakra-ui/react";
 import { useAuth } from "../../../store";
-import { Menu, MenuItem } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 import { setupAuthHeaderForServiceCalls } from "../../../axiosUtils";
 
-export const Avatar = () => {
-  const { userName, image, signOutUser, dispatch, setAuthLoading } = useAuth();
-  const [anchorEl, setAnchorEl] = useState<Element | null>(null);
+export const UserAvatar = () => {
+  const { image, signOutUser, dispatch, setAuthLoading, userName } = useAuth();
   const { push } = useHistory();
-
-  const handleClick = (event: SyntheticEvent) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  const handleLogout = () => {
-    signOutUser(dispatch, setAuthLoading);
-    setupAuthHeaderForServiceCalls(null);
-    handleClose();
-  };
-
-  const handleMyScores = () => {
-    push("/my-scores");
-    handleClose();
-  };
 
   return (
     <>
-      <div className={classes["name-avatar-container"]} onClick={handleClick}>
-        <p className={classes["name-container"]}>Hello, {userName}</p>
-        <div className={classes["avatar-container"]}>
-          <img
-            src={image ? image : profileImage}
-            className={classes["avatar"]}
-            alt="Active avatar"
-          />
-        </div>
-      </div>
-      <Menu
-        anchorEl={anchorEl}
-        keepMounted
-        open={Boolean(anchorEl)}
-        onClose={handleClose}
-      >
-        <MenuItem onClick={handleMyScores}>My Scores</MenuItem>
-        <MenuItem onClick={handleLogout}>Logout</MenuItem>
+      <Menu>
+        <WrapItem>
+          <Avatar name={userName} as={MenuButton} src={image} />
+        </WrapItem>
+        <MenuList>
+          <MenuItem
+            onClick={() => {
+              push("/my-scores");
+            }}
+          >
+            My Scores
+          </MenuItem>
+          <MenuItem
+            onClick={() => {
+              signOutUser(dispatch, setAuthLoading);
+              setupAuthHeaderForServiceCalls(null);
+              push("/sign-up");
+            }}
+          >
+            Sign out
+          </MenuItem>
+        </MenuList>
       </Menu>
     </>
   );

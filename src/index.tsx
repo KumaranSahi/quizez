@@ -3,32 +3,26 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { createMuiTheme, ThemeProvider } from "@material-ui/core";
 import { BrowserRouter } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import { AuthContextProvider, QuizContextProvider } from "./store";
-
-const theme = createMuiTheme({
-  palette: {
-    primary: {
-      main: "#311b92",
-    },
-  },
-});
+import { ChakraProvider, ColorModeScript } from "@chakra-ui/react";
+import theme from "./utils/theme";
 
 ReactDOM.render(
   <React.StrictMode>
-    <ThemeProvider theme={theme}>
-      <BrowserRouter>
+    <BrowserRouter>
+      <ChakraProvider>
+        <ColorModeScript initialColorMode={theme.config.initialColorMode} />
         <AuthContextProvider>
           <QuizContextProvider>
             <App />
             <ToastContainer />
           </QuizContextProvider>
         </AuthContextProvider>
-      </BrowserRouter>
-    </ThemeProvider>
+      </ChakraProvider>
+    </BrowserRouter>
   </React.StrictMode>,
   document.getElementById("root")
 );

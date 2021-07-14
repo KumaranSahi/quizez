@@ -25,7 +25,8 @@ export type AuthContextType = {
   currentPage: SigninPages;
   changePassword: (
     userData: ChangePassword,
-    setLoading: Dispatch<SetStateAction<boolean>>
+    setLoading: Dispatch<SetStateAction<boolean>>,
+    setCurrentPage: Dispatch<SetStateAction<SigninPages>>
   ) => void;
   setCurrentPage: Dispatch<SetStateAction<SigninPages>>;
   authLoading: boolean;

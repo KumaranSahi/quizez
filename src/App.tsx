@@ -44,7 +44,7 @@ const AdminAuthGaurd = ({ ...props }) => {
 };
 
 function App() {
-  const { token, authLoading } = useAuth();
+  const { token } = useAuth();
   const { quizLoading } = useQuiz();
   const { pathname } = useLocation();
   const { push } = useHistory();
@@ -82,7 +82,7 @@ function App() {
         </PlayQuizContextProvider>
       </main>
       {token && !(pathname === "/play-quiz") && <MobileNavbar />}
-      {(authLoading || quizLoading) && <Spinner />}
+      {quizLoading && <Spinner />}
     </div>
   );
 }

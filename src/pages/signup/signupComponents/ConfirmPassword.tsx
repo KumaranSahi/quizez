@@ -1,113 +1,150 @@
-import classes from "../Singup.module.css";
-import { ConfirmPasswordContainerProps } from "../Signup.types";
 import { useState } from "react";
 import {
-  TextField,
-  Button,
   FormControl,
-  InputLabel,
-  InputAdornment,
-  IconButton,
+  FormLabel,
+  FormErrorMessage,
   Input,
-} from "@material-ui/core";
-import { Visibility, VisibilityOff } from "@material-ui/icons";
+  InputGroup,
+  Button,
+  InputRightElement,
+  Heading,
+} from "@chakra-ui/react";
+import { Formik, Form, Field, FieldProps } from "formik";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import {
+  emailValidation,
+  passwordValidation,
+  passwordChangeValidation,
+} from "./utils";
+import { useAuth } from "../../../store";
+import { warningToast } from "../../../components";
 
-export const ConfirmPasswordContainer = ({
-  email,
-  password,
-  confirmPassword,
-  authLoading,
-  changePasswordSubmit,
-  signupDispatch,
-}: ConfirmPasswordContainerProps) => {
+export const ConfirmPasswordContainer = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const { changePassword, setAuthLoading, authLoading, setCurrentPage } =
+    useAuth();
 
   return (
     <>
-      <h1>Change Password:</h1>
-      <form
-        className={classes["signup-container"]}
-        onSubmit={changePasswordSubmit}
-      >
-        <TextField
-          label="Email"
-          type="email"
-          required
-          fullWidth
-          value={email}
-          onChange={(event) =>
-            signupDispatch({
-              type: "ADD_EMAIL",
-              payload: event.target.value,
-            })
+      <Heading color="teal" fontWeight="300">
+        Change Password:
+      </Heading>
+      <Formik
+        initialValues={{ email: "", password: "", confirmPassword: "" }}
+        onSubmit={(values) => {
+          if (
+            passwordChangeValidation(values.password, values.confirmPassword)
+          ) {
+            changePassword(
+              {
+                email: values.email,
+                password: values.password,
+                confirmPassword: values.confirmPassword,
+              },
+              setAuthLoading,
+              setCurrentPage
+            );
+          } else {
+            warningToast("Please verify the passwords");
           }
-        />
-        <FormControl fullWidth>
-          <InputLabel htmlFor="standard-adornment-password">
-            Password
-          </InputLabel>
-          <Input
-            type={showPassword ? "text" : "password"}
-            className={classes["edit-form-element"]}
-            required={true}
-            value={password}
-            onChange={(event) =>
-              signupDispatch({
-                type: "ADD_PASSWORD",
-                payload: event.target.value,
-              })
-            }
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={() => setShowPassword((state) => !state)}
-                  onMouseDown={(event) => event.preventDefault()}
+        }}
+      >
+        {(props) => (
+          <Form>
+            <Field name="email" validate={emailValidation}>
+              {({ field, form: { errors, touched } }: FieldProps) => (
+                <FormControl
+                  isInvalid={(errors.email && touched.email) as boolean}
                 >
-                  {showPassword ? <Visibility /> : <VisibilityOff />}
-                </IconButton>
-              </InputAdornment>
-            }
-          />
-        </FormControl>
-        <FormControl fullWidth>
-          <InputLabel htmlFor="standard-adornment-password">
-            Confirm Password
-          </InputLabel>
-          <Input
-            type={showConfirmPassword ? "text" : "password"}
-            className={classes["edit-form-element"]}
-            required={true}
-            value={confirmPassword}
-            onChange={(event) =>
-              signupDispatch({
-                type: "ADD_CONFIRM_PASSWORD",
-                payload: event.target.value,
-              })
-            }
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={() => setShowConfirmPassword((state) => !state)}
-                  onMouseDown={(event) => event.preventDefault()}
+                  <FormLabel htmlFor="email">Email</FormLabel>
+                  <Input {...field} id="email" placeholder="email" />
+                  <FormErrorMessage>{errors.email}</FormErrorMessage>
+                </FormControl>
+              )}
+            </Field>
+            <Field name="password" validate={passwordValidation}>
+              {({ field, form: { errors, touched } }: FieldProps) => (
+                <FormControl
+                  isInvalid={(errors.password && touched.password) as boolean}
                 >
-                  {showConfirmPassword ? <Visibility /> : <VisibilityOff />}
-                </IconButton>
-              </InputAdornment>
-            }
-          />
-        </FormControl>
-        <Button
-          variant="contained"
-          color="primary"
-          type="submit"
-          disabled={authLoading}
-        >
-          Change Password
-        </Button>
-      </form>
+                  <FormLabel htmlFor="password">Password</FormLabel>
+                  <InputGroup size="md">
+                    <Input
+                      pr="4.5rem"
+                      type={showPassword ? "text" : "password"}
+                      {...field}
+                      id="password"
+                      placeholder="Enter password"
+                    />
+                    <InputRightElement width="4.5rem">
+                      <Button
+                        h="1.75rem"
+                        size="sm"
+                        onClick={() => setShowPassword((state) => !state)}
+                      >
+                        {showPassword ? (
+                          <FontAwesomeIcon icon={faEyeSlash} />
+                        ) : (
+                          <FontAwesomeIcon icon={faEye} />
+                        )}
+                      </Button>
+                    </InputRightElement>
+                  </InputGroup>
+                  <FormErrorMessage>{errors.password}</FormErrorMessage>
+                </FormControl>
+              )}
+            </Field>
+            <Field name="confirmPassword" validate={passwordValidation}>
+              {({ field, form: { errors, touched } }: FieldProps) => (
+                <FormControl
+                  isInvalid={
+                    (errors.confirmPassword &&
+                      touched.confirmPassword) as boolean
+                  }
+                >
+                  <FormLabel htmlFor="confirmPassword">Password</FormLabel>
+                  <InputGroup size="md">
+                    <Input
+                      pr="4.5rem"
+                      type={showConfirmPassword ? "text" : "password"}
+                      {...field}
+                      id="confirmPassword"
+                      placeholder="Confirm password"
+                    />
+                    <InputRightElement width="4.5rem">
+                      <Button
+                        h="1.75rem"
+                        size="sm"
+                        onClick={() =>
+                          setShowConfirmPassword((state) => !state)
+                        }
+                      >
+                        {showConfirmPassword ? (
+                          <FontAwesomeIcon icon={faEyeSlash} />
+                        ) : (
+                          <FontAwesomeIcon icon={faEye} />
+                        )}
+                      </Button>
+                    </InputRightElement>
+                  </InputGroup>
+                  <FormErrorMessage>{errors.confirmPassword}</FormErrorMessage>
+                </FormControl>
+              )}
+            </Field>
+            <Button
+              mt={4}
+              colorScheme="teal"
+              isLoading={authLoading}
+              loadingText="Changing password"
+              type="submit"
+            >
+              Change Password
+            </Button>
+          </Form>
+        )}
+      </Formik>
     </>
   );
 };

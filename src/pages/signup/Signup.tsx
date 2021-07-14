@@ -14,19 +14,15 @@ import {
 export const Signup = () => {
   const {
     signUpUser,
-    signInUser,
     currentPage,
     setCurrentPage,
-    changePassword,
     setAuthLoading,
     authLoading,
-    dispatch,
   } = useAuth();
 
   const {
     dispatch: signupDispatch,
     state: {
-      confirmPassword,
       email,
       emailValid,
       fileUploadInfo,
@@ -107,37 +103,6 @@ export const Signup = () => {
     }
   };
 
-  const signInSubmit = async (event: SyntheticEvent) => {
-    event.preventDefault();
-    validateEmail();
-    if (emailValid)
-      signInUser(
-        {
-          email: email,
-          password: password,
-        },
-        dispatch,
-        setAuthLoading
-      );
-  };
-
-  const changePasswordSubmit = async (event: SyntheticEvent) => {
-    event.preventDefault();
-    validateEmail();
-    if (password === confirmPassword) {
-      changePassword(
-        {
-          email: email,
-          password: password,
-          confirmPassword: confirmPassword,
-        },
-        setAuthLoading
-      );
-    } else {
-      warningToast("Passwords do not match");
-    }
-  };
-
   const pageToRender = (currentPage: SigninPages) => {
     switch (currentPage) {
       case "SIGNUP_PAGE":
@@ -158,27 +123,9 @@ export const Signup = () => {
           />
         );
       case "SIGNIN_PAGE":
-        return (
-          <SigninContainer
-            signInSubmit={signInSubmit}
-            signupDispatch={signupDispatch}
-            email={email}
-            emailValid={emailValid}
-            password={password}
-            authLoading={authLoading}
-          />
-        );
+        return <SigninContainer />;
       case "CHANGE_PASSWORD":
-        return (
-          <ConfirmPasswordContainer
-            authLoading={authLoading}
-            changePasswordSubmit={changePasswordSubmit}
-            confirmPassword={confirmPassword}
-            email={email}
-            password={password}
-            signupDispatch={signupDispatch}
-          />
-        );
+        return <ConfirmPasswordContainer />;
       default:
         return (
           <SignupContainer

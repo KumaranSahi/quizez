@@ -27,7 +27,12 @@ export const Navbar = () => {
       bg={useColorModeValue("white", "gray.900")}
       zIndex="banner"
     >
-      <Heading color="teal" fontSize="1.8rem" onClick={() => push("/")}>
+      <Heading
+        color="teal"
+        fontSize="1.8rem"
+        onClick={() => push("/")}
+        cursor="pointer"
+      >
         QuizEz
       </Heading>
       <HStack>

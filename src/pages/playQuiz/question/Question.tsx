@@ -1,17 +1,20 @@
-import classes from "./Question.module.css";
 import { useState, useEffect, SyntheticEvent } from "react";
 import { Question as QuestionType } from "../../../store/quizContext/quiz.types";
-import {
-  FormGroup,
-  FormControlLabel,
-  Checkbox,
-  RadioGroup,
-  Radio,
-  Button,
-} from "@material-ui/core";
-import { KeyboardArrowRight, SaveAlt } from "@material-ui/icons";
+import { faSave, faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useQuiz, usePlayQuiz } from "../../../store";
 import { useHistory } from "react-router-dom";
+import {
+  Box,
+  HStack,
+  Text,
+  Button,
+  Radio,
+  VStack,
+  Checkbox,
+  RadioGroup,
+  CheckboxGroup,
+} from "@chakra-ui/react";
 
 interface QuestionProps extends QuestionType {
   totalQuestions: number;
@@ -60,20 +63,6 @@ export const Question = ({
       push("/quiz-result");
     } else {
       setQuizLoading(false);
-    }
-  };
-
-  const optionClicked = (id: string) => {
-    if (multipleCorrect) {
-      if (checked.some((optionId) => id === optionId)) {
-        setChecked((options) => options.filter((optionId) => optionId !== id));
-      } else {
-        checked.length > 0
-          ? setChecked((state) => [...state, id])
-          : setChecked([id]);
-      }
-    } else {
-      setChecked([id]);
     }
   };
 
@@ -182,89 +171,96 @@ export const Question = ({
   }, [timer]);
 
   return (
-    <>
-      <div className={classes["question-container"]}>
-        <div className={classes["index-points-timer"]}>
-          <p>
-            {currentIndex}/{totalQuestions}
-          </p>
-          <p>Timer: {timer}</p>
-          <p>Points: {showHint ? points / 2 : points}</p>
-        </div>
-        <p className={classes["question"]}>{question}</p>
-        {multipleCorrect ? (
-          <>
-            <FormGroup>
-              {options &&
-                options.map(({ content, id }) => (
-                  <FormControlLabel
-                    key={id}
-                    control={
-                      <Checkbox
-                        name={content}
-                        checked={checked.some((value) => id === value)}
-                        onClick={() => optionClicked(id!)}
-                      />
-                    }
-                    label={content}
-                  />
-                ))}
-            </FormGroup>
-          </>
-        ) : (
-          <>
-            <RadioGroup aria-label="option" name="option">
-              {options?.map(({ id, content }) => (
-                <FormControlLabel
-                  key={id}
-                  control={
-                    <Radio
-                      color="primary"
-                      name={content}
-                      checked={checked.some((value) => id === value)}
-                      onClick={() => optionClicked(id!)}
-                    />
-                  }
-                  label={content}
-                />
+    <Box width="100%" height="100%" padding="1rem" textAlign="left">
+      <HStack
+        justifyContent="space-between"
+        padding="1rem"
+        boxShadow="dark-lg"
+        color="teal"
+        fontSize="2xl"
+      >
+        <Text fontWeight="700">
+          {currentIndex}/{totalQuestions}
+        </Text>
+        <Text fontWeight="700">Timer: {timer}</Text>
+        <Text fontWeight="700">Points: {showHint ? points / 2 : points}</Text>
+      </HStack>
+      <Text fontSize="2xl" fontWeight="600" marginBottom="1rem">
+        {question}
+      </Text>
+
+      {multipleCorrect ? (
+        <CheckboxGroup onChange={(id) => setChecked(id as string[])}>
+          <VStack alignItems="flex-start">
+            {options &&
+              options.map(({ content, id }) => (
+                <Checkbox
+                  name={content}
+                  checked={checked.some((value) => id === value)}
+                  key={id!}
+                  value={id!}
+                >
+                  {content}
+                </Checkbox>
               ))}
-            </RadioGroup>
-          </>
-        )}
-        {hint && (
+          </VStack>
+        </CheckboxGroup>
+      ) : (
+        <RadioGroup onChange={(id) => setChecked([id])}>
+          <VStack alignItems="flex-start">
+            {options?.map(({ id, content }) => (
+              <Radio
+                color="teal"
+                key={id}
+                name={content}
+                checked={checked.some((value) => id === value)}
+                value={id}
+              >
+                {content}
+              </Radio>
+            ))}
+          </VStack>
+        </RadioGroup>
+      )}
+      {hint && (
+        <Button
+          color="teal"
+          variant="outlined"
+          disabled={showHint}
+          onClick={() => setShowHint(true)}
+        >
+          Show hint
+        </Button>
+      )}
+      {showHint && (
+        <Text width="100%" padding="1rem" fontSize="1xl" boxShadow="dark-lg">
+          {hint}
+        </Text>
+      )}
+      <Box margin="1rem" textAlign="right">
+        {currentIndex === totalQuestions ? (
           <Button
-            color="primary"
-            variant="outlined"
-            disabled={showHint}
-            onClick={() => setShowHint(true)}
+            variant="outline"
+            color="teal"
+            rightIcon={<FontAwesomeIcon icon={faSave} />}
+            disabled={quizLoading}
+            onClick={nexButtonClicked}
+            marginTop="1rem"
           >
-            Show hint
+            Submit
+          </Button>
+        ) : (
+          <Button
+            variant="outline"
+            color="teal"
+            leftIcon={<FontAwesomeIcon icon={faArrowRight} />}
+            onClick={nexButtonClicked}
+            marginTop="1rem"
+          >
+            Next
           </Button>
         )}
-        {showHint && <p className={classes["hint"]}>{hint}</p>}
-        <div className={classes["button-container"]}>
-          {currentIndex === totalQuestions ? (
-            <Button
-              variant="contained"
-              color="primary"
-              endIcon={<SaveAlt />}
-              disabled={quizLoading}
-              onClick={nexButtonClicked}
-            >
-              Submit
-            </Button>
-          ) : (
-            <Button
-              variant="contained"
-              color="primary"
-              endIcon={<KeyboardArrowRight />}
-              onClick={nexButtonClicked}
-            >
-              Next
-            </Button>
-          )}
-        </div>
-      </div>
-    </>
+      </Box>
+    </Box>
   );
 };

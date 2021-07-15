@@ -1,8 +1,8 @@
-import classes from "./Home.module.css";
 import { QuizContainer } from "./quizContainer/QuizContainer";
 import { CreateQuizAndLeaderBoard } from "../../components";
 import { useEffect } from "react";
 import { useAuth, useQuiz } from "../../store";
+import { Flex, Box, useMediaQuery } from "@chakra-ui/react";
 
 export const Home = () => {
   const { quizes, loadQuizList, dispatch, setQuizLoading } = useQuiz();
@@ -11,9 +11,18 @@ export const Home = () => {
     if (token) loadQuizList(dispatch, setQuizLoading);
   }, [dispatch, token, setQuizLoading, loadQuizList]);
 
+  const [isLargerThan700] = useMediaQuery("(min-width: 700px)");
+
   return (
-    <div className={classes["homepage-container"]}>
-      <ul className={classes["active-quizes"]}>
+    <Flex width="100%">
+      <Flex
+        flex="4"
+        listStyleType="none"
+        flexWrap="wrap"
+        margin="0"
+        paddingTop="1rem"
+        paddingInlineStart="0"
+      >
         {quizes.map(({ id, name, image, description }) => (
           <QuizContainer
             key={id}
@@ -23,10 +32,10 @@ export const Home = () => {
             description={description}
           />
         ))}
-      </ul>
-      <div className={classes["create-quiz-personal-scores"]}>
+      </Flex>
+      <Box flex="2" padding="1rem" display={isLargerThan700 ? "block" : "none"}>
         <CreateQuizAndLeaderBoard />
-      </div>
-    </div>
+      </Box>
+    </Flex>
   );
 };

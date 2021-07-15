@@ -1,8 +1,8 @@
-import classes from "./QuizContainer.module.css";
 import { Quiz } from "../../../store/quizContext/quiz.types";
 import uniqolor from "uniqolor";
 import { useQuiz } from "../../../store";
 import { useHistory } from "react-router-dom";
+import { VStack, Button, Heading, Text } from "@chakra-ui/react";
 
 export const QuizContainer = ({ id, name, image, description }: Quiz) => {
   const color = uniqolor.random({
@@ -19,30 +19,42 @@ export const QuizContainer = ({ id, name, image, description }: Quiz) => {
   };
 
   return (
-    <li
-      className={classes["quiz-container"]}
+    <VStack
+      justifyContent="space-between"
+      margin="2"
+      borderRadius="2xl"
+      width="22rem"
+      minHeight="25rem"
+      padding="1rem"
+      backgroundPosition="center"
       style={
         image
           ? {
               backgroundImage: ` linear-gradient(
                                 rgba(0, 0, 0, 0.5),
-                                rgba(0, 0, 0, 1)
+                                rgba(0, 0, 0.5, 1)
                               ),url(${image})`,
             }
           : { backgroundColor: `${color.color}` }
       }
     >
-      <h1 className={classes["quiz-name"]}>{name}</h1>
-      {description ? (
-        <p className={classes["quiz-description"]}>{description}</p>
-      ) : (
-        <p className={classes["quiz-description"]}>
-          Hey this is a test string for now
-        </p>
-      )}
-      <button className={classes["quiz-button"]} onClick={playQuiz}>
-        <span>Play Quiz!</span>
-      </button>
-    </li>
+      <Heading color="white" fontWeight="400">
+        {name}
+      </Heading>
+      <Text color="white" fontSize="x-large">
+        {description}
+      </Text>
+      <Button
+        padding="2rem"
+        margin="1rem"
+        variant="outline"
+        color="teal"
+        borderRadius="0"
+        fontSize="larger"
+        onClick={playQuiz}
+      >
+        Play Quiz!
+      </Button>
+    </VStack>
   );
 };

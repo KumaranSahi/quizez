@@ -1,39 +1,68 @@
-import classes from "./Rules.module.css";
 import { useQuiz, usePlayQuiz } from "../../store";
-import { Button } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
+import {
+  useMediaQuery,
+  Button,
+  HStack,
+  useColorModeValue,
+  Box,
+  Heading,
+  UnorderedList,
+  ListItem,
+} from "@chakra-ui/react";
+
+const rules = [
+  "You get 30 seconds to answer each question.",
+  "If the question times out no point is scored.",
+  " Each question has its own points.",
+  " Some questions may carry negative points.",
+  " Some questions may have hints.",
+  " Using hints for question will only give you half the points.",
+  "Once the game has started you cannot navigate away or reload.",
+  "If you are ready to start click on the play button and may the oddsbe forever in your favour!",
+];
 
 export const Rules = () => {
   const { currentQuiz, calculateTotalScore, quizLoading } = useQuiz();
   const { dispatch } = usePlayQuiz();
   const { push } = useHistory();
+
+  const [isLargerThan700] = useMediaQuery("(min-width: 700px)");
+
   return (
-    <div className={classes["rules-page"]}>
-      <div className={classes["rules-container"]}>
-        <h1>Rules</h1>
+    <HStack
+      width="100%"
+      height="100%"
+      justifyContent="center"
+      bg={useColorModeValue("lightgray", "gray.800")}
+    >
+      <Box
+        width={isLargerThan700 ? "40rem" : "100%"}
+        minHeight="90vh"
+        textAlign="center"
+        padding="1rem"
+        bg={useColorModeValue("white", "gray.900")}
+      >
+        <Heading color="teal">Rules</Heading>
         {currentQuiz && (
-          <div className={classes["quiz-info"]}>
-            <h2>{currentQuiz.name}</h2>
-            <h2>Total Points : {calculateTotalScore(currentQuiz)}</h2>
-          </div>
+          <HStack justifyContent="space-evenly">
+            <Heading fontSize="2xl">{currentQuiz.name}</Heading>
+            <Heading fontSize="2xl">
+              Total Points : {calculateTotalScore(currentQuiz)}
+            </Heading>
+          </HStack>
         )}
-        <ul className={classes["rules-list"]}>
-          <li>You get 30 seconds to answer each question.</li>
-          <li>If the question times out no point is scored.</li>
-          <li>Each question has its own points.</li>
-          <li>Some questions may carry negative points.</li>
-          <li>Some questions may have hints.</li>
-          <li>Using hints for question will only give you half the points.</li>
-          <li>Once the game has started you cannot navigate away or reload</li>
-          <li>
-            If you are ready to start click on the play button and may the odds
-            be forever in your favour!
-          </li>
-        </ul>
+        <UnorderedList textAlign="left">
+          {rules.map((rule) => (
+            <ListItem fontSize="2xl" fontWeight="400" key={rule}>
+              {rule}
+            </ListItem>
+          ))}
+        </UnorderedList>
         <Button
-          variant="contained"
-          color="primary"
-          disabled={quizLoading}
+          isLoading={quizLoading}
+          variant="solid"
+          color="teal"
           onClick={() => {
             push("/play-quiz");
             dispatch({ type: "START_QUIZ" });
@@ -47,7 +76,7 @@ export const Rules = () => {
         >
           Play Game!
         </Button>
-      </div>
-    </div>
+      </Box>
+    </HStack>
   );
 };

@@ -1,158 +1,224 @@
-import classes from "../Singup.module.css";
 import {
-  TextField,
-  Button,
   FormControl,
-  InputLabel,
-  InputAdornment,
-  IconButton,
+  FormLabel,
+  FormErrorMessage,
   Input,
+  InputGroup,
+  Button,
+  InputRightElement,
+  Heading,
   Checkbox,
-} from "@material-ui/core";
-import { PhotoCamera } from "@material-ui/icons";
-import { SignupContainerProps } from "../Signup.types";
+  Image,
+  Box,
+} from "@chakra-ui/react";
+import { Formik, Form, Field, FieldProps } from "formik";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCamera, faEyeSlash, faEye } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
-import { Visibility, VisibilityOff } from "@material-ui/icons";
+import { useAuth } from "../../../store";
+import { emailValidation, passwordValidation, nameValidation } from "./utils";
+import axios from "axios";
+import { warningToast, successToast, Spinner } from "../../../components";
 
-export const SignupContainer = ({
-  image,
-  fileUpload,
-  fileUploadInfo,
-  email,
-  emailValid,
-  password,
-  userName,
-  userNameValid,
-  signUpSubmit,
-  authLoading,
-  isAdmin,
-  signupDispatch,
-}: SignupContainerProps) => {
+export const SignupContainer = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [imageUploadLoading, setImageUploadLoading] = useState(false);
+
+  const { signUpUser, setCurrentPage, authLoading, setAuthLoading } = useAuth();
+
+  const fileUpload = async ({
+    file,
+    setImage,
+  }: {
+    file: FileList | null;
+    setImage: any;
+  }) => {
+    const allowedExtensions = new RegExp("^.*(.jpg|.jpeg|.png)");
+    if (
+      file &&
+      allowedExtensions.test(file[0].name.toLowerCase()) &&
+      file[0].size <= 4000000
+    ) {
+      try {
+        setImageUploadLoading(true);
+        const data = new FormData();
+        data.append("file", file[0]);
+        data.append("upload_preset", "conclave");
+        data.append("cloud_name", "conclave");
+        const { data: imageData } = await axios.post(
+          "https://api.cloudinary.com/v1_1/conclave/image/upload",
+          data
+        );
+        setImage("image", imageData.url);
+        setImageUploadLoading(false);
+        successToast("Image uploaded successfully");
+      } catch (error) {
+        console.log(error);
+        warningToast("Unable to upload image");
+      }
+    } else {
+      warningToast("Please upload a .jpg or .png file under 4mb");
+    }
+  };
+
   return (
     <>
-      <h1>Sign Up:</h1>
-      <form className={classes["signup-container"]} onSubmit={signUpSubmit}>
-        {image ? (
-          <img
-            src={image}
-            alt="Profile"
-            className={classes["profile-picture"]}
-          />
-        ) : (
-          <div>
-            <input
-              accept="image/*"
-              style={{ display: "none" }}
-              id="icon-button-file"
-              type="file"
-              onChange={(event) => fileUpload(event.target.files)}
-            />
-            <label htmlFor="icon-button-file">
-              <IconButton
-                color="primary"
-                aria-label="upload picture"
-                component="span"
-              >
-                <PhotoCamera />
-              </IconButton>
-              <span className={classes["upload-profile-picture"]}>
-                Upload Profile picture
-              </span>
-            </label>
-            {fileUploadInfo && (
-              <p className={classes["file-upload-info"]}>{fileUploadInfo}</p>
-            )}
-          </div>
-        )}
-        <div>
-          <TextField
-            label="Username"
-            required
-            fullWidth
-            value={userName}
-            onChange={(event) =>
-              signupDispatch({
-                type: "ADD_USERNAME",
-                payload: event.target.value,
-              })
-            }
-          />
-          {!userNameValid && (
-            <p className={classes["error-text"]}>
-              Please enter a valid user name
-            </p>
-          )}
-        </div>
-        <div>
-          <TextField
-            label="Email"
-            type="email"
-            required
-            fullWidth
-            value={email}
-            onChange={(event) =>
-              signupDispatch({
-                type: "ADD_EMAIL",
-                payload: event.target.value,
-              })
-            }
-          />
-          {!emailValid && (
-            <p className={classes["error-text"]}>Please enter a valid email</p>
-          )}
-        </div>
-        <FormControl fullWidth>
-          <InputLabel htmlFor="standard-adornment-password">
-            Password
-          </InputLabel>
-          <Input
-            type={showPassword ? "text" : "password"}
-            className={classes["edit-form-element"]}
-            required={true}
-            value={password}
-            onChange={(event) =>
-              signupDispatch({
-                type: "ADD_PASSWORD",
-                payload: event.target.value,
-              })
-            }
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={() => setShowPassword((state) => !state)}
-                  onMouseDown={(event) => event.preventDefault()}
+      <Heading color="teal" fontWeight="300" marginBottom="1rem">
+        Sign Up:
+      </Heading>
+      <Formik
+        initialValues={{
+          name: "",
+          email: "",
+          password: "",
+          image: "",
+          isAdmin: false,
+        }}
+        onSubmit={(values) => {
+          console.log(values);
+
+          signUpUser(
+            {
+              name: values.name,
+              email: values.email,
+              password: values.password,
+              image: values.image.length > 0 ? values.image : undefined,
+              isAdmin: values.isAdmin,
+            },
+            setAuthLoading,
+            setCurrentPage
+          );
+        }}
+      >
+        {({ values, setFieldValue }) => (
+          <Form>
+            <Field name="image">
+              {({ form: { errors, touched } }: FieldProps) =>
+                values.image ? (
+                  <Image
+                    src={values.image}
+                    alt="Profile"
+                    height="5rem"
+                    width="5rem"
+                    borderRadius="full"
+                    margin="auto"
+                  />
+                ) : (
+                  <Box>
+                    <input
+                      accept="image/*"
+                      style={{ display: "none" }}
+                      id="icon-button-file"
+                      type="file"
+                      onChange={(event) => {
+                        fileUpload({
+                          file: event.target.files,
+                          setImage: setFieldValue,
+                        });
+                      }}
+                    />
+                    <label
+                      htmlFor="icon-button-file"
+                      style={{
+                        color: "teal",
+                        marginTop: "1rem",
+                        cursor: "pointer",
+                      }}
+                    >
+                      <FontAwesomeIcon
+                        icon={faCamera}
+                        style={{ fontSize: "larger" }}
+                      />
+                      Upload Profile picture
+                    </label>
+                  </Box>
+                )
+              }
+            </Field>
+            <Field name="name" validate={nameValidation}>
+              {({ field, form: { errors, touched } }: FieldProps) => (
+                <FormControl
+                  isInvalid={(errors.email && touched.email) as boolean}
                 >
-                  {showPassword ? <Visibility /> : <VisibilityOff />}
-                </IconButton>
-              </InputAdornment>
-            }
-          />
-        </FormControl>
-        <label>
-          <Checkbox
-            onClick={() =>
-              signupDispatch({
-                type: "SET_IS_ADMIN",
-                payload: !isAdmin,
-              })
-            }
-            checked={isAdmin}
-            color="primary"
-            inputProps={{ "aria-label": "secondary checkbox" }}
-          />
-          Quiz Creator Account
-        </label>
-        <Button
-          variant="contained"
-          color="primary"
-          type="submit"
-          disabled={authLoading}
-        >
-          Sign up!
-        </Button>
-      </form>
+                  <FormLabel htmlFor="name">Name</FormLabel>
+                  <Input {...field} id="name" placeholder="name" />
+                  <FormErrorMessage>{errors.name}</FormErrorMessage>
+                </FormControl>
+              )}
+            </Field>
+            <Field name="email" validate={emailValidation}>
+              {({ field, form: { errors, touched } }: FieldProps) => (
+                <FormControl
+                  isInvalid={(errors.email && touched.email) as boolean}
+                >
+                  <FormLabel htmlFor="email">Email</FormLabel>
+                  <Input {...field} id="email" placeholder="email" />
+                  <FormErrorMessage>{errors.email}</FormErrorMessage>
+                </FormControl>
+              )}
+            </Field>
+            <Field name="password" validate={passwordValidation}>
+              {({ field, form: { errors, touched } }: FieldProps) => (
+                <FormControl
+                  isInvalid={(errors.password && touched.password) as boolean}
+                >
+                  <FormLabel htmlFor="password">Password</FormLabel>
+                  <InputGroup size="md">
+                    <Input
+                      pr="4.5rem"
+                      type={showPassword ? "text" : "password"}
+                      {...field}
+                      id="password"
+                      placeholder="Enter password"
+                    />
+                    <InputRightElement width="4.5rem">
+                      <Button
+                        h="1.75rem"
+                        size="sm"
+                        onClick={() => setShowPassword((state) => !state)}
+                      >
+                        {showPassword ? (
+                          <FontAwesomeIcon icon={faEyeSlash} />
+                        ) : (
+                          <FontAwesomeIcon icon={faEye} />
+                        )}
+                      </Button>
+                    </InputRightElement>
+                  </InputGroup>
+                  <FormErrorMessage>{errors.password}</FormErrorMessage>
+                </FormControl>
+              )}
+            </Field>
+            <Field name="isAdmin">
+              {({ form: { errors, touched } }: FieldProps) => (
+                <FormControl
+                  isInvalid={(errors.isAdmin && touched.isAdmin) as boolean}
+                >
+                  <Checkbox
+                    colorScheme="teal"
+                    onClick={() => setFieldValue("isAdmin", !values.isAdmin)}
+                    checked={values.isAdmin}
+                    marginTop="1rem"
+                  >
+                    Quiz Creator Account
+                  </Checkbox>
+                </FormControl>
+              )}
+            </Field>
+            <Button
+              mt={4}
+              colorScheme="teal"
+              isLoading={authLoading}
+              type="submit"
+              disabled={imageUploadLoading}
+              loadingText="Signing up"
+            >
+              Sign up
+            </Button>
+          </Form>
+        )}
+      </Formik>
+      {imageUploadLoading && <Spinner />}
     </>
   );
 };

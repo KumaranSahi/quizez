@@ -75,8 +75,6 @@ export const SignupContainer = () => {
           isAdmin: false,
         }}
         onSubmit={(values) => {
-          console.log(values);
-
           signUpUser(
             {
               name: values.name,

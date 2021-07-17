@@ -56,7 +56,7 @@ export const CreateQuizAndLeaderBoard = () => {
             <Tr key={id}>
               <Td>{userName}</Td>
               <Td>{quizName}</Td>
-              <Td>{score}</Td>
+              <Td>{score}%</Td>
             </Tr>
           ))}
         </Tbody>

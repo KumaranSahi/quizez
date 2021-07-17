@@ -1,24 +1,42 @@
-import classes from "./CreateQuiz.module.css";
-import { TextField, IconButton, Button } from "@material-ui/core";
-import { useState, SyntheticEvent, ChangeEvent } from "react";
-import { PhotoCamera } from "@material-ui/icons";
+import {
+  FormControl,
+  FormLabel,
+  FormErrorMessage,
+  Input,
+  Textarea,
+  Button,
+  useColorModeValue,
+  useMediaQuery,
+  Heading,
+  Image,
+  HStack,
+  Box,
+} from "@chakra-ui/react";
+import { useState } from "react";
 import { useQuiz, useAuth } from "../../store";
-import { successToast, warningToast } from "../../components";
+import { successToast, warningToast, Spinner } from "../../components";
 import { useHistory } from "react-router-dom";
+import { Formik, Form, Field, FieldProps } from "formik";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCamera } from "@fortawesome/free-solid-svg-icons";
+import { nameValidation } from "./utils";
 
 export const CreateQuiz = () => {
-  const [quizName, setQuizName] = useState("");
-  const [quizDescription, setQuizDescription] = useState("");
-
-  const [image, setImage] = useState("");
-  const [fileUploadInfo, setFileUploadInfo] = useState("");
+  const [imageUploadLoading, setImageUploadLoading] = useState(false);
 
   const { userName } = useAuth();
   const { setQuizLoading, quizLoading, createQuiz, dispatch } = useQuiz();
 
+  const [isLargerThan700] = useMediaQuery("(min-width: 700px)");
   const { push } = useHistory();
 
-  const fileUpload = async (file: FileList | null) => {
+  const fileUpload = async ({
+    file,
+    setImage,
+  }: {
+    file: FileList | null;
+    setImage: any;
+  }) => {
     const allowedExtensions = new RegExp("^.*(.jpg|.jpeg|.png)");
     if (
       file &&
@@ -26,7 +44,7 @@ export const CreateQuiz = () => {
       file[0].size <= 4000000
     ) {
       try {
-        setQuizLoading(true);
+        setImageUploadLoading(true);
         const data = new FormData();
         data.append("file", file[0]);
         data.append("upload_preset", "conclave");
@@ -39,113 +57,167 @@ export const CreateQuiz = () => {
           }
         );
         const imageData = await someData.json();
-        setImage(imageData.url);
-        setQuizLoading(false);
+        setImage("image", imageData.url);
+        setImageUploadLoading(false);
         successToast("Image uploaded successfully");
       } catch (error) {
         console.log(error);
-        setQuizLoading(false);
         warningToast("Unable to upload image");
       }
     } else {
-      setFileUploadInfo("Please upload a .jpg or .png file under 4mb");
+      warningToast("Please upload a .jpg or .png file under 4mb");
     }
   };
 
-  const quizNameEntered = (event: ChangeEvent) => {
-    const name = (event.target as HTMLInputElement).value;
-    setQuizName(name);
-    setQuizDescription(`${userName}'s quiz on ${name}`);
-  };
-
-  const createQuizSubmitted = async (event: SyntheticEvent) => {
-    event.preventDefault();
-    if (quizName && quizDescription) {
-      const id = await createQuiz(
-        {
-          name: quizName,
-          description: quizDescription,
-          image: image,
-        },
-        setQuizLoading,
-        dispatch
-      );
-
-      if (id) {
-        push({ pathname: "/edit-quiz", search: id });
-      }
-    }
+  const quizNameEntered = ({
+    name,
+    setValue,
+  }: {
+    name: string;
+    setValue: any;
+  }) => {
+    setValue("quizName", name);
+    setValue("quizDescription", `${userName}'s quiz on ${name}`);
   };
 
   return (
-    <div className={classes["create-quiz-page"]}>
-      <div className={classes["create-quiz-container"]}>
-        <h1>Create your quiz!</h1>
-        <form
-          className={classes["create-quiz-form"]}
-          onSubmit={createQuizSubmitted}
+    <HStack
+      width="100%"
+      height="100%"
+      justifyContent="center"
+      bg={useColorModeValue("lightgray", "gray.800")}
+    >
+      <Box
+        width={isLargerThan700 ? "40rem" : "100%"}
+        minHeight="90vh"
+        textAlign="center"
+        padding="1rem"
+        bg={useColorModeValue("white", "gray.900")}
+      >
+        <Heading marginBottom="1rem" color="teal">Create your quiz!</Heading>
+        <Formik
+          initialValues={{
+            quizName: "",
+            quizDescription: "",
+            image: "",
+          }}
+          onSubmit={async (values) => {
+            const id = await createQuiz(
+              {
+                name: values.quizName,
+                description: values.quizDescription,
+                image: values.image,
+              },
+              setQuizLoading,
+              dispatch
+            );
+            if (id) {
+              push({ pathname: "/edit-quiz", search: id });
+            }
+          }}
         >
-          {image ? (
-            <img
-              src={image}
-              alt="Profile"
-              className={classes["profile-picture"]}
-            />
-          ) : (
-            <div>
-              <input
-                accept="image/*"
-                style={{ display: "none" }}
-                id="icon-button-file"
-                type="file"
-                onChange={(event) => fileUpload(event.target.files)}
-              />
-              <label htmlFor="icon-button-file">
-                <IconButton
-                  color="primary"
-                  aria-label="upload picture"
-                  component="span"
-                >
-                  <PhotoCamera />
-                </IconButton>
-                <span className={classes["upload-profile-picture"]}>
-                  Upload Profile picture
-                </span>
-              </label>
-              {fileUploadInfo && (
-                <p className={classes["file-upload-info"]}>{fileUploadInfo}</p>
-              )}
-            </div>
+          {({ values, setFieldValue }) => (
+            <Form>
+              <Field name="image">
+                {({ form: { errors, touched } }: FieldProps) =>
+                  values.image ? (
+                    <Image
+                      src={values.image}
+                      alt="Profile"
+                      height="5rem"
+                      width="5rem"
+                      borderRadius="full"
+                      margin="auto"
+                    />
+                  ) : (
+                    <Box>
+                      <input
+                        accept="image/*"
+                        style={{ display: "none" }}
+                        id="icon-button-file"
+                        type="file"
+                        onChange={(event) => {
+                          fileUpload({
+                            file: event.target.files,
+                            setImage: setFieldValue,
+                          });
+                        }}
+                      />
+                      <label
+                        htmlFor="icon-button-file"
+                        style={{
+                          color: "teal",
+                          marginTop: "1rem",
+                          cursor: "pointer",
+                        }}
+                      >
+                        <FontAwesomeIcon
+                          icon={faCamera}
+                          style={{ fontSize: "larger" }}
+                        />
+                        Upload Profile picture
+                      </label>
+                    </Box>
+                  )
+                }
+              </Field>
+              <Field name="quizName" validate={nameValidation}>
+                {({ field, form: { errors, touched } }: FieldProps) => (
+                  <FormControl
+                    isInvalid={(errors.email && touched.email) as boolean}
+                  >
+                    <FormLabel htmlFor="quizName">Quiz name</FormLabel>
+                    <Input
+                      {...field}
+                      onChange={(event) =>
+                        quizNameEntered({
+                          name: event.target.value,
+                          setValue: setFieldValue,
+                        })
+                      }
+                      id="quizName"
+                      placeholder="Quiz name"
+                    />
+                    <FormErrorMessage>{errors.quizName}</FormErrorMessage>
+                  </FormControl>
+                )}
+              </Field>
+              <Field name="quizDescription">
+                {({ field, form: { errors, touched } }: FieldProps) => (
+                  <FormControl
+                    isInvalid={(errors.email && touched.email) as boolean}
+                  >
+                    <FormLabel htmlFor="quizDescription">
+                      Quiz Description
+                    </FormLabel>
+                    <Textarea
+                      {...field}
+                      id="quizDescription"
+                      placeholder="Quiz Description"
+                    />
+                    <FormErrorMessage>
+                      {errors.quizDescription}
+                    </FormErrorMessage>
+                  </FormControl>
+                )}
+              </Field>
+              <Button
+                type="submit"
+                size="lg"
+                width="100%"
+                marginTop="1rem"
+                variant="solid"
+                color="teal"
+                isLoading={quizLoading}
+                loadingText="Creating Quiz"
+              >
+                Create Quiz
+              </Button>
+            </Form>
           )}
-          <TextField
-            required
-            label="Quiz Name"
-            fullWidth
-            onChange={quizNameEntered}
-            value={quizName}
-            variant="outlined"
-          />
-          <TextField
-            required
-            label="Description"
-            multiline
-            fullWidth
-            onChange={(event) => setQuizDescription(event.target.value)}
-            value={quizDescription}
-            variant="outlined"
-            rows={4}
-          />
-          <Button
-            type="submit"
-            size="large"
-            variant="contained"
-            color="primary"
-            disabled={quizLoading}
-          >
-            Create
-          </Button>
-        </form>
-      </div>
-    </div>
+        </Formik>
+      </Box>
+      {imageUploadLoading && <Spinner />}
+    </HStack>
   );
 };

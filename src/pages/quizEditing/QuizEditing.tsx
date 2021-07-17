@@ -1,8 +1,16 @@
-import classes from "./QuizEditing.module.css";
 import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useQuiz } from "../../store";
-import { Button } from "@material-ui/core";
+import {
+  useMediaQuery,
+  Button,
+  HStack,
+  useColorModeValue,
+  Box,
+  Heading,
+  UnorderedList,
+  ListItem,
+} from "@chakra-ui/react";
 import { QuizModal } from "./quizModal/QuizModal";
 import { QuestionListItem } from "./questionListItem/QuestionListItem";
 
@@ -12,6 +20,8 @@ export const QuizEditing = () => {
   const [quizModalOpen, setQuizModalOpen] = useState(false);
 
   const [selected, setSelected] = useState("");
+
+  const [isLargerThan700] = useMediaQuery("(min-width: 700px)");
 
   useEffect(() => {
     getQuiz(search.substring(1), dispatch, setQuizLoading, true);
@@ -23,26 +33,38 @@ export const QuizEditing = () => {
   };
 
   return (
-    <div className={classes["edit-quiz-page"]}>
-      <div className={classes["edit-quiz-container"]}>
-        <h1>{creatingQuiz && creatingQuiz.name}</h1>
-        <ul className={classes["question-list"]}>
+    <HStack
+      width="100%"
+      height="100%"
+      justifyContent="center"
+      bg={useColorModeValue("lightgray", "gray.800")}
+    >
+      <Box
+        width={isLargerThan700 ? "40rem" : "100%"}
+        minHeight="90vh"
+        textAlign="center"
+        padding="1rem"
+        bg={useColorModeValue("white", "gray.900")}
+      >
+        <Heading color="teal">{creatingQuiz && creatingQuiz.name}</Heading>
+        <UnorderedList listStyleType="none" padding="0">
           {creatingQuiz &&
             creatingQuiz.questions?.map(({ id, question, points }) => (
-              <li key={id} style={{ marginBottom: "1rem" }}>
+              <ListItem key={id} marginBottom="2">
                 <QuestionListItem
                   id={id}
                   question={question}
                   points={points}
                   selectedQuestion={selectedQuestion}
                 />
-              </li>
+              </ListItem>
             ))}
-        </ul>
+        </UnorderedList>
         <Button
-          variant="contained"
-          fullWidth
-          color="primary"
+          variant="solid"
+          width="100%"
+          color="teal"
+          marginTop="1rem"
           onClick={() => setQuizModalOpen(true)}
         >
           Add a question
@@ -66,7 +88,7 @@ export const QuizEditing = () => {
             }
           />
         )}
-      </div>
-    </div>
+      </Box>
+    </HStack>
   );
 };

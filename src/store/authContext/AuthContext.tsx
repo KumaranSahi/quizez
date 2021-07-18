@@ -6,12 +6,7 @@ import {
   useState,
   useEffect,
 } from "react";
-import {
-  Props,
-  State,
-  SigninPages,
-  AuthContextType,
-} from "./auth.types";
+import { Props, State, SigninPages, AuthContextType } from "./auth.types";
 import {
   signUpUser,
   signOutUser,
@@ -20,6 +15,7 @@ import {
   signInUser,
 } from "./authMethods";
 import { authReducer } from "./authReducer/authReducer";
+import { setupAuthHeaderForServiceCalls } from "../../axiosUtils";
 
 export const AuthContext = createContext({});
 
@@ -38,6 +34,9 @@ export const AuthContextProvider: FC = ({ children }: Props) => {
   const [currentPage, setCurrentPage] = useState<SigninPages>("SIGNIN_PAGE");
 
   const [state, dispatch] = useReducer(authReducer, initialState);
+
+  const token = localStorage.getItem("token");
+  setupAuthHeaderForServiceCalls(token!);
 
   useEffect(() => {
     onReload(dispatch, setLoading);

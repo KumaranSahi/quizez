@@ -1,21 +1,20 @@
-import classes from "./QuizModal.module.css";
 import { Question, Option } from "../../../store/quizContext/quiz.types";
 import { SetStateAction, useState, Dispatch, SyntheticEvent } from "react";
 import {
   Modal,
-  Backdrop,
-  Fade,
-  TextField,
-  FormControlLabel,
+  VStack,
+  Heading,
+  Input,
   Checkbox,
-  RadioGroup,
   Radio,
-  FormGroup,
-  IconButton,
-  FormHelperText,
+  HStack,
   Button,
-} from "@material-ui/core";
-import { Add, Delete } from "@material-ui/icons";
+  Text,
+  ModalOverlay,
+  ModalContent,
+} from "@chakra-ui/react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 import { useQuiz } from "../../../store";
 
 type PropTypes =
@@ -186,162 +185,134 @@ export const QuizModal = (props: PropTypes) => {
   };
 
   return (
-    <Modal
-      aria-labelledby="transition-modal-title"
-      aria-describedby="transition-modal-description"
-      className={classes["quiz-modal"]}
-      open={props.open}
-      onClose={handleClose}
-      closeAfterTransition
-      BackdropComponent={Backdrop}
-      BackdropProps={{
-        timeout: 500,
-      }}
-    >
-      <Fade in={props.open}>
-        <div className={classes["quiz-modal-paper"]}>
-          <h2 className={classes["quiz-modal-headings"]}>Add a question</h2>
-          <form
-            className={classes["question-form"]}
-            onSubmit={questionSubmitted}
-          >
-            <TextField
-              label="Question"
-              fullWidth
-              multiline
+    <Modal isOpen={props.open} onClose={handleClose}>
+      <ModalOverlay />
+      <ModalContent>
+        <Heading color="teal">Add a question</Heading>
+        <form onSubmit={questionSubmitted}>
+          <VStack padding="1rem" alignItems="flex-start">
+            <Input
+              placeholder="Question"
+              width="100%"
               required
               value={question}
               onChange={(event) => setQuestion(event.target.value)}
-              variant="outlined"
             />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={multipleCorrect}
-                  onChange={() => {
-                    setMultipleCorrect((state) => !state);
-                    setOptions(
-                      (state) =>
-                        state &&
-                        state.map((option) => ({ ...option, isCorrect: false }))
-                    );
-                  }}
-                  color="primary"
-                />
-              }
-              label="Has multiple correct answers"
-            />
-            <div className={classes["adjacent-textfield"]}>
-              <TextField
-                label="Points"
+            <Checkbox
+              isChecked={multipleCorrect}
+              onChange={() => {
+                setMultipleCorrect((state) => !state);
+                setOptions(
+                  (state) =>
+                    state &&
+                    state.map((option) => ({ ...option, isCorrect: false }))
+                );
+              }}
+              color="teal"
+            >
+              Has multiple correct answers
+            </Checkbox>
+            <HStack>
+              <Input
+                placeholder="Points"
                 type="number"
                 required
                 value={points}
                 onChange={(event) => setPoints(+event.target.value)}
-                variant="outlined"
               />
-              <TextField
-                label="Negative Points"
+              <Input
+                placeholder="Negative Points"
                 type="number"
                 value={negativePoints}
                 onChange={(event) => setNegativePoints(+event.target.value)}
-                variant="outlined"
               />
-            </div>
-            <h3 className={classes["quiz-modal-headings"]}>
-              Options(atleast 2 options)
-            </h3>
+            </HStack>
+            <Text>Options(atleast 2 options)</Text>
             {multipleCorrect ? (
               <>
-                <FormGroup>
-                  {options &&
-                    options.map(({ content, isCorrect, id }) => (
-                      <div key={content} className={classes["option"]}>
-                        <FormControlLabel
-                          key={id ? id : content}
-                          control={
-                            <Checkbox
-                              name={content}
-                              checked={isCorrect}
-                              onClick={() => optionClicked(id, content)}
-                            />
-                          }
-                          label={content}
-                        />
-                        <IconButton
-                          color="secondary"
-                          onClick={() => optionDeleteClicked(id, content)}
-                        >
-                          <Delete />
-                        </IconButton>
-                      </div>
-                    ))}
-                </FormGroup>
+                {options &&
+                  options.map(({ content, isCorrect, id }) => (
+                    <HStack key={id ? id : content}>
+                      <Checkbox
+                        key={id ? id : content}
+                        name={content}
+                        isChecked={isCorrect}
+                        onChange={() => optionClicked(id, content)}
+                      >
+                        {content}
+                      </Checkbox>
+                      <Button
+                        color="red"
+                        onClick={() => optionDeleteClicked(id, content)}
+                      >
+                        <FontAwesomeIcon icon={faTrash} />
+                      </Button>
+                    </HStack>
+                  ))}
               </>
             ) : (
               <>
-                <RadioGroup aria-label="option" name="option">
-                  {options?.map(({ id, content, isCorrect }) => (
-                    <div key={content} className={classes["option"]}>
-                      <FormControlLabel
-                        key={id}
-                        control={
-                          <Radio
-                            color="primary"
-                            name={content}
-                            checked={isCorrect}
-                            onClick={() => optionClicked(id, content, true)}
-                          />
-                        }
-                        label={content}
-                      />
-                      <IconButton
-                        color="secondary"
-                        onClick={() => optionDeleteClicked(id, content)}
-                      >
-                        <Delete />
-                      </IconButton>
-                    </div>
-                  ))}
-                </RadioGroup>
+                {options?.map(({ id, content, isCorrect }) => (
+                  <HStack key={id ? id : content}>
+                    <Radio
+                      color="primary"
+                      name={content}
+                      isChecked={isCorrect}
+                      onClick={() => optionClicked(id, content, true)}
+                    >
+                      {content}
+                    </Radio>
+                    <Button
+                      color="red"
+                      onClick={() => optionDeleteClicked(id, content)}
+                    >
+                      <FontAwesomeIcon icon={faTrash} />
+                    </Button>
+                  </HStack>
+                ))}
               </>
             )}
-            <div style={{ marginBottom: "1rem" }}>
-              <TextField
+            <HStack marginBottom="1rem">
+              <Input
                 label="option"
                 value={addOption}
                 onChange={(event) => setAddOption(event.target.value)}
               />
-              <IconButton color="primary" onClick={addOptionButtonClicked}>
-                <Add />
-              </IconButton>
-            </div>
+              <Button color="teal" onClick={addOptionButtonClicked}>
+                <FontAwesomeIcon icon={faPlusCircle} />
+              </Button>
+            </HStack>
             {addOptionError && (
-              <FormHelperText>Options have to be unique</FormHelperText>
+              <Text color="red" fontStyle="italic">
+                Options have to be unique
+              </Text>
             )}
-            <TextField
-              label="Hint"
-              fullWidth
-              multiline
+            <Input
+              placeholder="Hint"
+              width="100%"
               value={hint}
               onChange={(event) => setHint(event.target.value)}
-              variant="outlined"
             />
             <Button
-              color="primary"
+              color="teal"
               type="submit"
-              variant="contained"
-              fullWidth
-              style={{ marginTop: "1rem" }}
-              disabled={quizLoading}
+              variant="solid"
+              width="100%"
+              marginTop="1rem"
+              isLoading={quizLoading}
+              loadingText={
+                props.type === "NEW_QUESTION"
+                  ? "Adding Question"
+                  : "Modifying Question"
+              }
             >
               {props.type === "NEW_QUESTION"
                 ? "Add Question"
                 : "Modify Question"}
             </Button>
-          </form>
-        </div>
-      </Fade>
+          </VStack>
+        </form>
+      </ModalContent>
     </Modal>
   );
 };

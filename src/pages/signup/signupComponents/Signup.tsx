@@ -136,7 +136,7 @@ export const SignupContainer = () => {
             <Field name="name" validate={nameValidation}>
               {({ field, form: { errors, touched } }: FieldProps) => (
                 <FormControl
-                  isInvalid={(errors.email && touched.email) as boolean}
+                  isInvalid={(errors.name && touched.name) as boolean}
                 >
                   <FormLabel htmlFor="name">Name</FormLabel>
                   <Input {...field} id="name" placeholder="name" />

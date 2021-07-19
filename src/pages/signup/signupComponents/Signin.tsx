@@ -1,85 +1,100 @@
-import classes from "../Singup.module.css";
-import {
-  TextField,
-  Button,
-  FormControl,
-  InputLabel,
-  InputAdornment,
-  IconButton,
-  Input,
-} from "@material-ui/core";
-import { SigninContainerProps } from "../Signup.types";
 import { useState } from "react";
-import { Visibility, VisibilityOff } from "@material-ui/icons";
+import {
+  FormControl,
+  FormLabel,
+  FormErrorMessage,
+  Input,
+  InputGroup,
+  Button,
+  InputRightElement,
+  Heading,
+} from "@chakra-ui/react";
+import { Formik, Form, Field, FieldProps } from "formik";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import { useAuth } from "../../../store";
+import { emailValidation } from "./utils";
 
-export const SigninContainer = ({
-  signInSubmit,
-  signupDispatch,
-  email,
-  emailValid,
-  password,
-  authLoading,
-}: SigninContainerProps) => {
+export const SigninContainer = () => {
   const [showPassword, setShowPassword] = useState(false);
+
+  const { signInUser, dispatch, setAuthLoading, authLoading } = useAuth();
+
   return (
     <>
-      <h1>Sign In:</h1>
-      <form className={classes["signup-container"]} onSubmit={signInSubmit}>
-        <div>
-          <TextField
-            label="Email"
-            type="email"
-            required
-            fullWidth
-            value={email}
-            onChange={(event) =>
-              signupDispatch({
-                type: "ADD_EMAIL",
-                payload: event.target.value,
-              })
-            }
-          />
-          {!emailValid && (
-            <p className={classes["error-text"]}>Please enter a valid email</p>
-          )}
-        </div>
-        <FormControl fullWidth>
-          <InputLabel htmlFor="standard-adornment-password">
-            Password
-          </InputLabel>
-          <Input
-            type={showPassword ? "text" : "password"}
-            className={classes["edit-form-element"]}
-            required={true}
-            value={password}
-            onChange={(event) =>
-              signupDispatch({
-                type: "ADD_PASSWORD",
-                payload: event.target.value,
-              })
-            }
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={() => setShowPassword((state) => !state)}
-                  onMouseDown={(event) => event.preventDefault()}
+      <Heading color="teal" fontWeight="300">
+        Sign In:
+      </Heading>
+      <Formik
+        initialValues={{ email: "", password: "" }}
+        onSubmit={(values) => {
+          signInUser(
+            {
+              email: values.email,
+              password: values.password,
+            },
+            dispatch,
+            setAuthLoading
+          );
+        }}
+      >
+        {(props) => (
+          <Form>
+            <Field name="email" validate={emailValidation}>
+              {({ field, form: { errors, touched } }: FieldProps) => (
+                <FormControl
+                  isInvalid={(errors.email && touched.email) as boolean}
                 >
-                  {showPassword ? <Visibility /> : <VisibilityOff />}
-                </IconButton>
-              </InputAdornment>
-            }
-          />
-        </FormControl>
-        <Button
-          variant="contained"
-          color="primary"
-          type="submit"
-          disabled={authLoading}
-        >
-          Sign In
-        </Button>
-      </form>
+                  <FormLabel htmlFor="email">Email</FormLabel>
+                  <Input {...field} id="email" placeholder="email" />
+                  <FormErrorMessage>{errors.email}</FormErrorMessage>
+                </FormControl>
+              )}
+            </Field>
+            <Field name="password">
+              {({ field, form: { errors, touched } }: FieldProps) => (
+                <FormControl
+                  isInvalid={(errors.password && touched.password) as boolean}
+                >
+                  <FormLabel htmlFor="password">Password</FormLabel>
+                  <InputGroup size="md">
+                    <Input
+                      pr="4.5rem"
+                      type={showPassword ? "text" : "password"}
+                      {...field}
+                      id="password"
+                      placeholder="Enter password"
+                    />
+                    <InputRightElement width="4.5rem">
+                      <Button
+                        h="1.75rem"
+                        size="sm"
+                        onClick={() => setShowPassword((state) => !state)}
+                      >
+                        {showPassword ? (
+                          <FontAwesomeIcon icon={faEyeSlash} />
+                        ) : (
+                          <FontAwesomeIcon icon={faEye} />
+                        )}
+                      </Button>
+                    </InputRightElement>
+                  </InputGroup>
+                  <FormErrorMessage>{errors.password}</FormErrorMessage>
+                </FormControl>
+              )}
+            </Field>
+            <Button
+              mt={4}
+              colorScheme="teal"
+              isLoading={authLoading}
+              loadingText="Signing in"
+              type="submit"
+            >
+              Sign in
+            </Button>
+          </Form>
+        )}
+      </Formik>
     </>
   );
 };

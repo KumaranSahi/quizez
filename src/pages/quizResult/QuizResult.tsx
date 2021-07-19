@@ -1,47 +1,75 @@
-import classes from "./QuizResult.module.css";
 import { usePlayQuiz, useQuiz } from "../../store";
 import { useHistory } from "react-router-dom";
-import { Button } from "@material-ui/core";
+import {
+  Button,
+  useMediaQuery,
+  useColorModeValue,
+  HStack,
+  Box,
+  Text,
+  Heading,
+  UnorderedList,
+  ListItem,
+} from "@chakra-ui/react";
+import { useEffect } from "react";
 
 export const QuizResult = () => {
   const { calculateTotalScore, currentQuiz } = useQuiz();
   const { score, quizResponses, dispatch } = usePlayQuiz();
   const { push } = useHistory();
 
-  return currentQuiz ? (
-    <div className={classes["quiz-result-page"]}>
-      <div className={classes["quiz-result-container"]}>
-        <h1 className={classes["congrats"]}>Congrats!</h1>
-        <h2>
-          Your score is{" "}
-          <span className={classes["score-display"]}>{score}</span>
-        </h2>
-        {calculateTotalScore(currentQuiz) === score ? (
-          <h1 className={classes["all-correct-text"]}>
+  const [isLargerThan700] = useMediaQuery("(min-width: 700px)");
+
+  useEffect(() => {
+    !currentQuiz && push("/");
+  }, [currentQuiz, push]);
+
+  return (
+    <HStack
+      width="100%"
+      height="100%"
+      justifyContent="center"
+      alignItems="flex-start"
+      bg={useColorModeValue("lightgray", "gray.800")}
+    >
+      <Box
+        width={isLargerThan700 ? "40rem" : "100%"}
+        minHeight="85vh"
+        textAlign="center"
+        padding="1rem"
+        bg={useColorModeValue("white", "gray.900")}
+      >
+        <Heading color="teal">Congrats!</Heading>
+        <Heading fontSize="2xl">
+          Your score is <Text color="teal">{score}</Text>
+        </Heading>
+        {currentQuiz && calculateTotalScore(currentQuiz) === score ? (
+          <Heading color="teal" fontWeight="400">
             Looks like you got all of it right!
-          </h1>
+          </Heading>
         ) : (
           <>
             <h3>Here are your results</h3>
-            <ul className={classes["response-list"]}>
+            <UnorderedList listStyleType="none" padding="0" margin="1rem">
               {quizResponses.map(({ content, response }) => (
-                <li
+                <ListItem
                   key={content}
-                  className={
-                    response
-                      ? classes["right-response"]
-                      : classes["wrong-response"]
-                  }
+                  width="100%"
+                  margin="1rem"
+                  padding="1rem"
+                  boxShadow="dark-lg"
+                  color={response ? "green" : "red"}
                 >
                   {content}
-                </li>
+                </ListItem>
               ))}
-            </ul>
+            </UnorderedList>
           </>
         )}
         <Button
-          variant="contained"
-          color="primary"
+          variant="solid"
+          color="teal"
+          marginTop="2rem"
           onClick={() => {
             dispatch({ type: "END_QUIZ" });
             push("/");
@@ -49,7 +77,7 @@ export const QuizResult = () => {
         >
           Play more!
         </Button>
-      </div>
-    </div>
-  ) : null;
+      </Box>
+    </HStack>
+  );
 };

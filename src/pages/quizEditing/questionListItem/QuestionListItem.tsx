@@ -1,7 +1,7 @@
-import { IconButton } from "@material-ui/core";
-import { Delete, Edit } from "@material-ui/icons";
-import classes from "./QuestionListItem.module.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash, faPen } from "@fortawesome/free-solid-svg-icons";
 import { useQuiz } from "../../../store";
+import { Button, HStack, Text } from "@chakra-ui/react";
 
 type QuestionListItemType = {
   id: string;
@@ -19,24 +19,29 @@ export const QuestionListItem = ({
   const { deleteQuestion, dispatch, setQuizLoading, creatingQuiz } = useQuiz();
 
   return (
-    <div className={classes["quesiton-container"]}>
-      <p className={classes["question"]}>
+    <HStack
+      boxShadow="dark-lg"
+      textAlign="left"
+      padding="4"
+      justifyContent="space-between"
+    >
+      <Text>
         {question} ( points: {points} )
-      </p>
+      </Text>
 
-      <div className={classes["action-buttons"]}>
-        <IconButton color="primary" onClick={() => selectedQuestion(id)}>
-          <Edit />
-        </IconButton>
-        <IconButton
-          color="secondary"
+      <HStack>
+        <Button color="teal" onClick={() => selectedQuestion(id)}>
+          <FontAwesomeIcon icon={faPen} />
+        </Button>
+        <Button
+          color="red"
           onClick={() =>
             deleteQuestion(id, dispatch, setQuizLoading, creatingQuiz)
           }
         >
-          <Delete />
-        </IconButton>
-      </div>
-    </div>
+          <FontAwesomeIcon icon={faTrash} />
+        </Button>
+      </HStack>
+    </HStack>
   );
 };

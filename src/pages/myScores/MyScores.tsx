@@ -54,7 +54,7 @@ export const MyScores = () => {
             {myLeaderBoard.map(({ id, score, quizName, quizId }) => (
               <Tr key={id}>
                 <Td>{quizName}</Td>
-                <Td>{score}</Td>
+                <Td>{score}%</Td>
                 <Td>
                   <Button
                     color="teal"

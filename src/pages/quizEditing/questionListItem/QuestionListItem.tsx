@@ -1,4 +1,5 @@
-import { Delete, Edit } from "@material-ui/icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash, faPen } from "@fortawesome/free-solid-svg-icons";
 import { useQuiz } from "../../../store";
 import { Button, HStack, Text } from "@chakra-ui/react";
 
@@ -30,7 +31,7 @@ export const QuestionListItem = ({
 
       <HStack>
         <Button color="teal" onClick={() => selectedQuestion(id)}>
-          <Edit />
+          <FontAwesomeIcon icon={faPen} />
         </Button>
         <Button
           color="red"
@@ -38,7 +39,7 @@ export const QuestionListItem = ({
             deleteQuestion(id, dispatch, setQuizLoading, creatingQuiz)
           }
         >
-          <Delete />
+          <FontAwesomeIcon icon={faTrash} />
         </Button>
       </HStack>
     </HStack>

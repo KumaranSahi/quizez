@@ -16,6 +16,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 import { useQuiz } from "../../../store";
+import { useEffect } from "react";
 
 type PropTypes =
   | {
@@ -33,29 +34,26 @@ type PropTypes =
     };
 
 export const QuizModal = (props: PropTypes) => {
-  const [question, setQuestion] = useState(
-    props.type === "EDIT_QUESTION" ? props.payload.question : ""
-  );
-  const [options, setOptions] = useState<Option[] | null>(
-    props.type === "EDIT_QUESTION" ? props.payload.options : null
-  );
-  const [points, setPoints] = useState(
-    props.type === "EDIT_QUESTION" ? props.payload.points : 0
-  );
-  const [negativePoints, setNegativePoints] = useState(
-    props.type === "EDIT_QUESTION" && props.payload.negativePoints
-      ? props.payload.negativePoints
-      : 0
-  );
-  const [multipleCorrect, setMultipleCorrect] = useState(
-    props.type === "EDIT_QUESTION" ? props.payload.multipleCorrect : false
-  );
-  const [hint, setHint] = useState(
-    props.type === "EDIT_QUESTION" && props.payload.hint
-      ? props.payload.hint
-      : ""
-  );
-
+  const [question, setQuestion] = useState("");
+  const [options, setOptions] = useState<Option[] | null>(null);
+  const [points, setPoints] = useState(0);
+  const [negativePoints, setNegativePoints] = useState(0);
+  const [multipleCorrect, setMultipleCorrect] = useState(false);
+  const [hint, setHint] = useState("");
+  useEffect(() => {
+    if (props.type === "EDIT_QUESTION") {
+      setQuestion(props.payload.question);
+      props.payload.hint &&
+        props.payload.hint.length > 0 &&
+        setHint(props.payload.hint);
+      setMultipleCorrect(props.payload.multipleCorrect);
+      props.payload.negativePoints &&
+        setNegativePoints(props.payload.negativePoints);
+      setPoints(props.payload.points);
+      setOptions(props.payload.options);
+      setQuestion(props.payload.question);
+    }
+  }, [props]);
   const [addOption, setAddOption] = useState("");
   const [addOptionError, setAddOptionError] = useState(false);
 

@@ -65,7 +65,10 @@ export const QuizEditing = () => {
           width="100%"
           color="teal"
           marginTop="1rem"
-          onClick={() => setQuizModalOpen(true)}
+          onClick={() => {
+            setSelected("");
+            setQuizModalOpen(true);
+          }}
         >
           Add a question
         </Button>

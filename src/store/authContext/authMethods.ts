@@ -15,17 +15,36 @@ import { successToast, warningToast, infoToast } from "../../components";
 export const signUpUser = async (
   userData: UserData,
   setLoading: Dispatch<SetStateAction<boolean>>,
-  setCurrentPage: Dispatch<SetStateAction<SigninPages>>
+  dispatch: Dispatch<AuthAction>
 ) => {
   setLoading(true);
   try {
-    const { data } = await axios.post<ResponseTemplate>(
+    const {
+      data: { data, ok },
+    } = await axios.post<ResponseTemplate>(
       `${APP_URL}/api/users/signup`,
       userData
     );
-    if (data.ok) {
+    if (ok) {
       successToast("User Added Successfully");
-      setCurrentPage("SIGNIN_PAGE");
+      setupAuthHeaderForServiceCalls(data!.token);
+      localStorage.setItem("token", data!.token);
+      localStorage.setItem("userName", data!.userName);
+      data?.isAdmin && localStorage.setItem("isAdmin", data.isAdmin);
+      data?.image && localStorage.setItem("image", data.image);
+      const expiresIn = new Date(new Date().getTime() + 3600000);
+      localStorage.setItem("expiresIn", "" + expiresIn);
+      checkAuthTimeout(3600, dispatch, setLoading);
+      dispatch({
+        type: "SIGNIN_USER",
+        payload: {
+          token: data!.token,
+          userName: data!.userName,
+          expiresIn: new Date(expiresIn),
+          isAdmin: data?.isAdmin,
+          image: data?.image,
+        },
+      });
       setLoading(false);
     }
   } catch (error: any) {

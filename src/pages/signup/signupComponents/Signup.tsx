@@ -24,7 +24,12 @@ export const SignupContainer = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [imageUploadLoading, setImageUploadLoading] = useState(false);
 
-  const { signUpUser, setCurrentPage, authLoading, setAuthLoading } = useAuth();
+  const {
+    signUpUser,
+    authLoading,
+    setAuthLoading,
+    dispatch: authDispatch,
+  } = useAuth();
 
   const fileUpload = async ({
     file,
@@ -84,7 +89,7 @@ export const SignupContainer = () => {
               isAdmin: values.isAdmin,
             },
             setAuthLoading,
-            setCurrentPage
+            authDispatch
           );
         }}
       >
@@ -194,7 +199,7 @@ export const SignupContainer = () => {
                 >
                   <Checkbox
                     colorScheme="teal"
-                    onClick={() => setFieldValue("isAdmin", !values.isAdmin)}
+                    onChange={() => setFieldValue("isAdmin", !values.isAdmin)}
                     checked={values.isAdmin}
                     marginTop="1rem"
                   >

@@ -12,11 +12,13 @@ export const emailValidation = (email: string) => {
 };
 
 export const passwordValidation = (password: string) => {
-  if (!password) {
+  if (password.length === 0) {
     return "Required";
   }
-  if (password.length < 8) {
-    return "Password should contain atleast 8 characters";
+  if (
+    !new RegExp("^(?=.*[0-9])[a-zA-Z0-9!@#$%^&*]{8,16}$").test(password)
+  ) {
+    return "Password should be atleast 8 characters with atleast 1 number";
   }
 };
 

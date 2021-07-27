@@ -8,7 +8,8 @@ import {
 import { VStack, Flex, Text } from "@chakra-ui/react";
 
 export const Signup = () => {
-  const { currentPage, setCurrentPage } = useAuth();
+  const { currentPage, setCurrentPage, signInUser, dispatch, setAuthLoading } =
+    useAuth();
 
   const pageToRender = (currentPage: SigninPages) => {
     switch (currentPage) {
@@ -23,21 +24,47 @@ export const Signup = () => {
     }
   };
 
+  const signinAsGuest = () => {
+    signInUser(
+      {
+        email: "testuser@test.com",
+        password: "testuser1",
+      },
+      dispatch,
+      setAuthLoading
+    );
+  };
+
   return (
     <Flex width="100%" height="100%" justifyContent="center">
       <VStack boxShadow="dark-lg" borderRadius="2xl" padding="4">
         {pageToRender(currentPage)}
+        <Text color="teal" onClick={signinAsGuest} cursor="pointer">
+          Sign-in as guest
+        </Text>
         {currentPage === "SIGNIN_PAGE" && (
-          <Text color="teal" onClick={() => setCurrentPage("CHANGE_PASSWORD")}>
+          <Text
+            color="teal"
+            onClick={() => setCurrentPage("CHANGE_PASSWORD")}
+            cursor="pointer"
+          >
             Forgot Password
           </Text>
         )}
         {currentPage === "SIGNIN_PAGE" ? (
-          <Text color="teal" onClick={() => setCurrentPage("SIGNUP_PAGE")}>
+          <Text
+            color="teal"
+            onClick={() => setCurrentPage("SIGNUP_PAGE")}
+            cursor="pointer"
+          >
             New to Quizez? Sign up!
           </Text>
         ) : (
-          <Text color="teal" onClick={() => setCurrentPage("SIGNIN_PAGE")}>
+          <Text
+            color="teal"
+            onClick={() => setCurrentPage("SIGNIN_PAGE")}
+            cursor="pointer"
+          >
             Already have an Account? Sign In!
           </Text>
         )}

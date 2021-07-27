@@ -11,7 +11,7 @@ export type AuthContextType = {
   signUpUser: (
     userData: UserData,
     setLoading: Dispatch<SetStateAction<boolean>>,
-    setCurrentPage: Dispatch<SetStateAction<SigninPages>>
+    dispatch: Dispatch<AuthAction>
   ) => void;
   signInUser: (
     emailAndPassword: SigninUser,

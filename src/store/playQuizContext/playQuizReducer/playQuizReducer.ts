@@ -6,6 +6,9 @@ export const playQuizReducer = (state: State, action: PlayQuizAction) => {
       return {
         ...state,
         playQuizMode: true,
+        score: 0,
+        currentQuestion: null,
+        quizResponses: [],
       };
     case "LOAD_QUESTION":
       return {
